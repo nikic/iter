@@ -2,7 +2,7 @@
 
 namespace iter;
 
-require __DIR__ . '/../src/iter.php';
+require_once __DIR__ . '/../src/iter.php';
 
 class Aggregate implements \IteratorAggregate {
     public function getIterator() {
