@@ -1,0 +1,12 @@
+{
+    "name": "nikic/iter",
+    "description": "Iteration primitives using generators.",
+    "keywords": ["iterator", "generator", "functional"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nikita Popov",
+            "email": "nikita.ppv@googlemail.com"
+        }
+    ]
+}
