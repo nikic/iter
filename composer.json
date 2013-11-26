@@ -8,5 +8,8 @@
             "name": "Nikita Popov",
             "email": "nikita.ppv@googlemail.com"
         }
-    ]
+    ],
+    "autoload": {
+        "files": ["src/iter.php", "src/iter.fn.php", "src/iter.rewindable.php"]
+    }
 }
