@@ -1,0 +1,15 @@
+{
+    "name": "nikic/iter",
+    "description": "Iteration primitives using generators",
+    "keywords": ["iterator", "generator", "functional"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Nikita Popov",
+            "email": "nikic@php.net"
+        }
+    ],
+    "autoload": {
+        "files": ["src/iter.php", "src/iter.rewindable.php"]
+    }
+}
