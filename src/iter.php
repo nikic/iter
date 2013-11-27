@@ -258,6 +258,40 @@ function slice($iterable, $start, $length = INF) {
 }
 
 /**
+ * Takes n items from an iterable.
+ *
+ * Examples:
+ *
+ *      iter\take(3, [1, 2, 3, 4, 5])
+ *      => iter(1, 2, 3)
+ *
+ * @param int   $length   The length
+ * @param mixed $iterable The iterable to take the slice from
+ */
+function take($length, $iterable) {
+    foreach (slice($iterable, 0, $length) as $key => $value) {
+        yield $key => $value;
+    }
+}
+
+/**
+ * Drops n items from an iterable.
+ *
+ * Examples:
+ *
+ *      iter\drop(3, [1, 2, 3, 4, 5])
+ *      => iter(4, 5)
+ *
+ * @param int   $length   The length
+ * @param mixed $iterable The iterable to take the slice from
+ */
+function drop($length, $iterable) {
+    foreach (slice($iterable, $length) as $key => $value) {
+        yield $key => $value;
+    }
+}
+
+/**
  * Repeat an element a given number of times. By default the element is repeated
  * indefinitely.
  *
@@ -364,6 +398,40 @@ function all(callable $predicate, $iterable) {
     }
 
     return true;
+}
+
+/**
+ * Returns the first element of an iterable.
+ *
+ * Examples:
+ *
+ *      iter\first([1, 2, 3, 4, 5])
+ *      => 1
+ *
+ * @param mixed $iterable The iterable
+ *
+ * @return mixed The first element
+ */
+function first($iterable) {
+    foreach ($iterable as $value) {
+        return $value;
+    }
+
+    return null;
+}
+
+/**
+ * Returns an iterable excluding the first element.
+ *
+ * Examples:
+ *
+ *      iter\rest([1, 2, 3, 4, 5])
+ *      => iter(2, 3, 4, 5)
+ *
+ * @param mixed $iterable The iterable
+ */
+function rest($iterable) {
+    return drop(1, $iterable);
 }
 
 function count($iterable) {

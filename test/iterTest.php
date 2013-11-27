@@ -130,4 +130,32 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(5, count([1, 2, 3, 4, 5]));
         $this->assertEquals(5, count(toIter([1, 2, 3, 4, 5])));
     }
+
+    public function testTake() {
+        $this->assertEquals([1, 2, 3], toArray(take(3, [1, 2, 3, 4, 5])));
+        $this->assertEquals([], toArray(take(3, [])));
+    }
+
+    public function testDrop() {
+        $this->assertEquals([4, 5], toArray(drop(3, [1, 2, 3, 4, 5])));
+        $this->assertEquals([], toArray(drop(3, [])));
+    }
+
+    public function testFirst() {
+        $iter = new \ArrayIterator([1, 2, 3]);
+        $this->assertEquals(1, first($iter));
+        $this->assertEquals(1, first($iter));
+
+        $this->assertEquals(null, first(new \ArrayIterator([])));
+        $this->assertEquals(null, first([]));
+    }
+
+    public function testRest() {
+        $iter = new \ArrayIterator([1, 2, 3]);
+        $this->assertEquals([2, 3], toArray(rest($iter)));
+        $this->assertEquals([2, 3], toArray(rest($iter)));
+
+        $this->assertEquals([], toArray(rest(new \ArrayIterator([]))));
+        $this->assertEquals([], toArray(rest([])));
+    }
 }
