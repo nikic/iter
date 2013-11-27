@@ -271,6 +271,40 @@ function slice($iterable, $start, $length = INF) {
 }
 
 /**
+ * Takes the first n items from an iterable.
+ *
+ * Examples:
+ *
+ *      iter\take(3, [1, 2, 3, 4, 5])
+ *      => iter(1, 2, 3)
+ *
+ * @param int   $num      Number of elements to take from the start
+ * @param mixed $iterable Iterable to take the elements from
+ *
+ * @return \Iterator
+ */
+function take($num, $iterable) {
+    return slice($iterable, 0, $num);
+}
+
+/**
+ * Drops the first n items from an iterable.
+ *
+ * Examples:
+ *
+ *      iter\drop(3, [1, 2, 3, 4, 5])
+ *      => iter(4, 5)
+ *
+ * @param int   $num      Number of elements to drop from the start
+ * @param mixed $iterable Iterable to drop the elements from
+ *
+ * @return \Iterator
+ */
+function drop($num, $iterable) {
+    return slice($iterable, $num);
+}
+
+/**
  * Repeat an element a given number of times. By default the element is repeated
  * indefinitely.
  *
@@ -282,12 +316,12 @@ function slice($iterable, $start, $length = INF) {
  *     => iter(1, 1, 1, 1, 1, 1, 1, 1, 1, ...)
  *
  * @param mixed $value Value to repeat
- * @param int   $n     Number of repetitions (defaults to INF)
+ * @param int   $num   Number of repetitions (defaults to INF)
  *
  * @return \Iterator
  */
-function repeat($value, $n = INF) {
-    for ($i = 0; $i < $n; ++$i) {
+function repeat($value, $num = INF) {
+    for ($i = 0; $i < $num; ++$i) {
         yield $value;
     }
 }

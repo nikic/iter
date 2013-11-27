@@ -88,6 +88,13 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testTakeDrop() {
+        $this->assertEquals([1, 2, 3], toArray(take(3, [1, 2, 3, 4, 5])));
+        $this->assertEquals([4, 5], toArray(drop(3, [1, 2, 3, 4, 5])));
+        $this->assertEquals([], toArray(take(3, [])));
+        $this->assertEquals([], toArray(drop(3, [])));
+    }
+
     public function testRepeat() {
         $this->assertEquals([1, 1, 1, 1, 1], toArray(repeat(1, 5)));
         $this->assertEquals([], toArray(repeat(1, 0)));

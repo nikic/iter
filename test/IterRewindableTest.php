@@ -42,6 +42,14 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             rewindable\slice(rewindable\range(0, 9), 5)
         );
         $this->assertRewindableEquals(
+            [1, 2, 3],
+            rewindable\take(3, [1, 2, 3, 4, 5])
+        );
+        $this->assertRewindableEquals(
+            [4, 5],
+            rewindable\drop(3, [1, 2, 3, 4, 5])
+        );
+        $this->assertRewindableEquals(
             [1, 1, 1, 1, 1],
             rewindable\repeat(1, 5)
         );

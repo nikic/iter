@@ -59,6 +59,8 @@ namespace iter\rewindable {
     function zipKeyValue() { return new _RewindableGenerator('iter\zipKeyValue', func_get_args()); }
     function chain()       { return new _RewindableGenerator('iter\chain',       func_get_args()); }
     function slice()       { return new _RewindableGenerator('iter\slice',       func_get_args()); }
+    function take()        { return new _RewindableGenerator('iter\take',        func_get_args()); }
+    function drop()        { return new _RewindableGenerator('iter\drop',        func_get_args()); }
     function repeat()      { return new _RewindableGenerator('iter\repeat',      func_get_args()); }
     function takeWhile()   { return new _RewindableGenerator('iter\takeWhile',   func_get_args()); }
     function dropWhile()   { return new _RewindableGenerator('iter\dropWhile',   func_get_args()); }
