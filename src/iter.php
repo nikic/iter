@@ -26,6 +26,8 @@ require __DIR__ . '/iter.fn.php';
  *                      $end and to -1 if $start greater $end)
  *
  * @throws \InvalidArgumentException if step is not valid
+ *
+ * @return \Iterator
  */
 function range($start, $end, $step = null) {
     if ($start == $end) {
@@ -73,8 +75,10 @@ function range($start, $end, $step = null) {
  *
  *     $column = map(fn\index('name'), $iter);
  *
- * @param callable $function The mapping function: mixed function(mixed $value)
- * @param mixed    $iterable The iterable to be mapped over
+ * @param callable $function Mapping function: mixed function(mixed $value)
+ * @param mixed    $iterable Iterable to be mapped over
+ *
+ * @return \Iterator
  */
 function map(callable $function, $iterable) {
     foreach ($iterable as $key => $value) {
@@ -94,8 +98,8 @@ function map(callable $function, $iterable) {
  *
  *     iter\apply(iter\fn\method('rewind'), $iterators);
  *
- * @param $function
- * @param $iterable
+ * @param callable $function Apply function: void function(mixed $value)
+ * @param mixed    $iterable Iterator to apply on
  */
 function apply(callable $function, $iterable) {
     foreach ($iterable as $value) {
@@ -117,8 +121,10 @@ function apply(callable $function, $iterable) {
  *
  *     iter\filter(iter\fn\operator('instanceof', 'SomeClass'), $objects);
  *
- * @param callable $predicate The predicate: bool function(mixed $value)
- * @param mixed    $iterable  The iterable to filter
+ * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param mixed    $iterable  Iterable to filter
+ *
+ * @return \Iterator
  */
 function filter(callable $predicate, $iterable) {
     foreach ($iterable as $key => $value) {
@@ -142,10 +148,11 @@ function filter(callable $predicate, $iterable) {
  *      reduce(fn\operator('*'), range(1, 5), 1)
  *      => 120
  *
- * @param callable $function Reduction function
- * @param mixed    $iterable Iterable to reduce
+ * @param callable $function   Reduction function:
+ *                             mixed function(mixed $acc, mixed $value)
+ * @param mixed    $iterable   Iterable to reduce
  * @param mixed    $startValue Start value for accumulator. Usually identity
- *                 value of $function.
+ *                             value of $function.
  *
  * @return mixed Result of the reduction
  */
@@ -169,7 +176,9 @@ function reduce(callable $function, $iterable, $startValue = null) {
  *     iter\zip([1, 2, 3], [4, 5, 6], [7, 8, 9])
  *     => iter([1, 4, 7], [2, 5, 8], [3, 6, 9])
  *
- * @param mixed[] ...$iterables The iterables to zip
+ * @param mixed[] ...$iterables Iterables to zip
+ *
+ * @return \Iterator
  */
 function zip(/* ...$iterables */) {
     $iterators = array_map('iter\\toIter', func_get_args());
@@ -194,6 +203,8 @@ function zip(/* ...$iterables */) {
  *
  * @param mixed $keys   Iterable of keys
  * @param mixed $values Iterable of values
+ *
+ * @return \Iterator
  */
 function zipKeyValue($keys, $values) {
     $keys = toIter($keys);
@@ -219,7 +230,9 @@ function zipKeyValue($keys, $values) {
  *     iter\chain(iter\range(0, 5), iter\range(6, 10), iter\range(11, 15))
  *     => iter(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
  *
- * @param mixed[] ...$iterables The iterables to chain
+ * @param mixed[] ...$iterables Iterables to chain
+ *
+ * @return \Iterator
  */
 function chain(/* ...$iterables */) {
     foreach (func_get_args() as $iterable) {
@@ -239,10 +252,12 @@ function chain(/* ...$iterables */) {
  *      iter\slice([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], 5, 3)
  *      => iter(0, 1, 2, 3)
  *
- * @param mixed $iterable The iterable to take the slice from
- * @param int   $start    The start offset
- * @param int   $length   The length (if not specified all remaining
- *                        iterable values are used)
+ * @param mixed $iterable Iterable to take the slice from
+ * @param int   $start    Start offset
+ * @param int   $length   Length (if not specified all remaining values from the
+ *                        iterable are used)
+ *
+ * @return \Iterator
  */
 function slice($iterable, $start, $length = INF) {
     $i = 0;
@@ -270,6 +285,8 @@ function slice($iterable, $start, $length = INF) {
  *
  * @param mixed $value Value to repeat
  * @param int   $n     Number of repetitions (defaults to INF)
+ *
+ * @return \Iterator
  */
 function repeat($value, $n = INF) {
     for ($i = 0; $i < $n; ++$i) {
@@ -286,6 +303,8 @@ function repeat($value, $n = INF) {
  *      => iter('a', 'b', 'c')
  *
  * @param mixed $iterable Iterable to get keys from
+ *
+ * @return \Iterator
  */
 function keys($iterable) {
     foreach ($iterable as $key => $_) {
@@ -302,6 +321,8 @@ function keys($iterable) {
  *      => iter(0 => 1, 1 => 42, 2 => 100)
  *
  * @param mixed $iterable Iterable to get values from
+ *
+ * @return \Iterator
  */
 function values($iterable) {
     foreach ($iterable as $value) {
@@ -323,7 +344,7 @@ function values($iterable) {
  *      iter\all(fn\operator('>', 0), range(-5, 5))
  *      => false
  *
- * @param callable $predicate Predicate
+ * @param callable $predicate Predicate: bool function(mixed $value)
  * @param mixed    $iterable  Iterable to check against the predicate
  *
  * @return bool Whether the predicate holds for all values
@@ -351,7 +372,7 @@ function any(callable $predicate, $iterable) {
  *      iter\all(fn\operator('>', 0), range(-5, 5))
  *      => false
  *
- * @param callable $predicate Predicate
+ * @param callable $predicate Predicate: bool function(mixed $value)
  * @param mixed    $iterable  Iterable to check against the predicate
  *
  * @return bool Whether the predicate holds for all values
