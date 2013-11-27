@@ -113,6 +113,17 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(false, any(fn\operator('>', 0), range(-10, 0)));
     }
 
+    public function testTakeOrDropWhile() {
+        $this->assertEquals(
+            [3, 1, 4],
+            toArray(takeWhile(fn\operator('>', 0), [3, 1, 4, -1, 5]))
+        );
+        $this->assertEquals(
+            [-1, 5],
+            toArray(dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5]))
+        );
+    }
+
     public function testToIter() {
         $iter = new \ArrayIterator([1, 2, 3]);
         $this->assertSame($iter, toIter($iter));

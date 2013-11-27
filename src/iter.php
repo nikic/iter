@@ -387,6 +387,61 @@ function all(callable $predicate, $iterable) {
     return true;
 }
 
+/**
+ * Takes items from an iterable until the predicate fails for the first time.
+ *
+ * This means that all elements before (and excluding) the first element on
+ * which the predicate fails will be returned.
+ *
+ * Examples:
+ *
+ *      iter\takeWhile(fn\operator('>', 0), [3, 1, 4, -1, 5])
+ *      => iter(3, 1, 4)
+ *
+ * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param mixed    $iterable  Iterable to take values from
+ *
+ * @return \Iterator
+ */
+function takeWhile(callable $predicate, $iterable) {
+    foreach ($iterable as $key => $value) {
+        if (!$predicate($value)) {
+            return;
+        }
+
+        yield $key => $value;
+    }
+}
+
+/**
+ * Drops items from an iterable until the predicate fails for the first time.
+ *
+ * This means that all elements after (and including) the first element on
+ * which the predicate fails will be returned.
+ *
+ * Examples:
+ *
+ *      iter\dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5])
+ *      => iter(-1, 5)
+ *
+ * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param mixed    $iterable  Iterable to drop values from
+ *
+ * @return \Iterator
+ */
+function dropWhile(callable $predicate, $iterable) {
+    $failed = false;
+    foreach ($iterable as $key => $value) {
+        if (!$failed && !$predicate($value)) {
+            $failed = true;
+        }
+
+        if ($failed) {
+            yield $key => $value;
+        }
+    }
+}
+
 function count($iterable) {
     if (is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);
@@ -432,10 +487,8 @@ function toArrayWithKeys($iterable) {
 /*
  * Python:
  * compress()
- * dropwhile()
  * groupby()
  * tee()
- * takewhile()
  * izip_longest()
  * multi-map
  */

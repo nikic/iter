@@ -47,6 +47,8 @@ list the function signatures as an overview:
     Iterator values(iterable $iterable)
     bool     any(callable $predicate, iterable $iterable)
     bool     all(callable $predicate, iterable $iterable)
+    Iterator takeWhile(callable $predicate, iterable $iterable)
+    Iterator dropWhile(callable $predicate, iterable $iterable)
     int      count(iterable $iterable)
     Iterator toIter(iterable $iterable)
     array    toArray(iterable $iterable)
