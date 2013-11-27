@@ -400,6 +400,40 @@ function all(callable $predicate, $iterable) {
     return true;
 }
 
+/**
+ * Returns the first element of an iterable.
+ *
+ * Examples:
+ *
+ *      iter\first([1, 2, 3, 4, 5])
+ *      => 1
+ *
+ * @param mixed $iterable The iterable
+ *
+ * @return mixed The first element
+ */
+function first($iterable) {
+    foreach ($iterable as $value) {
+        return $value;
+    }
+
+    return null;
+}
+
+/**
+ * Returns an iterable excluding the first element.
+ *
+ * Examples:
+ *
+ *      iter\rest([1, 2, 3, 4, 5])
+ *      => iter(2, 3, 4, 5)
+ *
+ * @param mixed $iterable The iterable
+ */
+function rest($iterable) {
+    return drop(1, $iterable);
+}
+
 function count($iterable) {
     if (is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);
