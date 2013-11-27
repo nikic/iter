@@ -42,6 +42,8 @@ list the function signatures as an overview:
     Iterator zipKeyValue(iterable $keys, iterable $values)
     Iterator chain(iterable... $iterables)
     Iterator slice(iterable $iterable, int $start, int $length = INF)
+    Iterator take(int $length, iterable $iterable)
+    Iterator drop(int $length, iterable $iterable)
     Iterator repeat(mixed $value, int $n = INF)
     Iterator keys(iterable $iterable)
     Iterator values(iterable $iterable)
