@@ -67,7 +67,7 @@ function operator($operator, $arg = null) {
 }
 
 function not($function) {
-    return function($value) use ($function) {
-        return !$function($value);
+    return function() use ($function) {
+        return !call_user_func_array($function, func_get_args());
     };
 }

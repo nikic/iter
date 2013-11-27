@@ -2,8 +2,6 @@
 
 namespace iter;
 
-require __DIR__ . '/iter.fn.php';
-
 /**
  * Creates an iterable containing all numbers between the start and end value
  * (inclusive) with a certain step.
@@ -454,6 +452,10 @@ function count($iterable) {
     }
 }
 
+/**
+ * @param mixed $iterable
+ * @return \Iterator
+ */
 function toIter($iterable) {
     if ($iterable instanceof \Iterator) {
         return $iterable;

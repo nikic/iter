@@ -1,10 +1,8 @@
 <?php
 
 namespace iter;
-use iter\rewindable;
 
-require_once __DIR__ . '/../src/iter.php';
-require_once __DIR__ . '/../src/iter.rewindable.php';
+use iter\rewindable;
 
 class IterRewindableTest extends \PHPUnit_Framework_TestCase {
     private function assertRewindableEquals($array, $iter, $withKeys = false) {
@@ -56,6 +54,14 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             ['a', 'c', 'e'],
             rewindable\keys(['a' => 'b', 'c' => 'd', 'e' => 'f']),
             true
+        );
+        $this->assertRewindableEquals(
+            [3, 1, 4],
+            rewindable\takeWhile(fn\operator('>', 0), [3, 1, 4, -1, 5])
+        );
+        $this->assertRewindableEquals(
+            [-1, 5],
+            rewindable\dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5])
         );
     }
 

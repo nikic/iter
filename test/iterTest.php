@@ -2,8 +2,6 @@
 
 namespace iter;
 
-require_once __DIR__ . '/../src/iter.php';
-
 class Aggregate implements \IteratorAggregate {
     public function getIterator() {
         return new \ArrayIterator([1, 2, 3]);
@@ -121,6 +119,14 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(
             [-1, 5],
             toArray(dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5]))
+        );
+        $this->assertEquals(
+            [1, 2, 3],
+            toArray(takeWhile(fn\operator('>', 0), [1, 2, 3]))
+        );
+        $this->assertEquals(
+            [],
+            toArray(dropWhile(fn\operator('>', 0), [1, 2, 3]))
         );
     }
 

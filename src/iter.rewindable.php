@@ -60,6 +60,8 @@ namespace iter\rewindable {
     function chain()       { return new _RewindableGenerator('iter\chain',       func_get_args()); }
     function slice()       { return new _RewindableGenerator('iter\slice',       func_get_args()); }
     function repeat()      { return new _RewindableGenerator('iter\repeat',      func_get_args()); }
+    function takeWhile()   { return new _RewindableGenerator('iter\takeWhile',   func_get_args()); }
+    function dropWhile()   { return new _RewindableGenerator('iter\dropWhile',   func_get_args()); }
     function keys()        { return new _RewindableGenerator('iter\keys',        func_get_args()); }
     function values()      { return new _RewindableGenerator('iter\values',      func_get_args()); }
 

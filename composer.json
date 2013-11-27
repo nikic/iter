@@ -10,6 +10,6 @@
         }
     ],
     "autoload": {
-        "files": ["src/iter.php", "src/iter.rewindable.php"]
+        "files": ["src/bootstrap.php"]
     }
 }

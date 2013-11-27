@@ -22,7 +22,7 @@ A small usage example for the ``map()`` and ``range()`` functions:
 
 use iter, iter\fn;
 
-// require 'path/to/src/iter.php'; has to happen somewhere
+// require 'path/to/src/bootstrap.php'; has to happen somewhere
 
 $nums = iter\range(1, 10);
 $numsTimesTen = iter\map(fn\operator('*', 10), $nums);
@@ -66,8 +66,7 @@ here is just a small usage example of the two main functions:
 
 use iter, iter\fn;
 
-// require 'path/to/src/iter.php';
-// require 'path/to/src/iter.rewindable.php';
+// require 'path/to/src/bootstrap.php';
 
 /* Create a rewindable map function which can be used multiple times */
 $rewindableMap = iter\makeRewindable('iter\\map');
