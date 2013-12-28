@@ -137,6 +137,33 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testFlatten() {
+        $this->assertEquals(
+            [1, 2, 3, 4, 5],
+            toArray(flatten([1, 2, 3, 4, 5]))
+        );
+        $this->assertEquals(
+            [1, 2, 3, 4, 5],
+            toArray(flatten([1, [2, 3], 4, 5]))
+        );
+        $this->assertEquals(
+            [1, 2, 3, 4, 5],
+            toArray(flatten([1, [[2, 3], 4], 5]))
+        );
+        $this->assertEquals(
+            [1, 2, 3, 4, 5],
+            toArray(flatten([[1, [[2, 3], 4]], 5]))
+        );
+        $this->assertEquals(
+            [1, 2, 3, 4, 5],
+            toArray(flatten(new \ArrayIterator([
+                new \ArrayIterator([1, 2]),
+                3,
+                new \ArrayIterator([4, 5]),
+            ])))
+        );
+    }
+
     public function testToIter() {
         $iter = new \ArrayIterator([1, 2, 3]);
         $this->assertSame($iter, toIter($iter));
