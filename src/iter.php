@@ -474,6 +474,31 @@ function dropWhile(callable $predicate, $iterable) {
     }
 }
 
+/**
+ * Takes an iterable containing any amount of nested iterables and returns
+ * a flat iterable with just the values.
+ *
+ * Examples:
+ *
+ *      iter\flatten([1, [2, [3, 4]], [5]])
+ *      => iter(1, 2, 3, 4, 5)
+ *
+ * @param mixed $iterable Iterable to flatten
+ *
+ * @return \Iterator
+ */
+function flatten($iterable) {
+    foreach ($iterable as $value) {
+        if (is_array($value) || $value instanceof \Traversable) {
+            foreach (flatten($value) as $v) {
+                yield $v;
+            }
+        } else {
+            yield $value;
+        }
+    }
+}
+
 function count($iterable) {
     if (is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);
