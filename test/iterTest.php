@@ -144,7 +144,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
         $this->assertEquals(
             [1, 2, 3, 4, 5],
-            toArray(flatten([1, [2, 3], 4, 5]))
+            toArray(flatten([1, [2, 3], 4, [], 5]))
         );
         $this->assertEquals(
             [1, 2, 3, 4, 5],
@@ -152,7 +152,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
         $this->assertEquals(
             [1, 2, 3, 4, 5],
-            toArray(flatten([[1, [[2, 3], 4]], 5]))
+            toArray(flatten([[1, [[2, [[]], 3], 4]], 5]))
         );
         $this->assertEquals(
             [1, 2, 3, 4, 5],

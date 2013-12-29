@@ -71,6 +71,10 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             [-1, 5],
             rewindable\dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5])
         );
+        $this->assertRewindableEquals(
+            [1, 2, 3, 4, 5],
+            rewindable\flatten([[1, [[2, [[]], 3], 4]], 5])
+        );
     }
 
     public function testMakeRewindable() {
