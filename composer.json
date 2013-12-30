@@ -9,6 +9,9 @@
             "email": "nikic@php.net"
         }
     ],
+    "require": {
+        "php": ">=5.5.0"
+    },
     "autoload": {
         "files": ["src/bootstrap.php"]
     }
