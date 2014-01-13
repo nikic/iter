@@ -499,6 +499,31 @@ function flatten($iterable) {
     }
 }
 
+/**
+ * Reindexes an iterable. Keys are calculated based on values. Takes an iterable
+ * and a callable which, when run with the value as argument, provides the key
+ * for that iteration.
+ *
+ * Examples:
+ *
+ *      $keyFn = function($value) {
+ *          return strtoupper($value);
+ *      };
+ *      iter\reindex(["a", "b", "c"], $keyFn);
+ *      => iter("A" => "a", "B" => "b", "C" => "c")
+ */
+function reindex($iterable, callable $keyFn) {
+    foreach ($iterable as $value) {
+        $key = $keyFn($value);
+
+        if (!is_scalar($key)) {
+            throw new \InvalidArgumentException("keyFn did not return a valid key.");
+        }
+
+        yield $key => $value;
+    }
+}
+
 function count($iterable) {
     if (is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);

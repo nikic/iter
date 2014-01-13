@@ -95,6 +95,46 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
     public function testInvalidOperator() {
         fn\operator('**');
     }
+
+    public function testPath()
+    {
+        $array = [
+            'foo' => 1,
+            'bar' => [
+                'baz' => 2
+            ]
+        ];
+
+        $path1 = fn\path('foo');
+        $path2 = fn\path('bar');
+        $path3 = fn\path('bar', 'baz');
+
+        $this->assertSame(1, $path1($array));
+        $this->assertSame(['baz' => 2], $path2($array));
+        $this->assertSame(2, $path3($array));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Path "foo > bar" not found in array.
+     */
+    public function testPathDoesNotExist()
+    {
+        $array = ['foo' => 1];
+        $path = fn\path('foo', 'bar');
+        $path($array);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Path item not scalar.
+     */
+    public function testPathContainsNonScalar()
+    {
+        $array = ['foo' => 1];
+        $path = fn\path(array());
+        $path($array);
+    }
 }
 
 class _MethodTestDummy {

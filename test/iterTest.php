@@ -181,4 +181,34 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(5, count([1, 2, 3, 4, 5]));
         $this->assertEquals(5, count(toIter([1, 2, 3, 4, 5])));
     }
+
+    public function testReindex() {
+        $keyFn = function($value) {
+            return strtoupper($value);
+        };
+        $iter = reindex(["a", "b", "c", "d", "e"], $keyFn);
+        $expected = ["A" => "a", "B" => "b", "C" => "c", "D" => "d", "E" => "e"];
+        $this->assertEquals($expected, toArrayWithKeys($iter));
+
+        $keyFn = function($value) {
+            return $value * 2;
+        };
+        $iter = reindex([1, 2, 3, 4], $keyFn);
+        $expected = [2 => 1, 4 => 2, 6 => 3, 8 => 4];
+        $this->assertEquals($expected, toArrayWithKeys($iter));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage keyFn did not return a valid key
+     */
+    public function testReindexKeyMustBeScalar()
+    {
+        $keyFn = function($value) {
+            return array();
+        };
+
+        $iter = reindex([1, 2, 3], $keyFn);
+        toArrayWithKeys($iter);
+    }
 }
