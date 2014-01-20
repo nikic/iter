@@ -499,6 +499,18 @@ function flatten($iterable) {
     }
 }
 
+/**
+ * Takes and iterable and returns the number of items it contains
+ * 
+ * Examples:
+ *
+ *      iter\count([1, 2, 3])
+ *      => 3
+ * 
+ * @param $iterable The iterable to count
+ * 
+ * @return int
+ */
 function count($iterable) {
     if (is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);
@@ -512,7 +524,14 @@ function count($iterable) {
 }
 
 /**
- * @param mixed $iterable
+ * Takes an iterable and returns an Iterator
+ * 
+ * Examples:
+ *      iter\toIter([1, 2, 3])
+ *      => iter(1, 2, 3)
+ * 
+ * @param mixed $iterable The iterable to turn into an iterator
+ * 
  * @return \Iterator
  */
 function toIter($iterable) {
@@ -529,6 +548,18 @@ function toIter($iterable) {
     });
 }
 
+/**
+ * Takes an iterator and returns an array
+ * 
+ * Examples:
+ * 
+ *      iter\toArray([1, 2, 3])
+ *      => [1, 2, 3]
+ * 
+ * @param $iterable The iterable to make an array
+ * 
+ * @return array
+ */
 function toArray($iterable) {
     $array = [];
     foreach ($iterable as $value) {
@@ -537,6 +568,18 @@ function toArray($iterable) {
     return $array;
 }
 
+/**
+ * Takes an iterator and returns an array preserving its keys
+ *
+ * Examples:
+ *
+ *      iter\toArray(['a' => 1, 'b' => 2, 'c' => 3])
+ *      => ['a' => 1, 'b' => 2, 'c' => 3]
+ *
+ * @param $iterable The iterable to make an array
+ * 
+ * @return array
+ */
 function toArrayWithKeys($iterable) {
     $array = [];
     foreach ($iterable as $key => $value) {
