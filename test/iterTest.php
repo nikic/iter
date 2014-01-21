@@ -163,6 +163,13 @@ class IterTest extends \PHPUnit_Framework_TestCase {
             ])))
         );
     }
+    
+    public function testCompress() {
+        $this->assertEquals(
+            [1, 3, 5, 6],
+            toArray(compress(range(1, 700), [1, 0, 1, 0, 1, 1, 0]))
+        );
+    }
 
     public function testToIter() {
         $iter = new \ArrayIterator([1, 2, 3]);

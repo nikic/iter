@@ -499,6 +499,35 @@ function flatten($iterable) {
     }
 }
 
+/**
+ * Takes a data iterable and a selectors iterable and filters items from the
+ * data iterable that have a corresponding falsey value in the selectors iterable
+ * 
+ * Examples:
+ * 
+ *      iter\compress([1, 2, 3], [1, 0, 1])
+ *      => iter(1, 3)
+ * 
+ * @param $iterable
+ * @param $selectors
+ * 
+ * @return \Iterator
+ */
+function compress($iterable, $selectors) {
+    $iterable = toIter($iterable);
+    $selectors = toIter($selectors);
+
+    for (
+        $iterable->rewind(), $selectors->rewind();
+        $iterable->valid() && $selectors->valid();
+        $iterable->next(), $selectors->next()
+    ) {
+        if ($selectors->current()) {
+            yield $iterable->key() => $iterable->current();
+        }
+    }
+}
+
 function count($iterable) {
     if (is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);
@@ -547,7 +576,6 @@ function toArrayWithKeys($iterable) {
 
 /*
  * Python:
- * compress()
  * groupby()
  * tee()
  * izip_longest()

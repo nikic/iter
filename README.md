@@ -52,6 +52,7 @@ list the function signatures as an overview:
     Iterator takeWhile(callable $predicate, iterable $iterable)
     Iterator dropWhile(callable $predicate, iterable $iterable)
     Iterator flatten(iterable $iterable)
+    Iterator compress(iterable $iterable, iterable $selectors)
     int      count(iterable $iterable)
     Iterator toIter(iterable $iterable)
     array    toArray(iterable $iterable)
