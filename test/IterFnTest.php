@@ -12,8 +12,8 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
         $arr1 = [10, 11, 12, 13, 14, 15];
         $arr2 = ['foo' => 'bar', 'test' => 'tset', 'bar' => 'foo'];
 
-        $this->assertEquals($arr1[3], $getIndex3($arr1));
-        $this->assertEquals($arr2['test'], $getIndexTest($arr2));
+        $this->assertSame($arr1[3], $getIndex3($arr1));
+        $this->assertSame($arr2['test'], $getIndexTest($arr2));
     }
 
     public function testProperty() {
@@ -22,8 +22,8 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
 
         $obj = (object) ['foo' => 'bar', 'bar' => 'foo'];
 
-        $this->assertEquals($obj->foo, $getPropertyFoo($obj));
-        $this->assertEquals($obj->bar, $getPropertyBar($obj));
+        $this->assertSame($obj->foo, $getPropertyFoo($obj));
+        $this->assertSame($obj->bar, $getPropertyBar($obj));
     }
 
     public function testMethod() {
@@ -33,9 +33,9 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
 
         $obj = new _MethodTestDummy;
 
-        $this->assertEquals([], $callMethod1($obj));
-        $this->assertEquals([], $callMethod2($obj));
-        $this->assertEquals(['a', 'b'], $callMethod3($obj));
+        $this->assertSame([], $callMethod1($obj));
+        $this->assertSame([], $callMethod2($obj));
+        $this->assertSame(['a', 'b'], $callMethod3($obj));
     }
 
     public function testNot() {
@@ -44,12 +44,12 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
         $invert = fn\not(function($bool) { return $bool; });
         $nand = fn\not(fn\operator('&&'));
 
-        $this->assertEquals(false, $constFalse());
-        $this->assertEquals(true, $constTrue());
-        $this->assertEquals(false, $invert(true));
-        $this->assertEquals(true, $invert(false));
-        $this->assertEquals(false, $nand(true, true));
-        $this->assertEquals(true, $nand(true, false));
+        $this->assertFalse($constFalse());
+        $this->assertTrue($constTrue());
+        $this->assertFalse($invert(true));
+        $this->assertTrue($invert(false));
+        $this->assertFalse($nand(true, true));
+        $this->assertTrue($nand(true, false));
     }
 
     /** @dataProvider provideTestOperator */
@@ -57,8 +57,8 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
         $fn1 = fn\operator($op);
         $fn2 = fn\operator($op, $b);
 
-        $this->assertEquals($result, $fn1($a, $b));
-        $this->assertEquals($result, $fn2($a));
+        $this->assertSame($result, $fn1($a, $b));
+        $this->assertSame($result, $fn2($a));
     }
 
     public function provideTestOperator() {

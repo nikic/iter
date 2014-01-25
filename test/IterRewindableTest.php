@@ -7,8 +7,8 @@ use iter\rewindable;
 class IterRewindableTest extends \PHPUnit_Framework_TestCase {
     private function assertRewindableEquals($array, $iter, $withKeys = false) {
         $fn = $withKeys ? 'iter\\toArrayWithKeys' : 'iter\\toArray';
-        $this->assertEquals($array, $fn($iter));
-        $this->assertEquals($array, $fn($iter));
+        $this->assertSame($array, $fn($iter));
+        $this->assertSame($array, $fn($iter));
     }
 
     public function testRewindableVariants() {
@@ -30,7 +30,7 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
         );
         $this->assertRewindableEquals(
             [5=>0, 4=>1, 3=>2, 2=>3, 1=>4, 0=>5],
-            rewindable\zipKeyValue(rewindable\range(0, 5), rewindable\range(5, 0, -1)),
+            rewindable\zipKeyValue(rewindable\range(5, 0, -1), rewindable\range(0, 5)),
             true
         );
         $this->assertRewindableEquals(
@@ -106,6 +106,8 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
                 yield 'end';
             }
         });
+
+        /** @var rewindable\_RewindableGenerator $gen */
         $gen = $genFn();
 
         for ($i = 0; $i < 2; ++$i) {
