@@ -500,15 +500,23 @@ function flatten($iterable) {
 }
 
 /**
- * Takes and iterable and returns the number of items it contains
- * 
+ * Returns the number of elements an iterable contains.
+ *
+ * This function is not recursive, it counts only the number of elements in the
+ * iterable itself, not its children.
+ *
+ * If the iterable implements Countable its count() method will be used.
+ *
  * Examples:
  *
  *      iter\count([1, 2, 3])
  *      => 3
- * 
- * @param $iterable The iterable to count
- * 
+ *
+ *      iter\count(iter\flatten([1, 2, 3, [4, [[[5, 6], 7]]], 8]))
+ *      => 8
+ *
+ * @param mixed $iterable The iterable to count
+ *
  * @return int
  */
 function count($iterable) {
@@ -524,14 +532,15 @@ function count($iterable) {
 }
 
 /**
- * Takes an iterable and returns an Iterator
- * 
+ * Converts any iterable into an Iterator.
+ *
  * Examples:
+ *
  *      iter\toIter([1, 2, 3])
  *      => iter(1, 2, 3)
- * 
+ *
  * @param mixed $iterable The iterable to turn into an iterator
- * 
+ *
  * @return \Iterator
  */
 function toIter($iterable) {
@@ -549,15 +558,21 @@ function toIter($iterable) {
 }
 
 /**
- * Takes an iterator and returns an array
- * 
+ * Converts an iterable into an array, without preserving keys.
+ *
+ * Not preserving the keys is useful, because iterators do not necessarily have
+ * unique keys and/or the key type is not supported by arrays.
+ *
  * Examples:
- * 
- *      iter\toArray([1, 2, 3])
+ *
+ *      iter\toArray(new ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]))
  *      => [1, 2, 3]
- * 
- * @param $iterable The iterable to make an array
- * 
+ *
+ *      iter\toArray(iter\chain(['a' => 1, 'b' => 2], ['a' => 3]))
+ *      => [1, 2, 3]
+ *
+ * @param mixed $iterable The iterable to convert to an array
+ *
  * @return array
  */
 function toArray($iterable) {
@@ -569,15 +584,22 @@ function toArray($iterable) {
 }
 
 /**
- * Takes an iterator and returns an array preserving its keys
+ * Converts an iterable into an array and preserves its keys.
+ *
+ * If the keys are not unique, newer keys will overwrite older keys. If a key
+ * is not a string or an integer, the usual array key casting rules (and
+ * associated notices/warnings) apply.
  *
  * Examples:
  *
- *      iter\toArray(['a' => 1, 'b' => 2, 'c' => 3])
+ *      iter\toArrayWithKeys(new ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]))
  *      => ['a' => 1, 'b' => 2, 'c' => 3]
  *
- * @param $iterable The iterable to make an array
- * 
+ *      iter\toArrayWithKeys(iter\chain(['a' => 1, 'b' => 2], ['a' => 3]))
+ *      => ['a' => 3, 'b' => 2]
+ *
+ * @param mixed $iterable The iterable to convert to an array
+ *
  * @return array
  */
 function toArrayWithKeys($iterable) {

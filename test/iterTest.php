@@ -8,6 +8,12 @@ class Aggregate implements \IteratorAggregate {
     }
 }
 
+class Countable implements \Countable {
+    public function count() {
+        return 42;
+    }
+}
+
 class IterTest extends \PHPUnit_Framework_TestCase {
     /** @dataProvider provideTestRange */
     public function testRange($start, $end, $step, $resultArray) {
@@ -180,5 +186,33 @@ class IterTest extends \PHPUnit_Framework_TestCase {
     public function testCount() {
         $this->assertEquals(5, count([1, 2, 3, 4, 5]));
         $this->assertEquals(5, count(toIter([1, 2, 3, 4, 5])));
+        $this->assertEquals(42, count(new Countable));
+    }
+
+    public function testToArray() {
+        $this->assertSame([1, 2, 3], toArray(['a' => 1, 'b' => 2, 'c' => 3]));
+        $this->assertSame(
+            [1, 2, 3],
+            toArray(new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]))
+        );
+        $this->assertSame(
+            [1, 2, 3],
+            toArray(chain(['a' => 1, 'b' => 2], ['a' => 3]))
+        );
+    }
+
+    public function testToArrayWithKeys() {
+        $this->assertSame(
+            ['a' => 1, 'b' => 2, 'c' => 3],
+            toArrayWithKeys(['a' => 1, 'b' => 2, 'c' => 3])
+        );
+        $this->assertSame(
+            ['a' => 1, 'b' => 2, 'c' => 3],
+            toArrayWithKeys(new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]))
+        );
+        $this->assertSame(
+            ['a' => 3, 'b' => 2],
+            toArrayWithKeys(chain(['a' => 1, 'b' => 2], ['a' => 3]))
+        );
     }
 }
