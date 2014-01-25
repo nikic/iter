@@ -8,6 +8,45 @@ function index($index) {
     };
 }
 
+/**
+ * Returns a callable which returns an item from a nested array corresponding
+ * to the given path.
+ *
+ * Examples:
+ *
+ *     $array = [
+ *         'foo' => [
+ *             'bar' => [
+ *                 'baz' => 42
+ *             ]
+ *         ]
+ *     ];
+ *
+ *     $getIndexFooBar = fn\nested_index('foo', 'bar');
+ *     $getIndexFooBarBaz = fn\nested_index('foo', 'bar', 'baz');
+ *
+ *     $getIndexFooBar($array)
+ *     => ['baz' => 42]
+ *
+ *     $getIndexFooBarBaz($array)
+ *     => 42
+ *
+ * @param mixed[] ...$indices Path of indices
+ *
+ * @return callable
+ */
+function nested_index(/* ...$indices */) {
+    $indices = func_get_args();
+
+    return function($array) use ($indices) {
+        foreach ($indices as $index) {
+            $array = $array[$index];
+        }
+
+        return $array;
+    };
+}
+
 function property($propertyName) {
     return function($object) use ($propertyName) {
         return $object->$propertyName;

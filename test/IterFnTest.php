@@ -16,6 +16,22 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame($arr2['test'], $getIndexTest($arr2));
     }
 
+    public function testNestedIndex() {
+        $getIndexFooBar = fn\nested_index('foo', 'bar');
+        $getIndexFooBarBaz = fn\nested_index('foo', 'bar', 'baz');
+
+        $array = [
+            'foo' => [
+                'bar' => [
+                    'baz' => 42
+                ]
+            ]
+        ];
+
+        $this->assertSame($array['foo']['bar'], $getIndexFooBar($array));
+        $this->assertSame($array['foo']['bar']['baz'], $getIndexFooBarBaz($array));
+    }
+
     public function testProperty() {
         $getPropertyFoo = fn\property('foo');
         $getPropertyBar = fn\property('bar');
