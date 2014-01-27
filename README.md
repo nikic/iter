@@ -34,6 +34,7 @@ You can find documentation and usage examples for the individual functions in
 list the function signatures as an overview:
 
     Iterator map(callable $function, iterable $iterable)
+    Iterator mapKeys(callable $function, iterable $iterable)
     Iterator filter(callable $predicate, iterable $iterable)
     Iterator zip(iterable... $iterables)
     Iterator zipKeyValue(iterable $keys, iterable $values)
