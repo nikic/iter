@@ -35,6 +35,7 @@ list the function signatures as an overview:
 
     Iterator range(number $start, number $end, number $step = null)
     Iterator map(callable $function, iterable $iterable)
+    Iterator mapKeys(callable $function, iterable $iterable)
     void     apply(callable $function, iterable $iterable)
     Iterator filter(callable $predicate, iterable $iterable)
     mixed    reduce(callable $function, iterable $iterable, mixed $startValue = null)

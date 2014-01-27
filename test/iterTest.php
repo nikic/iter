@@ -42,6 +42,12 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([0, 3, 6, 9, 12, 15], toArray($mapped));
     }
 
+    public function testMapKeys() {
+        $range = range(0, 5);
+        $mapped = mapKeys(function($n) { return $n * 3; }, $range);
+        $this->assertSame([0 => 0, 3 => 1, 6 => 2, 9 => 3, 12 => 4, 15 => 5], toArrayWithKeys($mapped));
+    }
+
     public function testApply() {
         $range = range(0, 5);
         $result = [];

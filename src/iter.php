@@ -85,6 +85,29 @@ function map(callable $function, $iterable) {
 }
 
 /**
+ * Applies a mapping function to all keys of an iterator.
+ *
+ * The function is passed the current iterator key and should return a
+ * modified iterator key. The value is left as-is and not passed to the mapping
+ * function.
+ *
+ * Examples:
+ *
+ *     iter\mapKeys('strtolower', ['A' => 1, 'B' => 2, 'C' => 3, 'D' => 4]);
+ *     => iter('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4)
+ *
+ * @param callable $function Mapping function: mixed function(mixed $key)
+ * @param mixed    $iterable Iterable to be mapped over
+ *
+ * @return \Iterator
+ */
+function mapKeys(callable $function, $iterable) {
+    foreach ($iterable as $key => $value) {
+        yield $function($key) => $value;
+    }
+}
+
+/**
  * Applies a function to all values of an iterable.
  *
  * The function is passed the current iterator value. The reason why apply
