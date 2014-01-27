@@ -532,6 +532,34 @@ function count($iterable) {
 }
 
 /**
+ * Takes an iterable and chunks it into the specified size.
+ * 
+ * This function is lazy in that it yields each chunk as a generator
+ * which when iterated will yield size times or until the iterator is
+ * no longer valid
+ * 
+ * Examples:
+ * 
+ *      iter\chunk([1, 2, 3], 2)
+ *      => iter(iter(1, 2), iter(3))
+ * 
+ * @param $iterable The iterable to chunk
+ * @param $size The size of each chunk
+ * @return \Iterator An iterator of iterators
+ */
+function chunk($iterable, $size) {
+    $iterable = toIter($iterable);
+    $iterable->rewind();
+    while ($iterable->valid()) {
+        yield call_user_func(function () use ($iterable, $size) {
+            for ($i = 0; $i < $size && $iterable->valid(); $iterable->next(), $i++) {
+                yield $iterable->key() => $iterable->current();
+            }
+        });
+    }
+}
+
+/**
  * Converts any iterable into an Iterator.
  *
  * Examples:
