@@ -203,6 +203,13 @@ class IterTest extends \PHPUnit_Framework_TestCase {
             toArrayWithKeys(chain(['a' => 1, 'b' => 2], ['a' => 3]))
         );
     }
+    
+    public function testImplode() {
+        $this->assertEquals(
+            "a,b,c",
+            implode(new \ArrayIterator(['a', 'b', 'c']), ',')
+        );
+    }
 }
 
 class _CountableTestDummy implements \Countable {
