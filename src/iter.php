@@ -610,6 +610,37 @@ function toArrayWithKeys($iterable) {
     return $array;
 }
 
+/**
+ * Takes an iterable and joins its elements with a string
+ *
+ * Examples:
+ * 
+ *      iter\implode(new \ArrayIterator(['a', 'b', 'c']), ',')
+ *      => "a,b,c"
+ * 
+ * @param $iterable
+ * @param $glue
+ * @return string
+ */
+function implode($iterable, $glue) {
+    $iterable = toIter($iterable);
+    $iterable->rewind();
+    
+    $str = '';
+
+    while (true) {
+        $str .= $iterable->current();
+        $iterable->next();
+        if ($iterable->valid()) {
+            $str .= $glue;
+        } else {
+            break;
+        }
+    }
+    
+    return $str;
+}
+
 /*
  * Python:
  * compress()
