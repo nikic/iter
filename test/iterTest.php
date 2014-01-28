@@ -203,6 +203,13 @@ class IterTest extends \PHPUnit_Framework_TestCase {
             toArrayWithKeys(chain(['a' => 1, 'b' => 2], ['a' => 3]))
         );
     }
+    
+    public function testFlip() {
+        $this->assertSame(
+            [1 => 'a', 2 => 'b', 3 => 'c'],
+            toArrayWithKeys(flip(['a' => 1, 'b' => 2, 'c' => 3]))
+        );
+    }
 }
 
 class _CountableTestDummy implements \Countable {

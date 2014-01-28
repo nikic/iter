@@ -500,6 +500,24 @@ function flatten($iterable) {
 }
 
 /**
+ * Flips the keys and values of an iterable.
+ *
+ * Examples:
+ *
+ *      iter\flip(['a' => 1, 'b' => 2, 'c' => 3])
+ *      => iter(1 => 'a', 2 => 'b', 3 => 'c')
+ *
+ * @param mixed $iterable The iterable to flip
+ *
+ * @return \Iterator
+ */
+function flip($iterable) {
+    foreach ($iterable as $key => $value) {
+        yield $value => $key;
+    }
+}
+
+/**
  * Returns the number of elements an iterable contains.
  *
  * This function is not recursive, it counts only the number of elements in the
