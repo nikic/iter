@@ -628,6 +628,23 @@ function toArrayWithKeys($iterable) {
     return $array;
 }
 
+/**
+ * Takes and iterator and yields its keys and values flipped
+ * 
+ * Examples:
+ * 
+ *      iter\flip(new ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]))
+ *      => iter(1 => 'a', 2 => 'b', 3 => 'c')
+ * 
+ * @param $iterable
+ * @return \Iterator
+ */
+function flip($iterable) {
+    foreach ($iterable as $key => $value) {
+        yield $value => $key;
+    }
+}
+
 /*
  * Python:
  * compress()
