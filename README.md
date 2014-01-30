@@ -45,6 +45,7 @@ list the function signatures as an overview:
     Iterator take(int $num, iterable $iterable)
     Iterator drop(int $num, iterable $iterable)
     Iterator repeat(mixed $value, int $num = INF)
+    Iterator cycle(iterable $iterable, int $num = INF)
     Iterator keys(iterable $iterable)
     Iterator values(iterable $iterable)
     bool     any(callable $predicate, iterable $iterable)
