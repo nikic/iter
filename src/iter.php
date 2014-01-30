@@ -518,6 +518,40 @@ function flip($iterable) {
 }
 
 /**
+ * Takes an iterable and chunks it into the specified size.
+ *
+ * This function yields arrays of the specified size
+ *
+ * Examples:
+ *
+ *      iter\chunk([1, 2, 3], 2)
+ *      => iter([1, 2], [3])
+ *
+ * @param $iterable The iterable to chunk
+ * @param $size The size of each chunk
+ * @return \Iterator An iterator of arrays
+ */
+function chunk($iterable, $size) {
+    $chunk = [];
+    $count = 0;
+
+    foreach ($iterable as $key => $value) {
+        $chunk[$key] = $value;
+        $count++;
+
+        if ($count === $size) {
+            yield $chunk;
+            $count = 0;
+            $chunk = [];
+        }
+    }
+
+    if ($count !== 0) {
+        yield $chunk;
+    }
+}
+
+/**
  * Joins the elements of an iterable with a separator between them.
  *
  * Examples:

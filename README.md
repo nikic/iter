@@ -47,6 +47,7 @@ list the function signatures as an overview:
     Iterator values(iterable $iterable)
     Iterator flatten(iterable $iterable)
     Iterator flip(iterable $iterable)
+    Iterator chunk(iterable $iterable, int $size)
     Iterator toIter(iterable $iterable)
 
     Iterator range(number $start, number $end, number $step = null)

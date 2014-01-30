@@ -204,6 +204,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+
     public function testFlip() {
         $this->assertSame(
             [1 => 'a', 2 => 'b', 3 => 'c'],
@@ -217,6 +218,21 @@ class IterTest extends \PHPUnit_Framework_TestCase {
             'a, b, c',
             join(', ', new \ArrayIterator(['a', 'b', 'c']))
         );
+    }
+
+    public function testChunk() {
+        $iterable = new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5, 'f' => 6, 'g' => 7]);
+
+        $str = '';
+
+        foreach (chunk($iterable, 2) as $chunk) {
+            foreach ($chunk as $key => $value) {
+                $str .= sprintf('%s:%s ', $key, $value);
+            }
+            $str .= "\n";
+        }
+
+        $this->assertEquals("a:1 b:2 \nc:3 d:4 \ne:5 f:6 \ng:7 \n", $str);
     }
 }
 

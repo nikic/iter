@@ -68,6 +68,7 @@ namespace iter\rewindable {
     function values()      { return new _RewindableGenerator('iter\values',      func_get_args()); }
     function flatten()     { return new _RewindableGenerator('iter\flatten',     func_get_args()); }
     function flip()        { return new _RewindableGenerator('iter\flip',        func_get_args()); }
+    function chunk()       { return new _RewindableGenerator('iter\chunk',       func_get_args()); }
 
     /**
      * This class is used for the internal implementation of rewindable
