@@ -57,6 +57,7 @@ list the function signatures as an overview:
     array    toArray(iterable $iterable)
     array    toArrayWithKeys(iterable $iterable)
     Iterator flip(iterable $iterable)
+    string   join(string $separator, iterable $iterable)
 
 As the functionality is implemented using generators the resulting iterators
 are by default not rewindable. This library implements additional functionality

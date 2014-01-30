@@ -518,6 +518,33 @@ function flip($iterable) {
 }
 
 /**
+ * Joins the elements of an iterable with a separator between them.
+ *
+ * Examples:
+ *
+ *      iter\join(', ', ['a', 'b', 'c'])
+ *      => "a, b, c"
+ *
+ * @param string $separator Separator to use between elements
+ * @param mixed  $iterable  The iterable to join
+ *
+ * @return string
+ */
+function join($separator, $iterable) {
+    $str = '';
+    $first = true;
+    foreach ($iterable as $value) {
+        if ($first) {
+            $str .= $value;
+            $first = false;
+        } else {
+            $str .= $separator . $value;
+        }
+    }
+    return $str;
+}
+
+/**
  * Returns the number of elements an iterable contains.
  *
  * This function is not recursive, it counts only the number of elements in the
