@@ -327,6 +327,33 @@ function repeat($value, $num = INF) {
 }
 
 /**
+ * Takes an iterator and cycles through its elements a given number of times
+ * 
+ * If working with a generator it is best to make it rewindable if the expected
+ * number of elements is large
+ * 
+ * Examples:
+ * 
+ *      iter\cycle([1, 2, 3], 3)
+ *      => iter(1, 2, 3, 1, 2, 3, 1, 2, 3)
+ * 
+ * @param mixed $iterable The iterator to cycle
+ * @param $num The number of items to cycle
+ * 
+ * @return \Iterator
+ */
+function cycle($iterable, $num = INF) {
+    if ($iterable instanceof \Generator) {
+        $iterable = toArray($iterable);
+    }
+    for ($i = 0; $i < $num; ++$i) {
+        foreach ($iterable as $key => $value) {
+            yield $key => $value;
+        }
+    }
+}
+
+/**
  * Returns the keys of an iterable.
  *
  * Examples:
