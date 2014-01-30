@@ -211,7 +211,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    public function testImplode() {
+    public function testJoin() {
         $this->assertSame('', join(', ', []));
         $this->assertSame(
             'a, b, c',

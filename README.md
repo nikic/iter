@@ -33,31 +33,33 @@ You can find documentation and usage examples for the individual functions in
 [iter.php](https://github.com/nikic/iter/blob/master/src/iter.php), here I only
 list the function signatures as an overview:
 
-    Iterator range(number $start, number $end, number $step = null)
     Iterator map(callable $function, iterable $iterable)
-    void     apply(callable $function, iterable $iterable)
     Iterator filter(callable $predicate, iterable $iterable)
-    mixed    reduce(callable $function, iterable $iterable, mixed $startValue = null)
     Iterator zip(iterable... $iterables)
     Iterator zipKeyValue(iterable $keys, iterable $values)
     Iterator chain(iterable... $iterables)
     Iterator slice(iterable $iterable, int $start, int $length = INF)
     Iterator take(int $num, iterable $iterable)
     Iterator drop(int $num, iterable $iterable)
-    Iterator repeat(mixed $value, int $num = INF)
-    Iterator keys(iterable $iterable)
-    Iterator values(iterable $iterable)
-    bool     any(callable $predicate, iterable $iterable)
-    bool     all(callable $predicate, iterable $iterable)
     Iterator takeWhile(callable $predicate, iterable $iterable)
     Iterator dropWhile(callable $predicate, iterable $iterable)
+    Iterator keys(iterable $iterable)
+    Iterator values(iterable $iterable)
     Iterator flatten(iterable $iterable)
-    int      count(iterable $iterable)
+    Iterator flip(iterable $iterable)
     Iterator toIter(iterable $iterable)
+
+    Iterator range(number $start, number $end, number $step = null)
+    Iterator repeat(mixed $value, int $num = INF)
+
+    mixed    reduce(callable $function, iterable $iterable, mixed $startValue = null)
+    bool     any(callable $predicate, iterable $iterable)
+    bool     all(callable $predicate, iterable $iterable)
+    void     apply(callable $function, iterable $iterable)
+    string   join(string $separator, iterable $iterable)
+    int      count(iterable $iterable)
     array    toArray(iterable $iterable)
     array    toArrayWithKeys(iterable $iterable)
-    Iterator flip(iterable $iterable)
-    string   join(string $separator, iterable $iterable)
 
 As the functionality is implemented using generators the resulting iterators
 are by default not rewindable. This library implements additional functionality
