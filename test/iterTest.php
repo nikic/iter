@@ -189,6 +189,27 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testToArrayRecursive() {
+        $this->assertSame(
+            [[[1, 2, 3], 2, 3], 2, 3],
+            toArrayRecursive(
+                new \ArrayIterator([
+                    'a' => new \ArrayIterator([
+                        'a' => new \ArrayIterator([
+                            'a' => 1,
+                            'b' => 2,
+                            'c' => 3
+                        ]),
+                        'b' => 2,
+                        'c' => 3
+                    ]),
+                    'b' => 2,
+                    'c' => 3
+                ])
+            )
+        );
+    }
+
     public function testToArrayWithKeys() {
         $this->assertSame(
             ['a' => 1, 'b' => 2, 'c' => 3],
@@ -201,6 +222,27 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(
             ['a' => 3, 'b' => 2],
             toArrayWithKeys(chain(['a' => 1, 'b' => 2], ['a' => 3]))
+        );
+    }
+
+    public function testToArrayRecursiveWithKeys() {
+        $this->assertSame(
+            ['a' => ['a' => ['a' => 1, 'b' => 2, 'c' => 3], 'b' => 2, 'c' => 3], 'b' => 2, 'c' => 3],
+            toArrayRecursiveWithKeys(
+                new \ArrayIterator([
+                    'a' => new \ArrayIterator([
+                            'a' => new \ArrayIterator([
+                                    'a' => 1,
+                                    'b' => 2,
+                                    'c' => 3
+                                ]),
+                            'b' => 2,
+                            'c' => 3
+                        ]),
+                    'b' => 2,
+                    'c' => 3
+                ])
+            )
         );
     }
     

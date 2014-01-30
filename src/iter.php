@@ -628,6 +628,60 @@ function toArrayWithKeys($iterable) {
     return $array;
 }
 
+/**
+ * Recursively converts iterables into arrays, without preserving keys.
+ *
+ * Each traversable value that is encountered turned into an array recursively
+ *
+ * Examples:
+ *
+ *      iter\toArrayRecursive(new \ArrayIterator([new \ArrayIterator([1, 2, 3]), 2, 3]))
+ *      => [[1, 2, 3], 2, 3]
+ *
+ * @param mixed $iterable The iterable to convert to an array
+ *
+ * @return array
+ */
+function toArrayRecursive($iterable) {
+    $array = [];
+    foreach ($iterable as $value) {
+        if ($value instanceof \Traversable) {
+            $array[] = toArrayRecursive($value);
+        } else {
+            $array[] = $value;
+        }
+    }
+    return $array;
+}
+
+/**
+ * Recursively converts iterables into arrays preserving their keys.
+ *
+ * Each traversable value that is encountered turned into an array recursively
+ *
+ * Examples:
+ *
+ *      iter\toArrayRecursiveWithKeys(
+ *          new \ArrayIterator(['a' => new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]), 'c' => 2, 'c' => 3])
+ *      )
+ *      => ['a' => ['a' => 1,'b' => 2, 'c' => 3], 'b' => 2, 'c' => 3]
+ *
+ * @param mixed $iterable The iterable to convert to an array
+ * 
+ * @return array
+ */
+function toArrayRecursiveWithKeys($iterable) {
+    $array = [];
+    foreach ($iterable as $key => $value) {
+        if ($value instanceof \Traversable) {
+            $array[$key] = toArrayRecursiveWithKeys($value);
+        } else {
+            $array[$key] = $value;
+        }
+    }
+    return $array;
+}
+
 /*
  * Python:
  * compress()
