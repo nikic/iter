@@ -518,17 +518,18 @@ function flip($iterable) {
 }
 
 /**
- * Takes an iterable and chunks it into the specified size.
+ * Chunks an iterable into arrays of the specified size.
  *
- * This function yields arrays of the specified size
+ * Each chunk is an array (non-lazy), but the chunks are yielded lazily.
  *
  * Examples:
  *
- *      iter\chunk([1, 2, 3], 2)
- *      => iter([1, 2], [3])
+ *      iter\chunk([1, 2, 3, 4, 5], 3)
+ *      => iter([1, 2, 3], [4, 5])
  *
- * @param $iterable The iterable to chunk
- * @param $size The size of each chunk
+ * @param mixed $iterable The iterable to chunk
+ * @param int   $size     The size of each chunk
+ *
  * @return \Iterator An iterator of arrays
  */
 function chunk($iterable, $size) {

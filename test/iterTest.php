@@ -221,18 +221,21 @@ class IterTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testChunk() {
-        $iterable = new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5, 'f' => 6, 'g' => 7]);
+        $iterable = new \ArrayIterator(
+            ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]
+        );
 
-        $str = '';
+        $this->assertSame(
+            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            toArray(chunk($iterable, 2))
+        );
 
-        foreach (chunk($iterable, 2) as $chunk) {
-            foreach ($chunk as $key => $value) {
-                $str .= sprintf('%s:%s ', $key, $value);
-            }
-            $str .= "\n";
-        }
-
-        $this->assertEquals("a:1 b:2 \nc:3 d:4 \ne:5 f:6 \ng:7 \n", $str);
+        $this->assertSame(
+            [[0=>0, 1=>1], [2=>2, 3=>3]],
+            toArray(chunk([0, 1, 2, 3], 2))
+        );
+        $this->assertSame([[0, 1, 2]], toArray(chunk([0, 1, 2], 100000)));
+        $this->assertSame([], toArray(chunk([], 100000)));
     }
 }
 

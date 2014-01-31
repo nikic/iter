@@ -80,6 +80,12 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             rewindable\flip(['a' => 1, 'b' => 2, 'c' => 3]),
             true
         );
+
+        $this->assertRewindableEquals(
+            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            rewindable\chunk(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], 2),
+            true
+        );
     }
 
     public function testMakeRewindable() {
