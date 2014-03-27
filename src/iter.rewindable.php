@@ -55,6 +55,7 @@ namespace iter\rewindable {
     function range()       { return new _RewindableGenerator('iter\range',       func_get_args()); }
     function map()         { return new _RewindableGenerator('iter\map',         func_get_args()); }
     function mapKeys()     { return new _RewindableGenerator('iter\mapKeys',     func_get_args()); }
+    function reindex()     { return new _RewindableGenerator('iter\reindex',     func_get_args()); }
     function filter()      { return new _RewindableGenerator('iter\filter',      func_get_args()); }
     function zip()         { return new _RewindableGenerator('iter\zip',         func_get_args()); }
     function zipKeyValue() { return new _RewindableGenerator('iter\zipKeyValue', func_get_args()); }
@@ -81,6 +82,7 @@ namespace iter\rewindable {
     class _RewindableGenerator implements \Iterator {
         protected $function;
         protected $args;
+        /** @var \Generator */
         protected $generator;
 
         public function __construct(callable $function, array $args) {

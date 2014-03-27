@@ -108,6 +108,37 @@ function mapKeys(callable $function, $iterable) {
 }
 
 /**
+ * Reindexes an array by applying a function to all values of an iterator and
+ * using the returned value as the new key/index.
+ *
+ * The function is passed the current iterator value and should return a new
+ * key for that element. The value is left as-is. The original key is not passed
+ * to the mapping function.
+ *
+ * Examples:
+ *
+ *     $users = [
+ *         ['id' => 42, 'name' => 'foo'],
+ *         ['id' => 24, 'name' => 'bar']
+ *     ];
+ *     iter\reindex(iter\fn\index('id'), $users)
+ *     => iter(
+ *         42 => ['id' => 42, 'name' => 'foo'],
+ *         24 => ['id' => 24, 'name' => 'bar']
+ *     )
+ *
+ * @param callable $function Mapping function mixed function(mixed $value)
+ * @param mixed    $iterable Iterable to reindex
+ *
+ * @return \Iterator
+ */
+function reindex(callable $function, $iterable) {
+    foreach ($iterable as $value) {
+        yield $function($value) => $value;
+    }
+}
+
+/**
  * Applies a function to all values of an iterable.
  *
  * The function is passed the current iterator value. The reason why apply

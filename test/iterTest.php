@@ -57,6 +57,20 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testReindex() {
+        $iter = reindex('strtoupper', ['a', 'b', 'c', 'd', 'e']);
+        $this->assertSame(
+            ['A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e'],
+            toArrayWithKeys($iter)
+        );
+
+        $iter = reindex(fn\operator('*', 2), [1, 2, 3, 4]);
+        $this->assertSame(
+            [2 => 1, 4 => 2, 6 => 3, 8 => 4],
+            toArrayWithKeys($iter)
+        );
+    }
+
     public function testApply() {
         $range = range(0, 5);
         $result = [];
