@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nikic/iter.svg?branch=master)](https://travis-ci.org/nikic/iter)
+
 Iteration primitives using generators
 =====================================
 
