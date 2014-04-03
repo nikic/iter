@@ -474,6 +474,33 @@ function all(callable $predicate, $iterable) {
 }
 
 /**
+ * Searches an iterable until a predicate returns true, then returns
+ * the value of the matching element.
+ *
+ * Examples:
+ *
+ *      iter\search(iter\fn\operator('===', 'baz'), ['foo', 'bar', 'baz'])
+ *      => 'baz'
+ *
+ *      iter\search(iter\fn\operator('===', 'qux'), ['foo', 'bar', 'baz'])
+ *      => null
+ *
+ * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param mixed $iterable The iterable to search
+ *
+ * @return null|mixed
+ */
+function search(callable $predicate, $iterable) {
+    foreach ($iterable as $value) {
+        if ($predicate($value)) {
+            return $value;
+        }
+    }
+
+    return null;
+}
+
+/**
  * Takes items from an iterable until the predicate fails for the first time.
  *
  * This means that all elements before (and excluding) the first element on

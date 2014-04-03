@@ -58,6 +58,7 @@ list the function signatures as an overview:
     mixed    reduce(callable $function, iterable $iterable, mixed $startValue = null)
     bool     any(callable $predicate, iterable $iterable)
     bool     all(callable $predicate, iterable $iterable)
+    mixed    search(callable $predicate, iterable $iterable)
     void     apply(callable $function, iterable $iterable)
     string   join(string $separator, iterable $iterable)
     int      count(iterable $iterable)
