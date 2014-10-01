@@ -101,15 +101,16 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
             ['^', 3, 1, 2],
             ['&&', true, false, false],
             ['||', true, false, true],
+            ['**', 2, 4, 16],
         ];
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown operator "**"
+     * @expectedExceptionMessage Unknown operator "***"
      */
     public function testInvalidOperator() {
-        fn\operator('**');
+        fn\operator('***');
     }
 }
 
