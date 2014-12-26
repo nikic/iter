@@ -39,6 +39,10 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             rewindable\zip(rewindable\range(0, 5), rewindable\range(5, 0, -1))
         );
         $this->assertRewindableEquals(
+            [1, 3, 6, 10, 15],
+            rewindable\reductions(fn\operator('+'), rewindable\range(1, 5), 0)
+        );
+        $this->assertRewindableEquals(
             [5=>0, 4=>1, 3=>2, 2=>3, 1=>4, 0=>5],
             rewindable\zipKeyValue(rewindable\range(5, 0, -1), rewindable\range(0, 5)),
             true

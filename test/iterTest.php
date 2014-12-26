@@ -134,6 +134,11 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(120, reduce(fn\operator('*'), range(1, 5), 1));
     }
 
+    public function testReductions() {
+        $this->assertSame([1, 3, 6, 10, 15], toArrayWithKeys(reductions(fn\operator('+'), range(1, 5), 0)));
+        $this->assertSame([1, 2, 6, 24, 120], toArrayWithKeys(reductions(fn\operator('*'), range(1, 5), 1)));
+    }
+
     public function testAnyAll() {
         $this->assertTrue(all(fn\operator('>', 0), range(1, 10)));
         $this->assertFalse(all(fn\operator('>', 0), range(-5, 5)));
