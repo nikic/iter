@@ -217,6 +217,38 @@ function reduce(callable $function, $iterable, $startValue = null) {
 }
 
 /**
+ * Intermediate values of reducing iterable using a function.
+ *
+ * The reduction function is passed an accumulator value and the current
+ * iterator value and returns a new accumulator. The accumulator is initialized
+ * to $startValue.
+ *
+ * Reductions yield each accumulator along the way.
+ *
+ * Examples:
+ *
+ *      reductions(fn\operator('+'), range(1, 5), 0)
+ *      => iter(1, 3, 6, 10, 15)
+ *      reductions(fn\operator('*'), range(1, 5), 1)
+ *      => iter(1, 2, 6, 24, 120)
+ *
+ * @param callable $function   Reduction function:
+ *                             mixed function(mixed $acc, mixed $value)
+ * @param mixed    $iterable   Iterable to reduce
+ * @param mixed    $startValue Start value for accumulator. Usually identity
+ *                             value of $function.
+ *
+ * @return mixed Intermediate results of the reduction
+ */
+function reductions(callable $function, $iterable, $startValue = null) {
+    $acc = $startValue;
+    foreach ($iterable as $value) {
+        $acc = $function($acc, $value);
+        yield $acc;
+    }
+}
+
+/**
  * Zips the iterables that were passed as arguments.
  *
  * Afterwards keys and values will be arrays containing the keys/values of

@@ -37,6 +37,7 @@ list the function signatures as an overview:
     Iterator mapKeys(callable $function, iterable $iterable)
     Iterator reindex(callable $function, iterable $iterable)
     Iterator filter(callable $predicate, iterable $iterable)
+    Iterator reductions(callable $function, iterable $iterable, mixed $startValue = null)
     Iterator zip(iterable... $iterables)
     Iterator zipKeyValue(iterable $keys, iterable $values)
     Iterator chain(iterable... $iterables)
