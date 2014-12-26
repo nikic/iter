@@ -146,6 +146,17 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse(any(fn\operator('>', 0), range(-10, 0)));
     }
 
+    public function testSearch() {
+        $iter = new \ArrayIterator(['foo', 'bar', 'baz']);
+        $this->assertSame('baz', search(fn\operator('===', 'baz'), $iter));
+
+        $iter = new \ArrayIterator(['foo', 'bar', 'baz']);
+        $this->assertSame(null, search(fn\operator('===', 'qux'), $iter));
+
+        $iter = new \ArrayIterator([]);
+        $this->assertSame(null, search(fn\operator('===', 'qux'), $iter));
+    }
+
     public function testTakeOrDropWhile() {
         $this->assertSame(
             [3, 1, 4],
