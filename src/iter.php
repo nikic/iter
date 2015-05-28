@@ -327,6 +327,42 @@ function chain(/* ...$iterables */) {
 }
 
 /**
+ * Returns the cartesian product of iterables that were passed as arguments.
+ *
+ * The resulting iterator will contain all the possible tuples of keys and values.
+ *
+ * Please note that the iterables after the first must be rewindable
+ *
+ * Examples:
+ *
+ *     iter\product(iter\range(1, 2), iter\rewindable\range(3, 4))
+ *     => iter([1, 3], [1, 4], [2, 3], [2, 4])
+ *
+ * @param mixed[] ...$iterables Iterables to combine
+ *
+ * @return \Iterator
+ */
+function product(/* ...$iterables */) {
+    $iterables = func_get_args();
+
+    if (!$iterables) {
+        yield [] => [];
+        return;
+    }
+
+    $head = array_shift($iterables);
+    $tailProduct = call_user_func_array("iter\\rewindable\\product", $iterables);
+
+    foreach ($head as $headKey => $headValue) {
+        foreach ($tailProduct as $tailKey => $tailValue) {
+            array_unshift($tailValue, $headValue);
+            array_unshift($tailKey, $headKey);
+            yield $tailKey => $tailValue;
+        }
+    }
+}
+
+/**
  * Takes a slice from an iterable.
  *
  * Examples:
