@@ -61,6 +61,7 @@ namespace iter\rewindable {
     function zip()         { return new _RewindableGenerator('iter\zip',         func_get_args()); }
     function zipKeyValue() { return new _RewindableGenerator('iter\zipKeyValue', func_get_args()); }
     function chain()       { return new _RewindableGenerator('iter\chain',       func_get_args()); }
+    function product()     { return new _RewindableGenerator('iter\product',     func_get_args()); }
     function slice()       { return new _RewindableGenerator('iter\slice',       func_get_args()); }
     function take()        { return new _RewindableGenerator('iter\take',        func_get_args()); }
     function drop()        { return new _RewindableGenerator('iter\drop',        func_get_args()); }
