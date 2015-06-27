@@ -12,6 +12,15 @@ functions like `array_map()` (which only accept arrays) and the SPL iterators
 (which usually only accept iterators, not even aggregates). The operations are
 of course lazy.
 
+Install
+-------
+
+To install with composer:
+
+```sh
+composer require nikic/iter
+```
+
 Functionality
 -------------
 
