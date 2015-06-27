@@ -12,6 +12,15 @@ functions like `array_map()` (which only accept arrays) and the SPL iterators
 (which usually only accept iterators, not even aggregates). The operations are
 of course lazy.
 
+Install
+-------
+
+To install with composer:
+
+```sh
+composer require nikic/iter
+```
+
 Functionality
 -------------
 
@@ -22,7 +31,7 @@ A small usage example for the ``map()`` and ``range()`` functions:
 
 use iter, iter\fn;
 
-// require 'path/to/src/bootstrap.php'; has to happen somewhere
+require 'path/to/vendor/autoload.php';
 
 $nums = iter\range(1, 10);
 $numsTimesTen = iter\map(fn\operator('*', 10), $nums);
@@ -78,8 +87,6 @@ here is just a small usage example of the two main functions:
 <?php
 
 use iter, iter\fn;
-
-// require 'path/to/src/bootstrap.php';
 
 /* Create a rewindable map function which can be used multiple times */
 $rewindableMap = iter\makeRewindable('iter\\map');
