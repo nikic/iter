@@ -212,7 +212,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([1, 2, 3], toArray($iter));
 
         $iter = toIter([1, 2, 3]);
-        $this->assertInstanceOf('Iterator', $iter);
+        $this->assertInstanceOf('ArrayIterator', $iter);
         $this->assertSame([1, 2, 3], toArray($iter));
     }
 
