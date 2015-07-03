@@ -329,9 +329,10 @@ function chain(/* ...$iterables */) {
 /**
  * Returns the cartesian product of iterables that were passed as arguments.
  *
- * The resulting iterator will contain all the possible tuples of keys and values.
+ * The resulting iterator will contain all the possible tuples of keys and
+ * values.
  *
- * Please note that the iterables after the first must be rewindable
+ * Please note that the iterables after the first must be rewindable.
  *
  * Examples:
  *
@@ -343,22 +344,38 @@ function chain(/* ...$iterables */) {
  * @return \Iterator
  */
 function product(/* ...$iterables */) {
-    $iterables = func_get_args();
-
-    if (!$iterables) {
+    /** @var \Iterator[] $iterators */
+    $iterators = array_map('iter\\toIter', func_get_args());
+    $numIterators = count($iterators);
+    if (!$numIterators) {
         yield [] => [];
         return;
     }
 
-    $head = array_shift($iterables);
-    $tailProduct = call_user_func_array("iter\\rewindable\\product", $iterables);
+    $keyTuple = $valueTuple = array_fill(0, $numIterators, null);
 
-    foreach ($head as $headKey => $headValue) {
-        foreach ($tailProduct as $tailKey => $tailValue) {
-            array_unshift($tailValue, $headValue);
-            array_unshift($tailKey, $headKey);
-            yield $tailKey => $tailValue;
+    $i = -1;
+    while (true) {
+        while (++$i < $numIterators - 1) {
+            $iterators[$i]->rewind();
+            if (!$iterators[$i]->valid()) {
+                return;
+            }
+            $keyTuple[$i] = $iterators[$i]->key();
+            $valueTuple[$i] = $iterators[$i]->current();
         }
+        foreach ($iterators[$i] as $keyTuple[$i] => $valueTuple[$i]) {
+            yield $keyTuple => $valueTuple;
+        }
+        while (--$i >= 0) {
+            $iterators[$i]->next();
+            if ($iterators[$i]->valid()) {
+                $keyTuple[$i] = $iterators[$i]->key();
+                $valueTuple[$i] = $iterators[$i]->current();
+                continue 2;
+            }
+        }
+        return;
     }
 }
 
@@ -779,11 +796,7 @@ function toIter($iterable) {
     if ($iterable instanceof \IteratorAggregate) {
         return $iterable->getIterator();
     }
-    return call_user_func(function() use ($iterable) {
-        foreach ($iterable as $key => $value) {
-            yield $key => $value;
-        }
-    });
+    return new \ArrayIterator($iterable);
 }
 
 /**

@@ -282,6 +282,31 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([[0, 1, 2]], toArray(chunk([0, 1, 2], 100000)));
         $this->assertSame([], toArray(chunk([], 100000)));
     }
+
+    public function testProduct() {
+        $this->assertKeysValues([[]], [[]], function() { return product(); });
+
+        $this->assertKeysValues(
+            [[0],[1]], [[1],[2]], function() { return product([1,2]); });
+
+        $this->assertKeysValues(
+            [[0,0],[0,1],[1,0],[1,1]],
+            [[1,3],[1,4],[2,3],[2,4]],
+            function() { return product([1,2],[3,4]); });
+
+        $this->assertKeysValues(
+            [[0,0,0],[0,0,1],[0,1,0],[0,1,1],[1,0,0],[1,0,1],[1,1,0],[1,1,1]],
+            [[1,1,1],[1,1,2],[1,2,1],[1,2,2],[2,1,1],[2,1,2],[2,2,1],[2,2,2]],
+            function() {
+                return product(range(1,2), [1,2], new \ArrayIterator([1,2]));
+            }
+        );
+    }
+
+    private function assertKeysValues(array $keys, array $values, callable $fn) {
+        $this->assertSame($keys, toArray(keys($fn())));
+        $this->assertSame($values, toArray(values($fn())));
+    }
 }
 
 class _CountableTestDummy implements \Countable {
