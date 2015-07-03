@@ -102,6 +102,10 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
             ['&&', true, false, false],
             ['||', true, false, true],
             ['**', 2, 4, 16],
+            ['<=>', [0=>1,1=>0], [1=>0,0=>1], 0],
+            ['<=>', '2e1', '1e10', -1],
+            ['<=>', new \stdClass(), new \SplStack(), 1],
+            ['<=>', new \SplStack(), new \stdClass(), 1],
         ];
     }
 
