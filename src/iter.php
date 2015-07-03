@@ -2,6 +2,8 @@
 
 namespace iter;
 
+use Traversable;
+
 /**
  * Creates an iterable containing all numbers between the start and end value
  * (inclusive) with a certain step.
@@ -74,7 +76,7 @@ function range($start, $end, $step = null) {
  *     $column = map(fn\index('name'), $iter);
  *
  * @param callable $function Mapping function: mixed function(mixed $value)
- * @param mixed    $iterable Iterable to be mapped over
+ * @param array|Traversable $iterable Iterable to be mapped over
  *
  * @return \Iterator
  */
@@ -98,7 +100,7 @@ function map(callable $function, $iterable) {
  *     => iter('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4)
  *
  * @param callable $function Mapping function: mixed function(mixed $key)
- * @param mixed    $iterable Iterable those keys are to be mapped over
+ * @param array|Traversable $iterable Iterable those keys are to be mapped over
  *
  * @return \Iterator
  */
@@ -130,7 +132,7 @@ function mapKeys(callable $function, $iterable) {
  *     )
  *
  * @param callable $function Mapping function mixed function(mixed $value)
- * @param mixed    $iterable Iterable to reindex
+ * @param array|Traversable $iterable Iterable to reindex
  *
  * @return \Iterator
  */
@@ -154,7 +156,7 @@ function reindex(callable $function, $iterable) {
  *     iter\apply(iter\fn\method('rewind'), $iterators);
  *
  * @param callable $function Apply function: void function(mixed $value)
- * @param mixed    $iterable Iterator to apply on
+ * @param array|Traversable $iterable Iterator to apply on
  */
 function apply(callable $function, $iterable) {
     _assertIterable($iterable, 'Second argument');
@@ -178,7 +180,7 @@ function apply(callable $function, $iterable) {
  *     iter\filter(iter\fn\operator('instanceof', 'SomeClass'), $objects);
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param mixed    $iterable  Iterable to filter
+ * @param array|Traversable $iterable Iterable to filter
  *
  * @return \Iterator
  */
@@ -205,11 +207,11 @@ function filter(callable $predicate, $iterable) {
  *      reduce(fn\operator('*'), range(1, 5), 1)
  *      => 120
  *
- * @param callable $function   Reduction function:
- *                             mixed function(mixed $acc, mixed $value)
- * @param mixed    $iterable   Iterable to reduce
- * @param mixed    $startValue Start value for accumulator. Usually identity
- *                             value of $function.
+ * @param callable $function Reduction function:
+ *                           mixed function(mixed $acc, mixed $value)
+ * @param array|Traversable $iterable Iterable to reduce
+ * @param mixed $startValue Start value for accumulator.
+ *                          Usually identity value of $function.
  *
  * @return mixed Result of the reduction
  */
@@ -239,13 +241,13 @@ function reduce(callable $function, $iterable, $startValue = null) {
  *      reductions(fn\operator('*'), range(1, 5), 1)
  *      => iter(1, 2, 6, 24, 120)
  *
- * @param callable $function   Reduction function:
- *                             mixed function(mixed $acc, mixed $value)
- * @param mixed    $iterable   Iterable to reduce
- * @param mixed    $startValue Start value for accumulator. Usually identity
- *                             value of $function.
+ * @param callable $function Reduction function:
+ *                           mixed function(mixed $acc, mixed $value)
+ * @param array|Traversable $iterable   Iterable to reduce
+ * @param mixed $startValue Start value for accumulator.
+ *                          Usually identity value of $function.
  *
- * @return mixed Intermediate results of the reduction
+ * @return \Iterator Intermediate results of the reduction
  */
 function reductions(callable $function, $iterable, $startValue = null) {
     _assertIterable($iterable, 'Second argument');
@@ -269,7 +271,7 @@ function reductions(callable $function, $iterable, $startValue = null) {
  *     iter\zip([1, 2, 3], [4, 5, 6], [7, 8, 9])
  *     => iter([1, 4, 7], [2, 5, 8], [3, 6, 9])
  *
- * @param mixed[] ...$iterables Iterables to zip
+ * @param array|Traversable ...$iterables Iterables to zip
  *
  * @return \Iterator
  */
@@ -296,8 +298,8 @@ function zip(/* ...$iterables */) {
  *     iter\zipKeyValue(['a', 'b', 'c'], [1, 2, 3])
  *     => iter('a' => 1, 'b' => 2, 'c' => 3)
  *
- * @param mixed $keys   Iterable of keys
- * @param mixed $values Iterable of values
+ * @param array|Traversable $keys   Iterable of keys
+ * @param array|Traversable $values Iterable of values
  *
  * @return \Iterator
  */
@@ -325,7 +327,7 @@ function zipKeyValue($keys, $values) {
  *     iter\chain(iter\range(0, 5), iter\range(6, 10), iter\range(11, 15))
  *     => iter(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
  *
- * @param mixed[] ...$iterables Iterables to chain
+ * @param array|Traversable ...$iterables Iterables to chain
  *
  * @return \Iterator
  */
@@ -352,7 +354,7 @@ function chain(/* ...$iterables */) {
  *     iter\product(iter\range(1, 2), iter\rewindable\range(3, 4))
  *     => iter([1, 3], [1, 4], [2, 3], [2, 4])
  *
- * @param mixed[] ...$iterables Iterables to combine
+ * @param array|Traversable ...$iterables Iterables to combine
  *
  * @return \Iterator
  */
@@ -405,10 +407,10 @@ function product(/* ...$iterables */) {
  *      iter\slice([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], 5, 3)
  *      => iter(0, 1, 2, 3)
  *
- * @param mixed $iterable Iterable to take the slice from
- * @param int   $start    Start offset
- * @param int   $length   Length (if not specified all remaining values from the
- *                        iterable are used)
+ * @param array|Traversable $iterable Iterable to take the slice from
+ * @param int $start Start offset
+ * @param int $length Length (if not specified all remaining values from the
+ *                    iterable are used)
  *
  * @return \Iterator
  */
@@ -435,8 +437,8 @@ function slice($iterable, $start, $length = INF) {
  *      iter\take(3, [1, 2, 3, 4, 5])
  *      => iter(1, 2, 3)
  *
- * @param int   $num      Number of elements to take from the start
- * @param mixed $iterable Iterable to take the elements from
+ * @param int $num Number of elements to take from the start
+ * @param array|Traversable $iterable Iterable to take the elements from
  *
  * @return \Iterator
  */
@@ -452,8 +454,8 @@ function take($num, $iterable) {
  *      iter\drop(3, [1, 2, 3, 4, 5])
  *      => iter(4, 5)
  *
- * @param int   $num      Number of elements to drop from the start
- * @param mixed $iterable Iterable to drop the elements from
+ * @param int $num Number of elements to drop from the start
+ * @param array|Traversable $iterable Iterable to drop the elements from
  *
  * @return \Iterator
  */
@@ -491,7 +493,7 @@ function repeat($value, $num = INF) {
  *      iter\keys(['a' => 0, 'b' => 1, 'c' => 2])
  *      => iter('a', 'b', 'c')
  *
- * @param mixed $iterable Iterable to get keys from
+ * @param array|Traversable $iterable Iterable to get keys from
  *
  * @return \Iterator
  */
@@ -510,7 +512,7 @@ function keys($iterable) {
  *      iter\values([17 => 1, 42 => 2, -2 => 100])
  *      => iter(0 => 1, 1 => 42, 2 => 100)
  *
- * @param mixed $iterable Iterable to get values from
+ * @param array|Traversable $iterable Iterable to get values from
  *
  * @return \Iterator
  */
@@ -536,7 +538,7 @@ function values($iterable) {
  *      => false
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param mixed    $iterable  Iterable to check against the predicate
+ * @param array|Traversable $iterable Iterable to check against the predicate
  *
  * @return bool Whether the predicate holds for all values
  */
@@ -565,7 +567,7 @@ function any(callable $predicate, $iterable) {
  *      => false
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param mixed    $iterable  Iterable to check against the predicate
+ * @param array|Traversable $iterable Iterable to check against the predicate
  *
  * @return bool Whether the predicate holds for all values
  */
@@ -593,7 +595,7 @@ function all(callable $predicate, $iterable) {
  *      => null
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param mixed $iterable The iterable to search
+ * @param array|Traversable $iterable The iterable to search
  *
  * @return null|mixed
  */
@@ -620,7 +622,7 @@ function search(callable $predicate, $iterable) {
  *      => iter(3, 1, 4)
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param mixed    $iterable  Iterable to take values from
+ * @param array|Traversable $iterable Iterable to take values from
  *
  * @return \Iterator
  */
@@ -647,7 +649,7 @@ function takeWhile(callable $predicate, $iterable) {
  *      => iter(-1, 5)
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param mixed    $iterable  Iterable to drop values from
+ * @param array|Traversable $iterable Iterable to drop values from
  *
  * @return \Iterator
  */
@@ -674,14 +676,14 @@ function dropWhile(callable $predicate, $iterable) {
  *      iter\flatten([1, [2, [3, 4]], [5]])
  *      => iter(1, 2, 3, 4, 5)
  *
- * @param mixed $iterable Iterable to flatten
+ * @param array|Traversable $iterable Iterable to flatten
  *
  * @return \Iterator
  */
 function flatten($iterable) {
     _assertIterable($iterable, 'Argument');
     foreach ($iterable as $value) {
-        if (is_array($value) || $value instanceof \Traversable) {
+        if (isIterable($value)) {
             foreach (flatten($value) as $v) {
                 yield $v;
             }
@@ -699,7 +701,7 @@ function flatten($iterable) {
  *      iter\flip(['a' => 1, 'b' => 2, 'c' => 3])
  *      => iter(1 => 'a', 2 => 'b', 3 => 'c')
  *
- * @param mixed $iterable The iterable to flip
+ * @param array|Traversable $iterable The iterable to flip
  *
  * @return \Iterator
  */
@@ -720,8 +722,8 @@ function flip($iterable) {
  *      iter\chunk([1, 2, 3, 4, 5], 3)
  *      => iter([1, 2, 3], [4, 5])
  *
- * @param mixed $iterable The iterable to chunk
- * @param int   $size     The size of each chunk
+ * @param array|Traversable $iterable The iterable to chunk
+ * @param int $size The size of each chunk
  *
  * @return \Iterator An iterator of arrays
  */
@@ -755,7 +757,7 @@ function chunk($iterable, $size) {
  *      => "a, b, c"
  *
  * @param string $separator Separator to use between elements
- * @param mixed  $iterable  The iterable to join
+ * @param array|Traversable $iterable The iterable to join
  *
  * @return string
  */
@@ -791,7 +793,7 @@ function join($separator, $iterable) {
  *      iter\count(iter\flatten([1, 2, 3, [4, [[[5, 6], 7]]], 8]))
  *      => 8
  *
- * @param mixed $iterable The iterable to count
+ * @param array|Traversable|\Countable $iterable The iterable to count
  *
  * @return int
  */
@@ -819,7 +821,7 @@ function count($iterable) {
  *      iter\toIter([1, 2, 3])
  *      => iter(1, 2, 3)
  *
- * @param mixed $iterable The iterable to turn into an iterator
+ * @param array|Traversable $iterable The iterable to turn into an iterator
  *
  * @return \Iterator
  */
@@ -850,7 +852,7 @@ function toIter($iterable) {
  *      iter\toArray(iter\chain(['a' => 1, 'b' => 2], ['a' => 3]))
  *      => [1, 2, 3]
  *
- * @param mixed $iterable The iterable to convert to an array
+ * @param array|Traversable $iterable The iterable to convert to an array
  *
  * @return array
  */
@@ -878,7 +880,7 @@ function toArray($iterable) {
  *      iter\toArrayWithKeys(iter\chain(['a' => 1, 'b' => 2], ['a' => 3]))
  *      => ['a' => 3, 'b' => 2]
  *
- * @param mixed $iterable The iterable to convert to an array
+ * @param array|Traversable $iterable The iterable to convert to an array
  *
  * @return array
  */
