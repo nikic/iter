@@ -852,6 +852,32 @@ function toArrayWithKeys($iterable) {
     return $array;
 }
 
+/**
+ * Determines whether a value is an iterable.
+ *
+ * Only arrays and objects implementing Traversable are considered as iterable.
+ * In particular objects that don't implement Traversable are not considered as
+ * iterable, even though PHP would accept them in a foreach() loop.
+ *
+ * Examples:
+ *
+ *     iter\isIterable([1, 2, 3])
+ *     => true
+ *
+ *     iter\isIterable(new ArrayIterator([1, 2, 3]))
+ *     => true
+ *
+ *     iter\isIterable(new stdClass)
+ *     => false
+ *
+ * @param mixed $value Value to check
+ *
+ * @return bool Whether the passed value is an iterable
+ */
+function isIterable($value) {
+    return is_array($value) || $value instanceof \Traversable;
+}
+
 /*
  * Python:
  * compress()
