@@ -319,6 +319,59 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse(isIterable("foobar"));
         $this->assertFalse(isIterable(123));
     }
+
+    /** @dataProvider provideTestAssertIterableFails */
+    public function testAssertIterableFails(callable $fn, $expectedMessage) {
+        $this->setExpectedException(
+            \InvalidArgumentException::class, $expectedMessage);
+        $ret = $fn();
+
+        // For generators the body will not be run until the first operation
+        if ($ret instanceof \Generator) {
+            $ret->rewind();
+        }
+    }
+
+    public function provideTestAssertIterableFails() {
+        yield [
+            function() { _assertIterable(new \stdClass(), 'Argument'); },
+            'Argument must be iterable'
+        ];
+        yield [
+            function() { _assertIterable("foobar", 'Argument'); },
+            'Argument must be iterable'
+        ];
+        yield [
+            function() { _assertAllIterable([[], new \stdClass()]); },
+            'Argument 2 must be iterable'
+        ];
+        yield [
+            function() { return count(new \stdClass()); },
+            'Argument must be iterable or implement Countable'
+        ];
+        yield [
+            function() { return toIter(new \stdClass()); },
+            'Argument must be iterable'
+        ];
+        yield [
+            function() {
+                return map(function($v) { return $v; }, new \stdClass());
+            },
+            'Second argument must be iterable'
+        ];
+        yield [
+            function() {
+                return chain([1], [2], new \stdClass());
+            },
+            'Argument 3 must be iterable'
+        ];
+        yield [
+            function() {
+                return zip([1], [2], new \stdClass());
+            },
+            'Argument 3 must be iterable'
+        ];
+    }
 }
 
 class _CountableTestDummy implements \Countable {

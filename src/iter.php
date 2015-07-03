@@ -79,6 +79,7 @@ function range($start, $end, $step = null) {
  * @return \Iterator
  */
 function map(callable $function, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $key => $value) {
         yield $key => $function($value);
     }
@@ -102,6 +103,7 @@ function map(callable $function, $iterable) {
  * @return \Iterator
  */
 function mapKeys(callable $function, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $key => $value) {
         yield $function($key) => $value;
     }
@@ -133,6 +135,7 @@ function mapKeys(callable $function, $iterable) {
  * @return \Iterator
  */
 function reindex(callable $function, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $value) {
         yield $function($value) => $value;
     }
@@ -154,6 +157,7 @@ function reindex(callable $function, $iterable) {
  * @param mixed    $iterable Iterator to apply on
  */
 function apply(callable $function, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $value) {
         $function($value);
     }
@@ -179,6 +183,7 @@ function apply(callable $function, $iterable) {
  * @return \Iterator
  */
 function filter(callable $predicate, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $key => $value) {
         if ($predicate($value)) {
             yield $key => $value;
@@ -209,6 +214,8 @@ function filter(callable $predicate, $iterable) {
  * @return mixed Result of the reduction
  */
 function reduce(callable $function, $iterable, $startValue = null) {
+    _assertIterable($iterable, 'Second argument');
+
     $acc = $startValue;
     foreach ($iterable as $value) {
         $acc = $function($acc, $value);
@@ -241,6 +248,8 @@ function reduce(callable $function, $iterable, $startValue = null) {
  * @return mixed Intermediate results of the reduction
  */
 function reductions(callable $function, $iterable, $startValue = null) {
+    _assertIterable($iterable, 'Second argument');
+
     $acc = $startValue;
     foreach ($iterable as $value) {
         $acc = $function($acc, $value);
@@ -265,8 +274,10 @@ function reductions(callable $function, $iterable, $startValue = null) {
  * @return \Iterator
  */
 function zip(/* ...$iterables */) {
-    $iterators = array_map('iter\\toIter', func_get_args());
+    $iterables = func_get_args();
+    _assertAllIterable($iterables);
 
+    $iterators = array_map('iter\\toIter', $iterables);
     for (
         apply(fn\method('rewind'), $iterators);
         all(fn\method('valid'), $iterators);
@@ -319,7 +330,9 @@ function zipKeyValue($keys, $values) {
  * @return \Iterator
  */
 function chain(/* ...$iterables */) {
-    foreach (func_get_args() as $iterable) {
+    $iterables = func_get_args();
+    _assertAllIterable($iterables);
+    foreach ($iterables as $iterable) {
         foreach ($iterable as $key => $value) {
             yield $key => $value;
         }
@@ -344,8 +357,11 @@ function chain(/* ...$iterables */) {
  * @return \Iterator
  */
 function product(/* ...$iterables */) {
+    $iterables = func_get_args();
+    _assertAllIterable($iterables);
+
     /** @var \Iterator[] $iterators */
-    $iterators = array_map('iter\\toIter', func_get_args());
+    $iterators = array_map('iter\\toIter', $iterables);
     $numIterators = count($iterators);
     if (!$numIterators) {
         yield [] => [];
@@ -397,6 +413,8 @@ function product(/* ...$iterables */) {
  * @return \Iterator
  */
 function slice($iterable, $start, $length = INF) {
+    _assertIterable($iterable, 'First argument');
+
     $i = 0;
     foreach ($iterable as $key => $value) {
         if ($i >= $start + $length) {
@@ -478,6 +496,7 @@ function repeat($value, $num = INF) {
  * @return \Iterator
  */
 function keys($iterable) {
+    _assertIterable($iterable, 'Argument');
     foreach ($iterable as $key => $_) {
         yield $key;
     }
@@ -496,6 +515,7 @@ function keys($iterable) {
  * @return \Iterator
  */
 function values($iterable) {
+    _assertIterable($iterable, 'Argument');
     foreach ($iterable as $value) {
         yield $value;
     }
@@ -521,6 +541,7 @@ function values($iterable) {
  * @return bool Whether the predicate holds for all values
  */
 function any(callable $predicate, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $value) {
         if ($predicate($value)) {
             return true;
@@ -549,6 +570,7 @@ function any(callable $predicate, $iterable) {
  * @return bool Whether the predicate holds for all values
  */
 function all(callable $predicate, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $value) {
         if (!$predicate($value)) {
             return false;
@@ -576,6 +598,7 @@ function all(callable $predicate, $iterable) {
  * @return null|mixed
  */
 function search(callable $predicate, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $value) {
         if ($predicate($value)) {
             return $value;
@@ -602,6 +625,7 @@ function search(callable $predicate, $iterable) {
  * @return \Iterator
  */
 function takeWhile(callable $predicate, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     foreach ($iterable as $key => $value) {
         if (!$predicate($value)) {
             return;
@@ -628,6 +652,7 @@ function takeWhile(callable $predicate, $iterable) {
  * @return \Iterator
  */
 function dropWhile(callable $predicate, $iterable) {
+    _assertIterable($iterable, 'Second argument');
     $failed = false;
     foreach ($iterable as $key => $value) {
         if (!$failed && !$predicate($value)) {
@@ -654,6 +679,7 @@ function dropWhile(callable $predicate, $iterable) {
  * @return \Iterator
  */
 function flatten($iterable) {
+    _assertIterable($iterable, 'Argument');
     foreach ($iterable as $value) {
         if (is_array($value) || $value instanceof \Traversable) {
             foreach (flatten($value) as $v) {
@@ -678,6 +704,7 @@ function flatten($iterable) {
  * @return \Iterator
  */
 function flip($iterable) {
+    _assertIterable($iterable, 'Argument');
     foreach ($iterable as $key => $value) {
         yield $value => $key;
     }
@@ -699,9 +726,10 @@ function flip($iterable) {
  * @return \Iterator An iterator of arrays
  */
 function chunk($iterable, $size) {
+    _assertIterable($iterable, 'First argument');
+
     $chunk = [];
     $count = 0;
-
     foreach ($iterable as $key => $value) {
         $chunk[$key] = $value;
         $count++;
@@ -732,6 +760,8 @@ function chunk($iterable, $size) {
  * @return string
  */
 function join($separator, $iterable) {
+    _assertIterable($iterable, 'Second argument');
+
     $str = '';
     $first = true;
     foreach ($iterable as $value) {
@@ -768,13 +798,17 @@ function join($separator, $iterable) {
 function count($iterable) {
     if (is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);
-    } else {
-        $count = 0;
-        foreach ($iterable as $_) {
-            ++$count;
-        }
-        return $count;
     }
+    if (!$iterable instanceof \Traversable) {
+        throw new \InvalidArgumentException(
+            'Argument must be iterable or implement Countable');
+    }
+
+    $count = 0;
+    foreach ($iterable as $_) {
+        ++$count;
+    }
+    return $count;
 }
 
 /**
@@ -796,7 +830,10 @@ function toIter($iterable) {
     if ($iterable instanceof \IteratorAggregate) {
         return $iterable->getIterator();
     }
-    return new \ArrayIterator($iterable);
+    if (is_array($iterable)) {
+        return new \ArrayIterator($iterable);
+    }
+    throw new \InvalidArgumentException('Argument must be iterable');
 }
 
 /**
@@ -818,6 +855,7 @@ function toIter($iterable) {
  * @return array
  */
 function toArray($iterable) {
+    _assertIterable($iterable, 'Argument');
     $array = [];
     foreach ($iterable as $value) {
         $array[] = $value;
@@ -845,6 +883,7 @@ function toArray($iterable) {
  * @return array
  */
 function toArrayWithKeys($iterable) {
+    _assertIterable($iterable, 'Argument');
     $array = [];
     foreach ($iterable as $key => $value) {
         $array[$key] = $value;
@@ -876,6 +915,18 @@ function toArrayWithKeys($iterable) {
  */
 function isIterable($value) {
     return is_array($value) || $value instanceof \Traversable;
+}
+
+function _assertIterable($value, $what) {
+    if (!isIterable($value)) {
+        throw new \InvalidArgumentException("$what must be iterable");
+    }
+}
+
+function _assertAllIterable($values) {
+    foreach ($values as $num => $value) {
+        _assertIterable($value, 'Argument ' . ($num + 1));
+    }
 }
 
 /*
