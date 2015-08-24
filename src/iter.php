@@ -208,7 +208,7 @@ function filter(callable $predicate, $iterable) {
  *      => 120
  *
  * @param callable $function Reduction function:
- *                           mixed function(mixed $acc, mixed $value)
+ *                           mixed function(mixed $acc, mixed $value, mixed $key)
  * @param array|Traversable $iterable Iterable to reduce
  * @param mixed $startValue Start value for accumulator.
  *                          Usually identity value of $function.
@@ -219,8 +219,8 @@ function reduce(callable $function, $iterable, $startValue = null) {
     _assertIterable($iterable, 'Second argument');
 
     $acc = $startValue;
-    foreach ($iterable as $value) {
-        $acc = $function($acc, $value);
+    foreach ($iterable as $key => $value) {
+        $acc = $function($acc, $value, $key);
     }
     return $acc;
 }
@@ -242,7 +242,7 @@ function reduce(callable $function, $iterable, $startValue = null) {
  *      => iter(1, 2, 6, 24, 120)
  *
  * @param callable $function Reduction function:
- *                           mixed function(mixed $acc, mixed $value)
+ *                           mixed function(mixed $acc, mixed $value, mixed $key)
  * @param array|Traversable $iterable   Iterable to reduce
  * @param mixed $startValue Start value for accumulator.
  *                          Usually identity value of $function.
@@ -253,8 +253,8 @@ function reductions(callable $function, $iterable, $startValue = null) {
     _assertIterable($iterable, 'Second argument');
 
     $acc = $startValue;
-    foreach ($iterable as $value) {
-        $acc = $function($acc, $value);
+    foreach ($iterable as $key => $value) {
+        $acc = $function($acc, $value, $key);
         yield $acc;
     }
 }
