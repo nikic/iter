@@ -134,9 +134,23 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(120, reduce(fn\operator('*'), range(1, 5), 1));
     }
 
+    public function testComplexReduce() {
+        $this->assertSame('abcdef', reduce(function ($acc, $value, $key) {
+            $acc .= $key . $value;
+            return $acc;
+        }, ['a' => 'b', 'c' => 'd', 'e' => 'f'], ''));
+    }
+
     public function testReductions() {
         $this->assertSame([1, 3, 6, 10, 15], toArrayWithKeys(reductions(fn\operator('+'), range(1, 5), 0)));
         $this->assertSame([1, 2, 6, 24, 120], toArrayWithKeys(reductions(fn\operator('*'), range(1, 5), 1)));
+    }
+
+    public function testComplexReductions() {
+        $this->assertSame(['ab', 'abcd', 'abcdef'], toArrayWithKeys(reductions(function ($acc, $value, $key) {
+            $acc .= $key . $value;
+            return $acc;
+        }, ['a' => 'b', 'c' => 'd', 'e' => 'f'], '')));
     }
 
     public function testAnyAll() {
