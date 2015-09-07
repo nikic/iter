@@ -324,6 +324,26 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testPermutations(){
+        $this->assertKeysValues([[]], [[]], function() { return permutations([]); });
+        $this->assertSame(
+            [[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]],
+            toArray(keys(permutations(range(0, 2), 3))));
+        $this->assertSame(
+            [[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]],
+            toArray(values(permutations(range(0, 2), 3))));
+    }
+
+    public function testCombinations(){
+        $this->assertKeysValues([[]], [[]], function() { return combinations([], 0); });
+        $this->assertSame(
+            [[0,1,2],[0,1,3],[0,2,3],[1,2,3]],
+            toArray(values(combinations(range(0, 3), 3))));
+        $this->assertSame(
+            [[0,1,2],[0,1,3],[0,2,3],[1,2,3]],
+            toArray(values(combinations(range(0, 3), 3))));
+    }
+
     private function assertKeysValues(array $keys, array $values, callable $fn) {
         $this->assertSame($keys, toArray(keys($fn())));
         $this->assertSame($values, toArray(values($fn())));
