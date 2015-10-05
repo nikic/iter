@@ -393,6 +393,52 @@ class IterTest extends \PHPUnit_Framework_TestCase {
             'Argument 3 must be iterable'
         ];
     }
+
+    public function testInterpolate()
+    {
+        $tasks = interpolate(
+            call_user_func(function() {
+                for ($i = 0; $i < 3; $i++) {
+                    yield "task 1, tick {$i} key" => "task 1, tick {$i} value";
+                }
+            }),
+            call_user_func(function() {
+                for ($i = 0; $i < 5; $i++) {
+                    yield "task 2, tick {$i} key" => "task 2, tick {$i} value";
+                }
+            }),
+            call_user_func(function() {
+                for ($i = 0; $i < 7; $i++) {
+                    yield "task 3, tick {$i} key" => "task 3, tick {$i} value";
+                }
+            }),
+            [
+                "array key" => "array value",
+            ]
+        );
+
+        $this->assertEquals(
+            [
+                "task 1, tick 0 key" => "task 1, tick 0 value",
+                "task 2, tick 0 key" => "task 2, tick 0 value",
+                "task 3, tick 0 key" => "task 3, tick 0 value",
+                "array key" => "array value",
+                "task 1, tick 1 key" => "task 1, tick 1 value",
+                "task 2, tick 1 key" => "task 2, tick 1 value",
+                "task 3, tick 1 key" => "task 3, tick 1 value",
+                "task 1, tick 2 key" => "task 1, tick 2 value",
+                "task 2, tick 2 key" => "task 2, tick 2 value",
+                "task 3, tick 2 key" => "task 3, tick 2 value",
+                "task 2, tick 3 key" => "task 2, tick 3 value",
+                "task 3, tick 3 key" => "task 3, tick 3 value",
+                "task 2, tick 4 key" => "task 2, tick 4 value",
+                "task 3, tick 4 key" => "task 3, tick 4 value",
+                "task 3, tick 5 key" => "task 3, tick 5 value",
+                "task 3, tick 6 key" => "task 3, tick 6 value",
+            ],
+            iterator_to_array($tasks)
+        );
+    }
 }
 
 class _CountableTestDummy implements \Countable {

@@ -398,6 +398,44 @@ function product(/* ...$iterables */) {
 }
 
 /**
+ * Yields an iteration for each iterable, in turn.
+ *
+ * Examples:
+ *
+ *     iter\interpolate([1, 2, 3], [4, 5, 6, 7, 8], [9, 10, 11])
+ *     => iter(1, 4, 9, 2, 5, 10, 3, 6, 11, 7, 8)
+ *
+ * @param array|Traversable ...$iterables Iterables to interpolate
+ *
+ * @return \Iterator
+ */
+function interpolate(/* ...$iterables */) {
+    $iterables = func_get_args();
+    _assertAllIterable($iterables);
+
+    while (true) {
+        $iterable = array_shift($iterables);
+
+        if (is_array($iterable)) {
+            $iterable = new \ArrayIterator($iterable);
+        }
+
+        if ($iterable->valid()) {
+            yield $iterable->key() => $iterable->current();
+
+            if ($iterable->valid()) {
+                $iterable->next();
+                array_push($iterables, $iterable);
+            }
+        }
+
+        if (count($iterables) == 0) {
+            break;
+        }
+    }
+}
+
+/**
  * Takes a slice from an iterable.
  *
  * Examples:
