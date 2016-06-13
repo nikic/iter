@@ -35,8 +35,7 @@ function range($start, $end, $step = null) {
     } elseif ($start < $end) {
         if (null === $step) {
             $step = 1;
-        }
-        if ($step <= 0) {
+        } elseif ($step <= 0) {
             throw new \InvalidArgumentException(
                 'If start < end the step must be positive'
             );
