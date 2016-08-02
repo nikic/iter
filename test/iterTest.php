@@ -109,6 +109,11 @@ class IterTest extends \PHPUnit_Framework_TestCase {
             [5, 6, 7, 8, 9],
             toArray(slice(range(0, 9), 5))
         );
+        $explodingGenerator = function () {
+            yield 1;
+            throw new \RuntimeException('This should only be iterated once');
+        };
+        $this->assertSame([1], toArray(slice($explodingGenerator(), 0, 1)));
     }
 
     public function testTakeDrop() {
