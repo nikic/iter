@@ -277,6 +277,9 @@ function reductions(callable $function, $iterable, $startValue = null) {
  */
 function zip(/* ...$iterables */) {
     $iterables = func_get_args();
+    if (count($iterables) === 0) {
+        return;
+    }
     _assertAllIterable($iterables);
 
     $iterators = array_map('iter\\toIter', $iterables);
