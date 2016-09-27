@@ -81,7 +81,7 @@ function operator($operator, $arg = null) {
         '|'   => function($a, $b) { return $a |   $b; },
         '&&'  => function($a, $b) { return $a &&  $b; },
         '||'  => function($a, $b) { return $a ||  $b; },
-        '**'  => function($a, $b) { return \pow($a, $b); },
+        '**'  => function($a, $b) { return $a **  $b; },
         '<=>' => function($a, $b) {
             return $a == $b ? 0 : ($a < $b ? -1 : 1);
         },
