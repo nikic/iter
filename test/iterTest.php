@@ -257,6 +257,12 @@ class IterTest extends \PHPUnit_Framework_TestCase {
                 new \ArrayIterator([4, 5]),
             ])))
         );
+
+        // Test key preservation
+        $this->assertSame(
+            ['a' => 1, 'c' => 2, 'd' => 3],
+            toArrayWithKeys(flatten(['a' => 1, 'b' => ['c' => 2, 'd' => 3]]))
+        );
     }
 
     public function testToIter() {

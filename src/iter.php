@@ -701,13 +701,13 @@ function dropWhile(callable $predicate, $iterable) {
  */
 function flatten($iterable) {
     _assertIterable($iterable, 'Argument');
-    foreach ($iterable as $value) {
+    foreach ($iterable as $key => $value) {
         if (isIterable($value)) {
-            foreach (flatten($value) as $v) {
-                yield $v;
+            foreach (flatten($value) as $k => $v) {
+                yield $k => $v;
             }
         } else {
-            yield $value;
+            yield $key => $value;
         }
     }
 }
