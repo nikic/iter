@@ -103,6 +103,9 @@ class IterTest extends \PHPUnit_Framework_TestCase {
     public function testChain() {
         $chained = chain(range(1, 3), range(4, 6), range(7, 9));
         $this->assertSame([1, 2, 3, 4, 5, 6, 7, 8, 9], toArray($chained));
+
+        // empty chain
+        $this->assertSame([], toArray(chain()));
     }
 
     public function testSlice() {
@@ -114,6 +117,25 @@ class IterTest extends \PHPUnit_Framework_TestCase {
             [5, 6, 7, 8, 9],
             toArray(slice(range(0, 9), 5))
         );
+
+        // empty slice
+        $this->assertSame([], toArray(slice(range(0, INF), 0, 0)));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Length must be non-negative
+     */
+    public function testSliceNegativeLengthError() {
+        toArray(slice(range(0, INF), 0, -1));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Start offset must be non-negative
+     */
+    public function testSliceNegativeStartOffsetError() {
+        toArray(slice(range(0, INF), -1, 5));
     }
 
     public function testTakeDrop() {
@@ -126,6 +148,14 @@ class IterTest extends \PHPUnit_Framework_TestCase {
     public function testRepeat() {
         $this->assertSame([1, 1, 1, 1, 1], toArray(repeat(1, 5)));
         $this->assertSame([], toArray(repeat(1, 0)));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Number of repetitions must be non-negative
+     */
+    public function testRepeatNegativeNumError() {
+        toArray(repeat(1, -1));
     }
 
     public function testKeyValue() {
@@ -307,6 +337,22 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
         $this->assertSame([[0, 1, 2]], toArray(chunk([0, 1, 2], 100000)));
         $this->assertSame([], toArray(chunk([], 100000)));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Chunk size must be positive
+     */
+    public function testZeroChunkSizeError() {
+        toArray(chunk([1, 2, 3], 0));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Chunk size must be positive
+     */
+    public function testNegativeChunkSizeError() {
+        toArray(chunk([1, 2, 3], -1));
     }
 
     public function testProduct() {

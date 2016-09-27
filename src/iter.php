@@ -415,10 +415,19 @@ function product(/* ...$iterables */) {
  * @param int $length Length (if not specified all remaining values from the
  *                    iterable are used)
  *
+ * @throws \InvalidArgumentException if start or length are negative
+ *
  * @return \Iterator
  */
 function slice($iterable, $start, $length = INF) {
     _assertIterable($iterable, 'First argument');
+
+    if ($start < 0) {
+        throw new \InvalidArgumentException('Start offset must be non-negative');
+    }
+    if ($length < 0) {
+        throw new \InvalidArgumentException('Length must be non-negative');
+    }
 
     $i = 0;
     foreach ($iterable as $key => $value) {
@@ -480,9 +489,16 @@ function drop($num, $iterable) {
  * @param mixed $value Value to repeat
  * @param int   $num   Number of repetitions (defaults to INF)
  *
+ * @throws \InvalidArgumentException if num is negative
+ *
  * @return \Iterator
  */
 function repeat($value, $num = INF) {
+    if ($num < 0) {
+        throw new \InvalidArgumentException(
+            'Number of repetitions must be non-negative');
+    }
+
     for ($i = 0; $i < $num; ++$i) {
         yield $value;
     }
@@ -728,10 +744,16 @@ function flip($iterable) {
  * @param array|Traversable $iterable The iterable to chunk
  * @param int $size The size of each chunk
  *
+ * @throws \InvalidArgumentException if the chunk size is not positive
+ *
  * @return \Iterator An iterator of arrays
  */
 function chunk($iterable, $size) {
     _assertIterable($iterable, 'First argument');
+
+    if ($size <= 0) {
+        throw new \InvalidArgumentException('Chunk size must be positive');
+    }
 
     $chunk = [];
     $count = 0;
