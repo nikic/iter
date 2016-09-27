@@ -839,6 +839,30 @@ function count($iterable) {
 }
 
 /**
+ * Recursively applies a function, working on entire iterables rather than
+ * individual values.
+ *
+ * The function will be called both on the passed iterable and all iterables it
+ * contains, etc. The call sequence is in post-order (inner before outer).
+ *
+ * Examples:
+ *
+ *     iter\recurse('iter\toArray',
+ *          new ArrayIterator([1, 2, new ArrayIterator([3, 4])]));
+ *     => [1, 2, [3, 4]]
+ *
+ * @param callable $function
+ * @param $iterable
+ * @return mixed
+ */
+function recurse(callable $function, $iterable) {
+    _assertIterable($iterable, 'Second argument');
+    return $function(map(function($value) use($function) {
+        return isIterable($value) ? recurse($function, $value) : $value;
+    }, $iterable));
+}
+
+/**
  * Converts any iterable into an Iterator.
  *
  * Examples:

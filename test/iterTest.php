@@ -381,6 +381,21 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    function testRecurse() {
+        $iter = new \ArrayIterator(['a' => 1, 'b' => 2,
+            'c' => new \ArrayIterator(['d' => 3, 'e' => 4])]);
+
+        $this->assertSame(
+            [1, 2, [3, 4]],
+            recurse('iter\toArray', $iter)
+        );
+
+        $this->assertSame(
+            ['a' => 1, 'b' => 2, 'c' => ['d' => 3, 'e' => 4]],
+            recurse('iter\toArrayWithKeys', $iter)
+        );
+    }
+
     private function assertKeysValues(array $keys, array $values, callable $fn) {
         $this->assertSame($keys, toArray(keys($fn())));
         $this->assertSame($values, toArray(values($fn())));
