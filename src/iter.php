@@ -401,6 +401,89 @@ function product(/* ...$iterables */) {
 }
 
 /**
+ * Return r length subsequences of elements from the input iterable
+ *
+ * Elements are treated as unique based on their position, not on their value. 
+ * So if the input elements are unique, there will be no repeat values in each combination
+ *
+ * Examples:
+ *
+ *     iter\combinations(iter\range(0, 3), 3)
+ *     => iter([0, 1, 2], [0, 1, 2], [0, 2, 3], [1, 2, 3])
+ *
+ *     iter\combinations(['a', 'b', 'c', 'd'], 2)
+ *     => iter(['a', 'b'], ['a', 'c'], ['a', 'd'], ['b', 'c'], ['b', 'd'], ['c', 'd'])
+ *
+ * @param array|Traversable|\Countable ...$iterable Iterable to produce combinations
+ * @param number $r subsequences length
+ *
+ * @return \Iterator
+ */
+function combinations($iterable, $r){
+    _assertIterable($iterable, 'First argument');
+    $iterable = toArrayWithKeys($iterable);
+    $length = \count($iterable);
+    if($r > $length){
+        return;
+    }
+    foreach(permutations($iterable, $r) as $key => $indices){
+        $copy = $indices;
+        sort($copy);
+        if($copy === array_values($indices)){
+            yield $key => $indices;
+        }
+    }
+}
+
+/**
+ * Return successive r length permutations of elements in the iterable.
+ *
+ * If r is not specified or is None, then r defaults to the length of the iterable and all possible full-length permutations are generated.
+ *
+ * Elements are treated as unique based on their position, not on their value. 
+ * So if the input elements are unique, there will be no repeat values in each permutation.
+ *
+ * Examples:
+ *
+ *     iter\permutations(iter\range(0, 2), 3)
+ *     => iter([0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0])
+ *
+ *     iter\permutations(['a', 'b', 'c', 'd'], 2)
+ *     => iter(['a', 'b'], ['a', 'c'], ['a', 'd'], ['b', 'a'], ['b', 'c'], ['b', 'd'], ['c', 'a'], ['c', 'b'], ['c', 'd'], ['d', 'a'], ['d', 'b'], ['d', 'c'])
+ *
+ * @param array|Traversable|\Countable...$iterable Iterable to produce permutations 
+ *
+ * @return \Iterator
+ */
+function permutations($iterable, $r = null){
+    _assertIterable($iterable, 'First argument');
+    if(!is_array($iterable))
+        $iterable = toArrayWithKeys($iterable);
+    $length = \count($iterable);
+    if($r === null){
+        $r = $length;
+    }
+    if($r > $length){
+        return;
+    }
+    $pools = [];
+    for ($i = 0; $i < $r; $i++) {
+            $pools[] = $iterable;
+    }
+    $productGenerator = call_user_func_array('iter\\product', $pools);
+    foreach($productGenerator as $key => $indices){
+        $flipIndices = array_keys(array_flip($indices));
+        if(\count($flipIndices) == $r){
+            $permute = [];
+            foreach($indices as $k => $i){
+                $permute[] = $iterable[$key[$k]];
+            }
+            yield $key => $permute;
+        }
+    }
+}
+
+/**
  * Takes a slice from an iterable.
  *
  * Examples:
