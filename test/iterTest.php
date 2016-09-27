@@ -90,6 +90,11 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([[0,5], [1,4], [2,3], [3,2], [4,1], [5,0]], toArray($zipped));
     }
 
+    public function testZipEmpty() {
+        $res = toArray(zip());
+        $this->assertSame([], $res);
+    }
+
     public function testZipKeyValue() {
         $zipped = zipKeyValue(range(5, 0, -1), range(0, 5));
         $this->assertSame([5=>0, 4=>1, 3=>2, 2=>3, 1=>4, 0=>5], toArrayWithKeys($zipped));
