@@ -121,7 +121,7 @@ class IterFnTest extends \PHPUnit_Framework_TestCase {
 }
 
 class _MethodTestDummy {
-    public function test() {
-        return func_get_args();
+    public function test(...$args) {
+        return $args;
     }
 }

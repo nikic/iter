@@ -19,8 +19,8 @@ namespace iter {
      * @return callable Rewindable generator function
      */
     function makeRewindable(callable $function) {
-        return function() use ($function) {
-            return new rewindable\_RewindableGenerator($function, func_get_args());
+        return function(...$args) use ($function) {
+            return new rewindable\_RewindableGenerator($function, $args);
         };
     }
 
@@ -38,11 +38,12 @@ namespace iter {
      *      // $res is a rewindable iterator with elements [3, 6, 9]
      *
      * @param callable $function Generator function to call rewindably
+     * @param mixed ...$args Function arguments
      *
      * @return \Iterator Rewindable generator result
      */
-    function callRewindable(callable $function /*, ... $args */) {
-        return new rewindable\_RewindableGenerator($function, array_slice(func_get_args(), 1));
+    function callRewindable(callable $function, ...$args) {
+        return new rewindable\_RewindableGenerator($function, $args);
     }
 }
 
@@ -94,7 +95,8 @@ namespace iter\rewindable {
         }
 
         public function rewind() {
-            $this->generator = call_user_func_array($this->function, $this->args);
+            $function = $this->function;
+            $this->generator = $function(...$this->args);
         }
 
         public function next() {
@@ -125,10 +127,10 @@ namespace iter\rewindable {
         public function __call($method, $args) {
             if ($method === 'throw') {
                 if (!$this->generator) { $this->rewind(); }
-                return call_user_func_array([$this->generator, 'throw'], $args);
+                return $this->generator->throw(...$args);
             } else {
                 // trigger normal undefined method error
-                return call_user_func_array([$this, $method], $args);
+                return $this->$method(...$args);
             }
         }
     }

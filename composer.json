@@ -10,9 +10,14 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0"
+        "php": ">=5.6.0"
     },
     "autoload": {
         "files": ["src/bootstrap.php"]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        }
     }
 }

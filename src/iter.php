@@ -275,8 +275,7 @@ function reductions(callable $function, $iterable, $startValue = null) {
  *
  * @return \Iterator
  */
-function zip(/* ...$iterables */) {
-    $iterables = func_get_args();
+function zip(...$iterables) {
     if (count($iterables) === 0) {
         return;
     }
@@ -334,8 +333,7 @@ function zipKeyValue($keys, $values) {
  *
  * @return \Iterator
  */
-function chain(/* ...$iterables */) {
-    $iterables = func_get_args();
+function chain(...$iterables) {
     _assertAllIterable($iterables);
     foreach ($iterables as $iterable) {
         foreach ($iterable as $key => $value) {
@@ -361,8 +359,7 @@ function chain(/* ...$iterables */) {
  *
  * @return \Iterator
  */
-function product(/* ...$iterables */) {
-    $iterables = func_get_args();
+function product(...$iterables) {
     _assertAllIterable($iterables);
 
     /** @var \Iterator[] $iterators */

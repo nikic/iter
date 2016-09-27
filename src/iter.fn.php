@@ -35,9 +35,7 @@ function index($index) {
  *
  * @return callable
  */
-function nested_index(/* ...$indices */) {
-    $indices = func_get_args();
-
+function nested_index(...$indices) {
     return function($array) use ($indices) {
         foreach ($indices as $index) {
             $array = $array[$index];
@@ -54,15 +52,9 @@ function property($propertyName) {
 }
 
 function method($methodName, $args = []) {
-    if (empty($args)) {
-        return function($object) use ($methodName) {
-            return $object->$methodName();
-        };
-    } else {
-        return function($object) use ($methodName, $args) {
-            return call_user_func_array([$object, $methodName], $args);
-        };
-    }
+    return function($object) use ($methodName, $args) {
+        return $object->$methodName(...$args);
+    };
 }
 
 function operator($operator, $arg = null) {
@@ -110,7 +102,7 @@ function operator($operator, $arg = null) {
 }
 
 function not($function) {
-    return function() use ($function) {
-        return !call_user_func_array($function, func_get_args());
+    return function(...$args) use ($function) {
+        return !$function(...$args);
     };
 }
