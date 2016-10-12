@@ -556,7 +556,7 @@ function values($iterable) {
  * @param callable $predicate Predicate: bool function(mixed $value)
  * @param array|Traversable $iterable Iterable to check against the predicate
  *
- * @return bool Whether the predicate holds for all values
+ * @return bool Whether the predicate matches any value
  */
 function any(callable $predicate, $iterable) {
     _assertIterable($iterable, 'Second argument');
