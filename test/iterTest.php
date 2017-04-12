@@ -265,6 +265,33 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testFlattenLevels() {
+        $this->assertSame(
+            [[1, [[2, [[]], 3], 4]], 5],
+            toArray(flatten([[1, [[2, [[]], 3], 4]], 5], 0))
+        );
+        $this->assertSame(
+            [1, [[2, [[]], 3], 4], 5],
+            toArray(flatten([[1, [[2, [[]], 3], 4]], 5], 1))
+        );
+        $this->assertSame(
+            [1, [2, [[]], 3], 4, 5],
+            toArray(flatten([[1, [[2, [[]], 3], 4]], 5], 2))
+        );
+        $this->assertSame(
+            [1, 2, [[]], 3, 4, 5],
+            toArray(flatten([[1, [[2, [[]], 3], 4]], 5], 3))
+        );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Number of levels must be non-negative
+     */
+    public function testFlattenNegativeLevelError() {
+        toArray(flatten([1, 2, 3], -1));
+    }
+
     public function testToIter() {
         $iter = new \ArrayIterator([1, 2, 3]);
         $this->assertSame($iter, toIter($iter));
