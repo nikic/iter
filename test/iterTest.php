@@ -57,6 +57,19 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testFlatMap() {
+        $this->assertSame(
+            [-1, 1, -2, 2, -3, 3, -4, 4, -5, 5],
+            toArray(flatMap(function($v) {
+                return [-$v, $v];
+            }, [1, 2, 3, 4, 5]))
+        );
+        $this->assertSame(
+            [],
+            toArray(flatMap(function() { return []; }, [1, 2, 3, 4, 5]))
+        );
+    }
+
     public function testReindex() {
         $iter = reindex('strtoupper', ['a', 'b', 'c', 'd', 'e']);
         $this->assertSame(

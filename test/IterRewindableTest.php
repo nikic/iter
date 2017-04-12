@@ -26,6 +26,12 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             true
         );
         $this->assertRewindableEquals(
+            [-1, 1, -2, 2, -3, 3, -4, 4, -5, 5],
+            rewindable\flatMap(function($v) {
+                return [-$v, $v];
+            }, [1, 2, 3, 4, 5])
+        );
+        $this->assertRewindableEquals(
             [2 => 1, 4 => 2, 6 => 3, 8 => 4],
             rewindable\reindex(fn\operator('*', 2), [1, 2, 3, 4]),
             true

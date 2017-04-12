@@ -110,6 +110,32 @@ function mapKeys(callable $function, $iterable) {
         yield $function($key) => $value;
     }
 }
+/**
+ *
+ * Applies a function to each value in an iterator and flattens the result.
+ *
+ * The function is passed the current iterator value and should return an
+ * iterator of new values. The result will be a concatenation of the iterators
+ * returned by the mapping function.
+ *
+ * Examples:
+ *
+ *     iter\flatMap(function($v) { return [-$v, $v]; }, [1, 2, 3, 4, 5]);
+ *     => iter(-1, 1, -2, 2, -3, 3, -4, 4, -5, 5)
+ *
+ * @param callable $function Mapping function: iterable function(mixed $value)
+ * @param array|Traversable $iterable Iterable to be mapped over
+ *
+ * @return \Iterator
+ */
+function flatMap(callable $function, $iterable) {
+    _assertIterable($iterable, 'Second argument');
+    foreach ($iterable as $value) {
+        foreach ($function($value) as $k => $v) {
+            yield $k => $v;
+        }
+    }
+}
 
 /**
  * Reindexes an array by applying a function to all values of an iterator and
