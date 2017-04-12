@@ -11,3 +11,9 @@ matrix:
   allow_failures:
     - php: hhvm
   fast_finish: true
+
+install:
+  - composer install --prefer-dist
+
+script:
+  - vendor/bin/phpunit
