@@ -58,7 +58,7 @@ list the function signatures as an overview:
     Iterator dropWhile(callable $predicate, iterable $iterable)
     Iterator keys(iterable $iterable)
     Iterator values(iterable $iterable)
-    Iterator flatten(iterable $iterable)
+    Iterator flatten(iterable $iterable, int $levels = INF)
     Iterator flip(iterable $iterable)
     Iterator chunk(iterable $iterable, int $size)
     Iterator toIter(iterable $iterable)

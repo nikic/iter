@@ -690,24 +690,54 @@ function dropWhile(callable $predicate, $iterable) {
  * Takes an iterable containing any amount of nested iterables and returns
  * a flat iterable with just the values.
  *
+ * The $level argument allows to limit flattening to a certain number of levels.
+ *
  * Examples:
  *
  *      iter\flatten([1, [2, [3, 4]], [5]])
  *      => iter(1, 2, 3, 4, 5)
+ *      iter\flatten([1, [2, [3, 4]], [5]], 1)
+ *      => iter(1, 2, [3, 4], 5)
  *
  * @param array|Traversable $iterable Iterable to flatten
+ * @param int               $levels   Number of levels to flatten
  *
  * @return \Iterator
  */
-function flatten($iterable) {
+function flatten($iterable, $levels = INF) {
     _assertIterable($iterable, 'Argument');
-    foreach ($iterable as $key => $value) {
-        if (isIterable($value)) {
-            foreach (flatten($value) as $k => $v) {
-                yield $k => $v;
+    if ($levels < 0) {
+        throw new \InvalidArgumentException(
+            'Number of levels must be non-negative'
+        );
+    }
+
+    if ($levels === 0) {
+        // Flatten zero levels == do nothing
+        foreach ($iterable as $k => $v) {
+            yield $k => $v;
+        }
+    } else if ($levels === 1) {
+        // Optimized implementation for flattening one level
+        foreach ($iterable as $key => $value) {
+            if (isIterable($value)) {
+                foreach ($value as $k => $v) {
+                    yield $k => $v;
+                }
+            } else {
+                yield $key => $value;
             }
-        } else {
-            yield $key => $value;
+        }
+    } else {
+        // Otherwise flatten recursively
+        foreach ($iterable as $key => $value) {
+            if (isIterable($value)) {
+                foreach (flatten($value, $levels - 1) as $k => $v) {
+                    yield $k => $v;
+                }
+            } else {
+                yield $key => $value;
+            }
         }
     }
 }
