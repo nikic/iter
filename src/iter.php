@@ -528,6 +528,29 @@ function repeat($value, $num = INF) {
 }
 
 /**
+ * Append two iterables. Once all values of the first are consumed,
+ * the second one gets drawn.
+ *
+ * Examples:
+ *
+ *     iter\append([1, 2, 3], [4, 5, 6])
+ *     => iter([1, 2, 3, 4, 5, 6])
+ *
+ * @param mixed $iterable1 Iterable to get values from
+ * @param mixed $iterable2 Iterable to get values from
+ *
+ * @return \Iterator
+ */
+function append($iterable1, $iterable2) {
+    foreach ($iterable1 as $value) {
+        yield $value;
+    }
+    foreach ($iterable2 as $value) {
+        yield $value;
+    }
+}
+
+/**
  * Returns the keys of an iterable.
  *
  * Examples:

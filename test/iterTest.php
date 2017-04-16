@@ -208,6 +208,13 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testAppend() {
+        $this->assertEquals([], toArray(append([], [])));
+        $this->assertEquals([1, 2, 3], toArray(append([1, 2, 3], [])));
+        $this->assertEquals([1, 2, 3], toArray(append([], [1, 2, 3])));
+        $this->assertEquals([1, 2, 3, 4, 5, 6], toArray(append([1, 2, 3], [4, 5, 6])));
+    }
+
     public function testAnyAll() {
         $this->assertTrue(all(fn\operator('>', 0), range(1, 10)));
         $this->assertFalse(all(fn\operator('>', 0), range(-5, 5)));
