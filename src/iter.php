@@ -19,10 +19,10 @@ use Traversable;
  *     iter\range(3.0, 0.0, -0.5)
  *     => iter(3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0)
  *
- * @param number $start First number (inclusive)
- * @param number $end   Last number (inclusive, but doesn't have to be part of
+ * @param int|float $start First number (inclusive)
+ * @param int|float $end   Last number (inclusive, but doesn't have to be part of
  *                      resulting range if $step steps over it)
- * @param number $step  Step between numbers (defaults to 1 if $start smaller
+ * @param int|float $step  Step between numbers (defaults to 1 if $start smaller
  *                      $end and to -1 if $start greater $end)
  *
  * @throws \InvalidArgumentException if step is not valid
