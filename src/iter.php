@@ -796,12 +796,13 @@ function flip($iterable) {
  *
  * @param array|Traversable $iterable The iterable to chunk
  * @param int $size The size of each chunk
+ * @param bool $preserveKeys Whether keys from the input iterable should be preserved
  *
  * @throws \InvalidArgumentException if the chunk size is not positive
  *
  * @return \Iterator An iterator of arrays
  */
-function chunk($iterable, $size) {
+function chunk($iterable, $size, $preserveKeys = false) {
     _assertIterable($iterable, 'First argument');
 
     if ($size <= 0) {
@@ -811,7 +812,11 @@ function chunk($iterable, $size) {
     $chunk = [];
     $count = 0;
     foreach ($iterable as $key => $value) {
-        $chunk[$key] = $value;
+        if ($preserveKeys) {
+            $chunk[$key] = $value;
+        } else {
+            $chunk[] = $value;
+        }
         $count++;
 
         if ($count === $size) {
@@ -955,42 +960,19 @@ function toIter($iterable) {
  *      => [1, 2, 3]
  *
  * @param array|Traversable $iterable The iterable to convert to an array
+ * @param bool $preserveKeys Whether keys from the input iterable should be preserved
  *
  * @return array
  */
-function toArray($iterable) {
+function toArray($iterable, $preserveKeys = false) {
     _assertIterable($iterable, 'Argument');
     $array = [];
-    foreach ($iterable as $value) {
-        $array[] = $value;
-    }
-    return $array;
-}
-
-/**
- * Converts an iterable into an array and preserves its keys.
- *
- * If the keys are not unique, newer keys will overwrite older keys. If a key
- * is not a string or an integer, the usual array key casting rules (and
- * associated notices/warnings) apply.
- *
- * Examples:
- *
- *      iter\toArrayWithKeys(new ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]))
- *      => ['a' => 1, 'b' => 2, 'c' => 3]
- *
- *      iter\toArrayWithKeys(iter\chain(['a' => 1, 'b' => 2], ['a' => 3]))
- *      => ['a' => 3, 'b' => 2]
- *
- * @param array|Traversable $iterable The iterable to convert to an array
- *
- * @return array
- */
-function toArrayWithKeys($iterable) {
-    _assertIterable($iterable, 'Argument');
-    $array = [];
-    foreach ($iterable as $key => $value) {
-        $array[$key] = $value;
+    foreach ($iterable as $keys => $value) {
+        if ($preserveKeys) {
+            $array[$keys] = $value;
+        } else {
+            $array[] = $value;
+        }
     }
     return $array;
 }

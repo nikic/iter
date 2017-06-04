@@ -6,7 +6,7 @@ use iter\rewindable;
 
 class IterRewindableTest extends \PHPUnit_Framework_TestCase {
     private function assertRewindableEquals($array, $iter, $withKeys = false) {
-        $fn = $withKeys ? 'iter\\toArrayWithKeys' : 'iter\\toArray';
+        $fn = function ($v) use ($withKeys) { return toarray($v, $withKeys); };
         $this->assertSame($array, $fn($iter));
         $this->assertSame($array, $fn($iter));
     }
@@ -101,8 +101,13 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             true
         );
         $this->assertRewindableEquals(
-            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            [[1, 2], [3, 4], [5]],
             rewindable\chunk(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], 2),
+            true
+        );
+        $this->assertRewindableEquals(
+            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            rewindable\chunk(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], 2, true),
             true
         );
         $this->assertRewindableEquals(
