@@ -47,13 +47,13 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $mapped = mapKeys(function($n) { return $n * 3; }, $range);
         $this->assertSame(
             [0 => 0, 3 => 1, 6 => 2, 9 => 3, 12 => 4, 15 => 5],
-            toArrayWithKeys($mapped)
+            toArray($mapped, true)
         );
 
         $mapped = mapKeys('strtolower', ['A' => 1, 'B' => 2, 'C' => 3]);
         $this->assertSame(
             ['a' => 1, 'b' => 2, 'c' => 3],
-            toArrayWithKeys($mapped)
+            toArray($mapped, true)
         );
     }
 
@@ -74,13 +74,13 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $iter = reindex('strtoupper', ['a', 'b', 'c', 'd', 'e']);
         $this->assertSame(
             ['A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e'],
-            toArrayWithKeys($iter)
+            toArray($iter, true)
         );
 
         $iter = reindex(fn\operator('*', 2), [1, 2, 3, 4]);
         $this->assertSame(
             [2 => 1, 4 => 2, 6 => 3, 8 => 4],
-            toArrayWithKeys($iter)
+            toArray($iter, true)
         );
     }
 
@@ -110,7 +110,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
 
     public function testZipKeyValue() {
         $zipped = zipKeyValue(range(5, 0, -1), range(0, 5));
-        $this->assertSame([5=>0, 4=>1, 3=>2, 2=>3, 1=>4, 0=>5], toArrayWithKeys($zipped));
+        $this->assertSame([5=>0, 4=>1, 3=>2, 2=>3, 1=>4, 0=>5], toArray($zipped, true));
     }
 
     public function testChain() {
@@ -173,8 +173,8 @@ class IterTest extends \PHPUnit_Framework_TestCase {
 
     public function testKeyValue() {
         $array = ['a' => 'b', 'c' => 'd', 'e' => 'f'];
-        $this->assertSame(['b', 'd', 'f'], toArrayWithKeys(values($array)));
-        $this->assertSame(['a', 'c', 'e'], toArrayWithKeys(keys($array)));
+        $this->assertSame(['b', 'd', 'f'], toArray(values($array), true));
+        $this->assertSame(['a', 'c', 'e'], toArray(keys($array), true));
     }
 
     public function testReduce() {
@@ -191,20 +191,20 @@ class IterTest extends \PHPUnit_Framework_TestCase {
     public function testReductions() {
         $this->assertSame(
             [1, 3, 6, 10, 15],
-            toArrayWithKeys(reductions(fn\operator('+'), range(1, 5), 0))
+            toArray(reductions(fn\operator('+'), range(1, 5), 0), true)
         );
         $this->assertSame(
             [1, 2, 6, 24, 120],
-            toArrayWithKeys(reductions(fn\operator('*'), range(1, 5), 1))
+            toArray(reductions(fn\operator('*'), range(1, 5), 1), true)
         );
     }
 
     public function testComplexReductions() {
         $this->assertSame(
             ['ab', 'abcd', 'abcdef'],
-            toArrayWithKeys(reductions(function ($acc, $value, $key) {
+            toArray(reductions(function ($acc, $value, $key) {
                 return $acc . $key . $value;
-            }, ['a' => 'b', 'c' => 'd', 'e' => 'f'], ''))
+            }, ['a' => 'b', 'c' => 'd', 'e' => 'f'], ''), true)
         );
     }
 
@@ -274,7 +274,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         // Test key preservation
         $this->assertSame(
             ['a' => 1, 'c' => 2, 'd' => 3],
-            toArrayWithKeys(flatten(['a' => 1, 'b' => ['c' => 2, 'd' => 3]]))
+            toArray(flatten(['a' => 1, 'b' => ['c' => 2, 'd' => 3]]), true)
         );
     }
 
@@ -339,15 +339,15 @@ class IterTest extends \PHPUnit_Framework_TestCase {
     public function testToArrayWithKeys() {
         $this->assertSame(
             ['a' => 1, 'b' => 2, 'c' => 3],
-            toArrayWithKeys(['a' => 1, 'b' => 2, 'c' => 3])
+            toArray(['a' => 1, 'b' => 2, 'c' => 3], true)
         );
         $this->assertSame(
             ['a' => 1, 'b' => 2, 'c' => 3],
-            toArrayWithKeys(new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]))
+            toArray(new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]), true)
         );
         $this->assertSame(
             ['a' => 3, 'b' => 2],
-            toArrayWithKeys(chain(['a' => 1, 'b' => 2], ['a' => 3]))
+            toArray(chain(['a' => 1, 'b' => 2], ['a' => 3]), true)
         );
     }
 
@@ -355,7 +355,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
     public function testFlip() {
         $this->assertSame(
             [1 => 'a', 2 => 'b', 3 => 'c'],
-            toArrayWithKeys(flip(['a' => 1, 'b' => 2, 'c' => 3]))
+            toArray(flip(['a' => 1, 'b' => 2, 'c' => 3]), true)
         );
     }
 
@@ -373,13 +373,23 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         );
 
         $this->assertSame(
-            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            [[1, 2], [3, 4], [5]],
             toArray(chunk($iterable, 2))
         );
 
         $this->assertSame(
-            [[0=>0, 1=>1], [2=>2, 3=>3]],
+            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            toArray(chunk($iterable, 2, true))
+        );
+
+        $this->assertSame(
+            [[0, 1], [2, 3]],
             toArray(chunk([0, 1, 2, 3], 2))
+        );
+
+        $this->assertSame(
+            [[0=>0, 1=>1], [2=>2, 3=>3]],
+            toArray(chunk([0, 1, 2, 3], 2, true))
         );
         $this->assertSame([[0, 1, 2]], toArray(chunk([0, 1, 2], 100000)));
         $this->assertSame([], toArray(chunk([], 100000)));
@@ -432,7 +442,7 @@ class IterTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertSame(
             ['a' => 1, 'b' => 2, 'c' => ['d' => 3, 'e' => 4]],
-            recurse('iter\toArrayWithKeys', $iter)
+            recurse(function ($v) { return toArray($v, true); }, $iter)
         );
     }
 
