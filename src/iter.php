@@ -220,6 +220,30 @@ function filter(callable $predicate, $iterable) {
 }
 
 /**
+ * Enumerates 2-tuple of [key, value] of an iterable
+ *
+ * Examples:
+ *
+ *      iter\enumerate(['a', 'b']);
+ *      => iter([0, 'a'], [1, 'b'])
+ *
+ *      $values = ['a', 'b', 'c', 'd'];
+ *      $filter = function($t) { return $t[0] % 2 == 0; };
+ *      iter\map(iter\fn\index(1), iter\filter($filter, iter\enumerate($values)));
+ *      => iter('a', 'c')
+ *
+ * @param array|Traversable $iterable Iterable to enumerate
+ *
+ * @return \Iterator
+ */
+function enumerate($iterable) {
+    _assertIterable($iterable, 'First argument');
+    foreach ($iterable as $key => $value) {
+        yield [$key, $value];
+    }
+}
+
+/**
  * Reduce iterable using a function.
  *
  * The reduction function is passed an accumulator value and the current
