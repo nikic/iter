@@ -98,6 +98,18 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame([-5, -4, -3, -2, -1], toArray($filtered));
     }
 
+    public function testEnumerate() {
+         $this->assertSame([[0, 'a'], [1, 'b']], toArray(enumerate(['a', 'b'])));
+    }
+
+    public function testEnumerateWithStringKeys() {
+        $enumerated = enumerate([
+            'a' => 1,
+            'b' => 2,
+        ]);
+        $this->assertSame([['a', 1], ['b', 2]], toArray($enumerated));
+    }
+
     public function testZip() {
         $zipped = zip(range(0, 5), range(5, 0, -1));
         $this->assertSame([[0,5], [1,4], [2,3], [3,2], [4,1], [5,0]], toArray($zipped));
