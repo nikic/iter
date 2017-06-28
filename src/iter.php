@@ -823,12 +823,13 @@ function flip($iterable) {
  *
  * @param array|Traversable $iterable The iterable to chunk
  * @param int $size The size of each chunk
+ * @param bool $preserveKeys Whether to preserve keys from the input iterable
  *
  * @throws \InvalidArgumentException if the chunk size is not positive
  *
  * @return \Iterator An iterator of arrays
  */
-function chunk($iterable, $size) {
+function chunk($iterable, $size, $preserveKeys = true) {
     _assertIterable($iterable, 'First argument');
 
     if ($size <= 0) {
@@ -838,9 +839,13 @@ function chunk($iterable, $size) {
     $chunk = [];
     $count = 0;
     foreach ($iterable as $key => $value) {
-        $chunk[$key] = $value;
-        $count++;
+        if ($preserveKeys) {
+            $chunk[$key] = $value;
+        } else {
+            $chunk[] = $value;
+        }
 
+        $count++;
         if ($count === $size) {
             yield $chunk;
             $count = 0;
