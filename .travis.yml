@@ -1,3 +1,4 @@
+dist: trusty
 language: php
 
 php:
@@ -5,11 +6,13 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - nightly
   - hhvm
 
 matrix:
   allow_failures:
     - php: hhvm
+    - php: nightly
   fast_finish: true
 
 install:
