@@ -336,6 +336,15 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame(42, count(new _CountableTestDummy));
     }
 
+    public function testIsEmpty() {
+        $this->assertTrue(isEmpty([]));
+        $this->assertFalse(isEmpty([null]));
+        $this->assertTrue(isEmpty(toArray([])));
+        $this->assertFalse(isEmpty(toArray([null])));
+        $this->assertTrue(isEmpty(repeat(42, 0)));
+        $this->assertFalse(isEmpty(repeat(42)));
+    }
+
     public function testToArray() {
         $this->assertSame([1, 2, 3], toArray(['a' => 1, 'b' => 2, 'c' => 3]));
         $this->assertSame(
@@ -501,6 +510,10 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         ];
         yield [
             function() { return count(new \stdClass()); },
+            'Argument must be iterable or implement Countable'
+        ];
+        yield [
+            function() { return isEmpty(new \stdClass()); },
             'Argument must be iterable or implement Countable'
         ];
         yield [

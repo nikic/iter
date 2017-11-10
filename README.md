@@ -75,6 +75,7 @@ list the function signatures as an overview:
     void     apply(callable $function, iterable $iterable)
     string   join(string $separator, iterable $iterable)
     int      count(iterable $iterable)
+    bool     isEmpty(iterable $iterable)
     mixed    recurse(callable $function, $iterable)
     array    toArray(iterable $iterable)
     array    toArrayWithKeys(iterable $iterable)

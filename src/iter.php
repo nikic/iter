@@ -3,6 +3,7 @@
 namespace iter;
 
 use Traversable;
+use Countable;
 
 /**
  * Creates an iterable containing all numbers between the start and end value
@@ -903,12 +904,12 @@ function join($separator, $iterable) {
  *      iter\count(iter\flatten([1, 2, 3, [4, [[[5, 6], 7]]], 8]))
  *      => 8
  *
- * @param array|Traversable|\Countable $iterable The iterable to count
+ * @param array|Traversable|Countable $iterable The iterable to count
  *
  * @return int
  */
 function count($iterable) {
-    if (is_array($iterable) || $iterable instanceof \Countable) {
+    if (\is_array($iterable) || $iterable instanceof Countable) {
         return \count($iterable);
     }
     if (!$iterable instanceof \Traversable) {
@@ -921,6 +922,31 @@ function count($iterable) {
         ++$count;
     }
     return $count;
+}
+
+/**
+ * Determines whether iterable is empty.
+ *
+ * If the iterable implements Countable, its count() method will be used.
+ * Calling isEmpty() does not drain iterators, as only the valid() method will
+ * be called.
+ *
+ * @param array|Traversable|Countable $iterable
+ * @return bool
+ */
+function isEmpty($iterable) {
+    if (\is_array($iterable) || $iterable instanceof \Countable) {
+        return count($iterable) == 0;
+    }
+
+    if ($iterable instanceof \Iterator) {
+        return !$iterable->valid();
+    } else if ($iterable instanceof \IteratorAggregate) {
+        return !$iterable->getIterator()->valid();
+    } else {
+        throw new \InvalidArgumentException(
+            'Argument must be iterable or implement Countable');
+    }
 }
 
 /**
