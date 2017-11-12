@@ -3,8 +3,9 @@
 namespace iter;
 
 use iter\rewindable;
+use PHPUnit\Framework\TestCase;
 
-class IterRewindableTest extends \PHPUnit_Framework_TestCase {
+class IterRewindableTest extends TestCase {
     private function assertRewindableEquals($array, $iter, $withKeys = false) {
         $fn = $withKeys ? 'iter\\toArrayWithKeys' : 'iter\\toArray';
         $this->assertSame($array, $fn($iter));
