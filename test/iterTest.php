@@ -2,7 +2,9 @@
 
 namespace iter;
 
-class IterTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class IterTest extends TestCase {
     /** @dataProvider provideTestRange */
     public function testRange($start, $end, $step, $resultArray) {
         $this->assertSame($resultArray, toArray(range($start, $end, $step)));
@@ -453,10 +455,12 @@ class IterTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse(isIterable(123));
     }
 
-    /** @dataProvider provideTestAssertIterableFails */
+    /**
+     * @dataProvider provideTestAssertIterableFails
+     * @expectedException \InvalidArgumentException
+     */
     public function testAssertIterableFails(callable $fn, $expectedMessage) {
-        $this->setExpectedException(
-            \InvalidArgumentException::class, $expectedMessage);
+        $this->expectExceptionMessage($expectedMessage);
         $ret = $fn();
 
         // For generators the body will not be run until the first operation

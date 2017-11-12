@@ -3,8 +3,9 @@
 namespace iter;
 
 use iter\fn;
+use PHPUnit\Framework\TestCase;
 
-class IterFnTest extends \PHPUnit_Framework_TestCase {
+class IterFnTest extends TestCase {
     public function testIndex() {
         $getIndex3 = fn\index(3);
         $getIndexTest = fn\index('test');
