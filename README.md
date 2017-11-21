@@ -29,7 +29,7 @@ A small usage example for the ``map()`` and ``range()`` functions:
 ```php
 <?php
 
-use iter, iter\fn;
+use iter\fn;
 
 require 'path/to/vendor/autoload.php';
 
