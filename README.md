@@ -89,7 +89,9 @@ here is just a small usage example of the two main functions:
 ```php
 <?php
 
-use iter, iter\fn;
+use iter\fn;
+
+require 'path/to/vendor/autoload.php';
 
 /* Create a rewindable map function which can be used multiple times */
 $rewindableMap = iter\makeRewindable('iter\\map');
