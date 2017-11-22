@@ -88,8 +88,9 @@ function map(callable $function, $iterable) {
 /**
  * Leaves only unique occurrences by using a provided hash function.
  *
- * If hash function is not provided values of the iterable will be used for comparison. Storing values instead of hashes
- * can require more memory but it prevents possible false positives if there are hash collisions.
+ * If hash function is not provided values of the iterable will be serialized and used for comparison. Using serialize
+ * as a hash function can require more memory then other more efficient hash functions but it prevents possible
+ * false positives if there are hash collisions.
  *
  * @param array|Traversable $iterable Iterable to remove duplicates from
  * @param callable|null $hashFunction Hash function that returns the value which will be used to determine
