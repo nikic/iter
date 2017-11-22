@@ -94,27 +94,23 @@ function map(callable $function, $iterable) {
  * @param array|Traversable $iterable Iterable to remove duplicates from
  * @param callable|null $hashFunction Hash function that returns the value which will be used to determine
  *                                    uniqueness of the element
- * @param bool $strict If is set to true the types of the values from hash function will also be checked
  * @return \Iterator
  */
-function unique($iterable, callable $hashFunction = null, $strict = false) {
+function unique($iterable, callable $hashFunction = null) {
     _assertIterable($iterable, 'First argument');
-
     $hashSet = [];
-
     foreach ($iterable as $key => $value) {
-
         if ($hashFunction === null) {
-            $hash = $value;
+            $hash = serialize($value);
         } else {
             $hash = $hashFunction($value);
         }
 
-        if (\in_array($hash, $hashSet, $strict)) {
+        if (isset($hashSet[$hash])) {
             continue;
         }
 
-        $hashSet[] = $hash;
+        $hashSet[$hash] = '';
 
         yield $key => $value;
     }

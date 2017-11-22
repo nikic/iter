@@ -51,13 +51,6 @@ class IterTest extends TestCase {
         $this->assertSame($expected, toArray($unique));
     }
 
-    public function testUniqueWithoutHashFunctionNotStrict() {
-        $iterable = [null, '', 0, 1, '1', 1.0, true];
-        $expected = [null, 1];
-        $unique = unique($iterable, null);
-        $this->assertSame($expected, toArray($unique));
-    }
-
     public function testUniqueStringsWithHashFunction() {
         $iterable = [
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
