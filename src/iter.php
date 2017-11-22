@@ -86,6 +86,41 @@ function map(callable $function, $iterable) {
 }
 
 /**
+ * Leaves only unique occurrences by using a provided hash function.
+ *
+ * If hash function is not provided values of the iterable will be used for comparison. Storing values instead of hashes
+ * can require more memory but it prevents possible false positives if there are hash collisions.
+ *
+ * @param array|Traversable $iterable Iterable to remove duplicates from
+ * @param callable|null $hashFunction Hash function that returns the value which will be used to determine
+ *                                    uniqueness of the element
+ * @param bool $strict If is set to true the types of the values from hash function will also be checked
+ * @return \Iterator
+ */
+function unique($iterable, callable $hashFunction = null, $strict = false) {
+    _assertIterable($iterable, 'First argument');
+
+    $hashSet = [];
+
+    foreach ($iterable as $key => $value) {
+
+        if ($hashFunction === null) {
+            $hash = $value;
+        } else {
+            $hash = $hashFunction($value);
+        }
+
+        if (\in_array($hash, $hashSet, $strict)) {
+            continue;
+        }
+
+        $hashSet[] = $hash;
+
+        yield $key => $value;
+    }
+}
+
+/**
  * Applies a mapping function to all keys of an iterator.
  *
  * The function is passed the current iterator key and should return a
