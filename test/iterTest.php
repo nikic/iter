@@ -47,7 +47,7 @@ class IterTest extends TestCase {
     public function testUniqueWithoutHashFunction() {
         $iterable = [1, 2, '2', '2', 3, 4, 4, null, null, 5, '', '', [1], [1], [2]];
         $expected = [1, 2, '2', 3, 4, null, 5, '', [1], [2]];
-        $unique = unique($iterable, null, true);
+        $unique = unique($iterable, null);
         $this->assertSame($expected, toArray($unique));
     }
 
@@ -63,7 +63,7 @@ class IterTest extends TestCase {
         ];
         $unique = unique($iterable, function ($v) {
             return crc32($v);
-        }, true);
+        });
         $this->assertSame($expected, toArray($unique));
     }
 
@@ -76,7 +76,18 @@ class IterTest extends TestCase {
         $expected = [$obj1, $obj2];
         $unique = unique($iterable, function ($v) {
             return $v->a;
-        }, true);
+        });
+        $this->assertSame($expected, toArray($unique));
+    }
+
+    public function testUniqueObjectsWithoutHashFunction() {
+        $obj1 = new \stdClass();
+        $obj1->a = 1;
+        $obj2 = new \stdClass();
+        $obj2->a = 2;
+        $iterable = [$obj1, $obj1, $obj2];
+        $expected = [$obj1, $obj2];
+        $unique = unique($iterable);
         $this->assertSame($expected, toArray($unique));
     }
 
