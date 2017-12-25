@@ -457,10 +457,12 @@ class IterTest extends TestCase {
 
     /**
      * @dataProvider provideTestAssertIterableFails
-     * @expectedException \InvalidArgumentException
      */
-    public function testAssertIterableFails(callable $fn, $expectedMessage) {
-        $this->expectExceptionMessage($expectedMessage);
+    public function testAssertIterableFails(callable $fn, $expectedMessage, $expectedException) {
+        if(null !== $expectedMessage){
+            $this->expectExceptionMessage($expectedMessage);
+        }
+        $this->expectException($expectedException);
         $ret = $fn();
 
         // For generators the body will not be run until the first operation
@@ -471,42 +473,35 @@ class IterTest extends TestCase {
 
     public function provideTestAssertIterableFails() {
         yield [
-            function() { _assertIterable(new \stdClass(), 'Argument'); },
-            'Argument must be iterable'
-        ];
-        yield [
-            function() { _assertIterable("foobar", 'Argument'); },
-            'Argument must be iterable'
-        ];
-        yield [
-            function() { _assertAllIterable([[], new \stdClass()]); },
-            'Argument 2 must be iterable'
-        ];
-        yield [
             function() { return count(new \stdClass()); },
-            'Argument must be iterable or implement Countable'
+            'Argument must be iterable or implement Countable',
+            \InvalidArgumentException::class
         ];
         yield [
             function() { return toIter(new \stdClass()); },
-            'Argument must be iterable'
+            null,
+            \TypeError::class
         ];
         yield [
             function() {
                 return map(function($v) { return $v; }, new \stdClass());
             },
-            'Second argument must be iterable'
+            null,
+            \TypeError::class
         ];
         yield [
             function() {
                 return chain([1], [2], new \stdClass());
             },
-            'Argument 3 must be iterable'
+            null,
+            \TypeError::class
         ];
         yield [
             function() {
                 return zip([1], [2], new \stdClass());
             },
-            'Argument 3 must be iterable'
+            null,
+            \TypeError::class
         ];
     }
 }
