@@ -41,6 +41,18 @@ class IterRewindableTest extends \PHPUnit_Framework_TestCase {
             rewindable\filter(fn\operator('<', 0), rewindable\range(-5, 5))
         );
         $this->assertRewindableEquals(
+            [[0,0], [1,1], [2,2], [3,3], [4,4], [5,5]],
+            rewindable\enumerate(rewindable\range(0, 5))
+        );
+        $this->assertRewindableEquals(
+            [[0,0], [1,1], [2,2], [3,3], [4,4], [5,5]],
+            rewindable\toPairs(rewindable\range(0, 5))
+        );
+        $this->assertRewindableEquals(
+            [0, 1, 2, 3, 4, 5],
+            rewindable\fromPairs([[0,0], [1,1], [2,2], [3,3], [4,4], [5,5]])
+        );
+        $this->assertRewindableEquals(
             [[0,5], [1,4], [2,3], [3,2], [4,1], [5,0]],
             rewindable\zip(rewindable\range(0, 5), rewindable\range(5, 0, -1))
         );
