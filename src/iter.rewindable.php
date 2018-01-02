@@ -125,14 +125,9 @@ namespace iter\rewindable {
             return $this->generator->send($value);
         }
 
-        public function __call($method, $args) {
-            if ($method === 'throw') {
-                if (!$this->generator) { $this->rewind(); }
-                return $this->generator->throw(...$args);
-            } else {
-                // trigger normal undefined method error
-                return $this->$method(...$args);
-            }
+        public function throw($exception) {
+            if (!$this->generator) { $this->rewind(); }
+            return $this->generator->throw($exception);
         }
     }
 }
