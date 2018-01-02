@@ -100,6 +100,18 @@ class IterTest extends TestCase {
         $this->assertSame([-5, -4, -3, -2, -1], toArray($filtered));
     }
 
+    public function testEnumerate() {
+         $this->assertSame([[0, 'a'], [1, 'b']], toArray(enumerate(['a', 'b'])));
+    }
+
+    public function testEnumerateWithStringKeys() {
+        $enumerated = enumerate([
+            'a' => 1,
+            'b' => 2,
+        ]);
+        $this->assertSame([['a', 1], ['b', 2]], toArray($enumerated));
+    }
+
     public function testZip() {
         $zipped = zip(range(0, 5), range(5, 0, -1));
         $this->assertSame([[0,5], [1,4], [2,3], [3,2], [4,1], [5,0]], toArray($zipped));
@@ -326,6 +338,15 @@ class IterTest extends TestCase {
         $this->assertSame(42, count(new _CountableTestDummy));
     }
 
+    public function testIsEmpty() {
+        $this->assertTrue(isEmpty([]));
+        $this->assertFalse(isEmpty([null]));
+        $this->assertTrue(isEmpty(toArray([])));
+        $this->assertFalse(isEmpty(toArray([null])));
+        $this->assertTrue(isEmpty(repeat(42, 0)));
+        $this->assertFalse(isEmpty(repeat(42)));
+    }
+
     public function testToArray() {
         $this->assertSame([1, 2, 3], toArray(['a' => 1, 'b' => 2, 'c' => 3]));
         $this->assertSame(
@@ -378,11 +399,20 @@ class IterTest extends TestCase {
             [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
             toArray(chunk($iterable, 2))
         );
+        $this->assertSame(
+            [[1, 2], [3, 4], [5]],
+            toArray(chunk($iterable, 2, false))
+        );
 
         $this->assertSame(
             [[0=>0, 1=>1], [2=>2, 3=>3]],
             toArray(chunk([0, 1, 2, 3], 2))
         );
+        $this->assertSame(
+            [[0, 1], [2, 3]],
+            toArray(chunk([0, 1, 2, 3], 2, false))
+        );
+
         $this->assertSame([[0, 1, 2]], toArray(chunk([0, 1, 2], 100000)));
         $this->assertSame([], toArray(chunk([], 100000)));
     }
@@ -474,6 +504,11 @@ class IterTest extends TestCase {
     public function provideTestAssertIterableFails() {
         yield [
             function() { return count(new \stdClass()); },
+            'Argument must be iterable or implement Countable',
+            \InvalidArgumentException::class
+        ];
+        yield [
+            function() { return isEmpty(new \stdClass()); },
             'Argument must be iterable or implement Countable',
             \InvalidArgumentException::class
         ];

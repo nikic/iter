@@ -17,11 +17,11 @@ namespace iter;
  *     iter\range(3.0, 0.0, -0.5)
  *     => iter(3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0)
  *
- * @param number $start First number (inclusive)
- * @param number $end   Last number (inclusive, but doesn't have to be part of
- *                      resulting range if $step steps over it)
- * @param number $step  Step between numbers (defaults to 1 if $start smaller
- *                      $end and to -1 if $start greater $end)
+ * @param int|float $start First number (inclusive)
+ * @param int|float $end   Last number (inclusive, but doesn't have to be part of
+ *                         resulting range if $step steps over it)
+ * @param int|float $step  Step between numbers (defaults to 1 if $start smaller
+ *                         $end and to -1 if $start greater $end)
  *
  * @throws \InvalidArgumentException if step is not valid
  *
@@ -207,6 +207,29 @@ function filter(callable $predicate, iterable $iterable): \Iterator {
         if ($predicate($value)) {
             yield $key => $value;
         }
+    }
+}
+
+/**
+ * Enumerates pairs of [key, value] of an iterable.
+ *
+ * Examples:
+ *
+ *      iter\enumerate(['a', 'b']);
+ *      => iter([0, 'a'], [1, 'b'])
+ *
+ *      $values = ['a', 'b', 'c', 'd'];
+ *      $filter = function($t) { return $t[0] % 2 == 0; };
+ *      iter\map(iter\fn\index(1), iter\filter($filter, iter\enumerate($values)));
+ *      => iter('a', 'c')
+ *
+ * @param iterable $iterable Iterable to enumerate
+ *
+ * @return \Iterator
+ */
+function enumerate(iterable $iterable) : \Iterator {
+    foreach ($iterable as $key => $value) {
+        yield [$key, $value];
     }
 }
 
@@ -766,10 +789,11 @@ function flip(iterable $iterable): \Iterator {
  *
  * @param iterable $iterable The iterable to chunk
  * @param int $size The size of each chunk
+ * @param bool $preserveKeys Whether to preserve keys from the input iterable
  *
  * @return \Iterator An iterator of arrays
  */
-function chunk(iterable $iterable, int $size): \Iterator {
+function chunk(iterable $iterable, int $size, bool $preserveKeys = true): \Iterator {
     if ($size <= 0) {
         throw new \InvalidArgumentException('Chunk size must be positive');
     }
@@ -777,9 +801,13 @@ function chunk(iterable $iterable, int $size): \Iterator {
     $chunk = [];
     $count = 0;
     foreach ($iterable as $key => $value) {
-        $chunk[$key] = $value;
-        $count++;
+        if ($preserveKeys) {
+            $chunk[$key] = $value;
+        } else {
+            $chunk[] = $value;
+        }
 
+        $count++;
         if ($count === $size) {
             yield $chunk;
             $count = 0;
@@ -840,7 +868,7 @@ function join(string $separator, iterable $iterable): string {
  * @return int
  */
 function count($iterable): int {
-    if (is_array($iterable) || $iterable instanceof \Countable) {
+    if (\is_array($iterable) || $iterable instanceof \Countable) {
         return \count($iterable);
     }
     if (!$iterable instanceof \Traversable) {
@@ -853,6 +881,31 @@ function count($iterable): int {
         ++$count;
     }
     return $count;
+}
+
+/**
+ * Determines whether iterable is empty.
+ *
+ * If the iterable implements Countable, its count() method will be used.
+ * Calling isEmpty() does not drain iterators, as only the valid() method will
+ * be called.
+ *
+ * @param iterable|\Countable $iterable
+ * @return bool
+ */
+function isEmpty($iterable): bool {
+    if (\is_array($iterable) || $iterable instanceof \Countable) {
+        return count($iterable) == 0;
+    }
+
+    if ($iterable instanceof \Iterator) {
+        return !$iterable->valid();
+    } else if ($iterable instanceof \IteratorAggregate) {
+        return !$iterable->getIterator()->valid();
+    } else {
+        throw new \InvalidArgumentException(
+            'Argument must be iterable or implement Countable');
+    }
 }
 
 /**
