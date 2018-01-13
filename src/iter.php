@@ -979,16 +979,24 @@ function recurse(callable $function, iterable $iterable) {
  * @return \Iterator
  */
 function toIter(iterable $iterable): \Iterator {
+    if (\is_array($iterable)) {
+        return new \ArrayIterator($iterable);
+    }
+
     if ($iterable instanceof \Iterator) {
         return $iterable;
     }
     if ($iterable instanceof \IteratorAggregate) {
         return $iterable->getIterator();
     }
-    if (is_array($iterable)) {
-        return new \ArrayIterator($iterable);
-    }
-    throw new \InvalidArgumentException('Argument must be iterable');
+
+    // Traversable, but not Iterator or IteratorAggregate
+    $generator = function() use($iterable) {
+        foreach ($iterable as $key => $value) {
+            yield $key => $value;
+        }
+    };
+    return $generator();
 }
 
 /**

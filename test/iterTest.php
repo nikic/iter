@@ -343,6 +343,14 @@ class IterTest extends TestCase {
         $iter = toIter([1, 2, 3]);
         $this->assertInstanceOf('ArrayIterator', $iter);
         $this->assertSame([1, 2, 3], toArray($iter));
+
+        // DatePeriod is Traversable, but not Iterator or IteratorAggregate
+        $iter = toIter(new \DatePeriod('R2/2012-07-01T00:00:00Z/P7D'));
+        $this->assertInstanceOf('Iterator', $iter);
+        $this->assertSame(
+            ['2012-07-01', '2012-07-08', '2012-07-15'],
+            toArray(map(fn\method('format', ['Y-m-d']), $iter))
+        );
     }
 
     public function testCount() {
