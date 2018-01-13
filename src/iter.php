@@ -988,7 +988,6 @@ function toIter(iterable $iterable): \Iterator {
     if (is_array($iterable)) {
         return new \ArrayIterator($iterable);
     }
-    throw new \InvalidArgumentException('Argument must be iterable');
 }
 
 /**
