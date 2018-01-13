@@ -100,16 +100,29 @@ class IterTest extends TestCase {
         $this->assertSame([-5, -4, -3, -2, -1], toArray($filtered));
     }
 
-    public function testEnumerate() {
-         $this->assertSame([[0, 'a'], [1, 'b']], toArray(enumerate(['a', 'b'])));
+    public function testEnumerateIsAliasOfToPairs() {
+        $this->assertSame(toArray(toPairs(['a', 'b'])), toArray(enumerate(['a', 'b'])));
     }
 
-    public function testEnumerateWithStringKeys() {
-        $enumerated = enumerate([
+    public function testToPairs() {
+         $this->assertSame([[0, 'a'], [1, 'b']], toArray(toPairs(['a', 'b'])));
+    }
+
+    public function testToPairsWithStringKeys() {
+        $enumerated = toPairs([
             'a' => 1,
             'b' => 2,
         ]);
         $this->assertSame([['a', 1], ['b', 2]], toArray($enumerated));
+    }
+
+    public function testFromPairs() {
+        $this->assertSame(['a', 'b'], toArrayWithKeys(fromPairs([[0, 'a'], [1, 'b']])));
+    }
+
+    public function testFromPairsInverseToPairs() {
+        $map = ['a' => 1, 'b' => 2];
+        $this->assertSame($map, toArrayWithKeys(fromPairs(toPairs($map))));
     }
 
     public function testZip() {

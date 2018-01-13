@@ -211,25 +211,60 @@ function filter(callable $predicate, iterable $iterable): \Iterator {
 }
 
 /**
- * Enumerates pairs of [key, value] of an iterable.
- *
- * Examples:
- *
- *      iter\enumerate(['a', 'b']);
- *      => iter([0, 'a'], [1, 'b'])
- *
- *      $values = ['a', 'b', 'c', 'd'];
- *      $filter = function($t) { return $t[0] % 2 == 0; };
- *      iter\map(iter\fn\index(1), iter\filter($filter, iter\enumerate($values)));
- *      => iter('a', 'c')
+ * Alias of toPairs().
  *
  * @param iterable $iterable Iterable to enumerate
  *
  * @return \Iterator
  */
-function enumerate(iterable $iterable) : \Iterator {
+function enumerate(iterable $iterable): \Iterator {
+    return toPairs($iterable);
+}
+
+/**
+ * Converts an iterable of key => value into an iterable of [key, value] pairs.
+ *
+ * Examples:
+ *
+ *      iter\toPairs(['a', 'b']);
+ *      => iter([0, 'a'], [1, 'b'])
+ *
+ *      $values = ['a', 'b', 'c', 'd'];
+ *      $filter = function($t) { return $t[0] % 2 == 0; };
+ *      iter\fromPairs(iter\filter($filter, iter\toPairs($values)));
+ *      => iter('a', 'c')
+ *
+ * @param iterable $iterable Iterable to convert to pairs
+ *
+ * @return \Iterator
+ */
+function toPairs(iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         yield [$key, $value];
+    }
+}
+
+/**
+ * Converts an iterable of [key, value] pairs into a key => value iterable.
+ *
+ * This acts as an inverse to the toPairs() function.
+ *
+ * Examples:
+ *
+ *      iter\fromPairs([['a', 1], ['b', 2]])
+ *      => iter('a' => 1, 'b' => 2)
+ *
+ *      $map = ['a' => 1, 'b' => 2];
+ *      iter\fromPairs(iter\toPairs($map))
+ *      => iter('a' => 1, 'b' => 2)
+ *
+ * @param iterable $iterable Iterable of [key, value] pairs
+ *
+ * @return \Iterator
+ */
+function fromPairs(iterable $iterable): \Iterator {
+    foreach ($iterable as [$key, $value]) {
+        yield $key => $value;
     }
 }
 

@@ -59,6 +59,9 @@ namespace iter\rewindable {
     function flatMap()     { return new _RewindableGenerator('iter\flatMap',     func_get_args()); }
     function reindex()     { return new _RewindableGenerator('iter\reindex',     func_get_args()); }
     function filter()      { return new _RewindableGenerator('iter\filter',      func_get_args()); }
+    function enumerate()   { return new _RewindableGenerator('iter\enumerate',   func_get_args()); }
+    function toPairs()     { return new _RewindableGenerator('iter\toPairs',     func_get_args()); }
+    function fromPairs()   { return new _RewindableGenerator('iter\fromPairs',   func_get_args()); }
     function reductions()  { return new _RewindableGenerator('iter\reductions',  func_get_args()); }
     function zip()         { return new _RewindableGenerator('iter\zip',         func_get_args()); }
     function zipKeyValue() { return new _RewindableGenerator('iter\zipKeyValue', func_get_args()); }
