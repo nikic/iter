@@ -13,7 +13,7 @@
         "php": "^7.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.7 || ~6.4"
+        "phpunit/phpunit": "~6.5"
     },
     "autoload": {
         "files": ["src/bootstrap.php"]
