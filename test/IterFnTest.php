@@ -109,6 +109,8 @@ class IterFnTest extends TestCase {
             ['<=>', '2e1', '1e10', -1],
             ['<=>', new \stdClass(), new \SplStack(), 1],
             ['<=>', new \SplStack(), new \stdClass(), 1],
+            ['<>', 1, 2, true],
+            ['<>', 1, true, false],
         ];
     }
 
