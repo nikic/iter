@@ -772,7 +772,7 @@ function flatten(iterable $iterable, $levels = INF): \Iterator {
     } else if ($levels === 1) {
         // Optimized implementation for flattening one level
         foreach ($iterable as $key => $value) {
-            if (isIterable($value)) {
+            if (is_iterable($value)) {
                 foreach ($value as $k => $v) {
                     yield $k => $v;
                 }
@@ -783,7 +783,7 @@ function flatten(iterable $iterable, $levels = INF): \Iterator {
     } else {
         // Otherwise flatten recursively
         foreach ($iterable as $key => $value) {
-            if (isIterable($value)) {
+            if (is_iterable($value)) {
                 foreach (flatten($value, $levels - 1) as $k => $v) {
                     yield $k => $v;
                 }
@@ -962,7 +962,7 @@ function isEmpty($iterable): bool {
  */
 function recurse(callable $function, iterable $iterable) {
     return $function(map(function($value) use($function) {
-        return isIterable($value) ? recurse($function, $value) : $value;
+        return is_iterable($value) ? recurse($function, $value) : $value;
     }, $iterable));
 }
 
@@ -1052,31 +1052,6 @@ function toArrayWithKeys(iterable $iterable): array {
     return $array;
 }
 
-/**
- * Determines whether a value is an iterable.
- *
- * Only arrays and objects implementing Traversable are considered as iterable.
- * In particular objects that don't implement Traversable are not considered as
- * iterable, even though PHP would accept them in a foreach() loop.
- *
- * Examples:
- *
- *     iter\isIterable([1, 2, 3])
- *     => true
- *
- *     iter\isIterable(new ArrayIterator([1, 2, 3]))
- *     => true
- *
- *     iter\isIterable(new stdClass)
- *     => false
- *
- * @param mixed $value Value to check
- *
- * @return bool Whether the passed value is an iterable
- */
-function isIterable($value) {
-    return is_array($value) || $value instanceof \Traversable;
-}
 /*
  * Python:
  * compress()

@@ -494,18 +494,6 @@ class IterTest extends TestCase {
         $this->assertSame($values, toArray(values($fn())));
     }
 
-    public function testIsIterable() {
-        $this->assertTrue(isIterable([]));
-        $this->assertTrue(isIterable([1, 2, 3]));
-        $this->assertTrue(isIterable(new \ArrayIterator([1, 2, 3])));
-        $gen = function() { yield; };
-        $this->assertTrue(isIterable($gen()));
-
-        $this->assertFalse(isIterable(new \stdClass()));
-        $this->assertFalse(isIterable("foobar"));
-        $this->assertFalse(isIterable(123));
-    }
-
     /**
      * @dataProvider provideTestAssertIterableFails
      */
