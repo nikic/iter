@@ -81,7 +81,6 @@ list the function signatures as an overview:
     mixed    recurse(callable $function, $iterable)
     array    toArray(iterable $iterable)
     array    toArrayWithKeys(iterable $iterable)
-    bool     isIterable($value)
 
 As the functionality is implemented using generators the resulting iterators
 are by default not rewindable. This library implements additional functionality
