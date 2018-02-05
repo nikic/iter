@@ -359,6 +359,10 @@ class IterTest extends TestCase {
         $this->assertSame(42, count(new _CountableTestDummy));
     }
 
+    public function testCountWithStringCount() {
+        $this->assertSame(3, count(new MyIterator()));
+    }
+
     public function testIsEmpty() {
         $this->assertTrue(isEmpty([]));
         $this->assertFalse(isEmpty([null]));
@@ -366,6 +370,10 @@ class IterTest extends TestCase {
         $this->assertFalse(isEmpty(toArray([null])));
         $this->assertTrue(isEmpty(repeat(42, 0)));
         $this->assertFalse(isEmpty(repeat(42)));
+    }
+
+    public function testIsEmptyWithValidIteratorAgg() {
+        $this->assertFalse(isEmpty(new MyIteratorAgg()));
     }
 
     public function testToArray() {
