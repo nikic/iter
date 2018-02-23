@@ -125,9 +125,7 @@ function mapKeys(callable $function, iterable $iterable): \Iterator {
  */
 function flatMap(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $value) {
-        foreach ($function($value) as $k => $v) {
-            yield $k => $v;
-        }
+        yield from $function($value);
     }
 }
 
@@ -405,9 +403,7 @@ function zipKeyValue(iterable $keys, iterable $values): \Iterator {
  */
 function chain(iterable ...$iterables): \Iterator {
     foreach ($iterables as $iterable) {
-        foreach ($iterable as $key => $value) {
-            yield $key => $value;
-        }
+        yield from $iterable;
     }
 }
 
@@ -766,16 +762,12 @@ function flatten(iterable $iterable, $levels = INF): \Iterator {
 
     if ($levels === 0) {
         // Flatten zero levels == do nothing
-        foreach ($iterable as $k => $v) {
-            yield $k => $v;
-        }
+        yield from $iterable;
     } else if ($levels === 1) {
         // Optimized implementation for flattening one level
         foreach ($iterable as $key => $value) {
             if (isIterable($value)) {
-                foreach ($value as $k => $v) {
-                    yield $k => $v;
-                }
+                yield from $value;
             } else {
                 yield $key => $value;
             }
@@ -784,9 +776,7 @@ function flatten(iterable $iterable, $levels = INF): \Iterator {
         // Otherwise flatten recursively
         foreach ($iterable as $key => $value) {
             if (isIterable($value)) {
-                foreach (flatten($value, $levels - 1) as $k => $v) {
-                    yield $k => $v;
-                }
+                yield from flatten($value, $levels - 1);
             } else {
                 yield $key => $value;
             }
@@ -992,9 +982,7 @@ function toIter(iterable $iterable): \Iterator {
 
     // Traversable, but not Iterator or IteratorAggregate
     $generator = function() use($iterable) {
-        foreach ($iterable as $key => $value) {
-            yield $key => $value;
-        }
+        yield from $iterable;
     };
     return $generator();
 }
