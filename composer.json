@@ -13,10 +13,15 @@
         "php": "^7.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0"
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "files": ["src/bootstrap.php"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "iter\\": "test"
+        }
     },
     "extra": {
         "branch-alias": {

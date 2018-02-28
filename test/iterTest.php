@@ -366,6 +366,11 @@ class IterTest extends TestCase {
         $this->assertFalse(isEmpty(toArray([null])));
         $this->assertTrue(isEmpty(repeat(42, 0)));
         $this->assertFalse(isEmpty(repeat(42)));
+        $this->assertFalse(isEmpty(new MyIteratorAgg()));
+    }
+
+    public function testCountWithValidIteratorAgg() {
+        $this->assertSame(4, count(new MyIteratorAgg()));
     }
 
     public function testToArray() {

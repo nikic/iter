@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="./src/bootstrap.php">
+         bootstrap="./vendor/autoload.php">
     <testsuites>
         <testsuite name="Iter Test Suite">
             <directory>./test/</directory>
@@ -18,7 +18,10 @@
 
     <filter>
         <whitelist>
-            <directory suffix=".php">./lib/</directory>
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <file suffix=".php">src/bootstrap.php</file>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
