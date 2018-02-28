@@ -83,6 +83,7 @@ function operator($operator, $arg = null) {
         '||'  => function($a, $b) { return $a ||  $b; },
         '**'  => function($a, $b) { return $a **  $b; },
         '<=>' => function($a, $b) { return $a <=> $b; },
+        '<>'  => function($a, $b) { return $a <>  $b; },
     ];
 
     if (!isset($functions[$operator])) {
