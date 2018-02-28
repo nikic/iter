@@ -18,6 +18,11 @@
     "autoload": {
         "files": ["src/bootstrap.php"]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "iter\\": "test"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.0-dev"
