@@ -16,7 +16,11 @@
         "phpunit/phpunit": "~7.0"
     },
     "autoload": {
-        "files": ["src/bootstrap.php"]
+        "files": [
+            "src/iter.fn.php",
+            "src/iter.php",
+            "src/iter.rewindable.php"
+        ]
     },
     "extra": {
         "branch-alias": {
