@@ -11,7 +11,7 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         bootstrap="./src/bootstrap.php">
+         bootstrap="vendor/autoload.php">
     <testsuites>
         <testsuite name="Iter Test Suite">
             <directory>./test/</directory>
