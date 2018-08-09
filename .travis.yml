@@ -12,6 +12,10 @@ matrix:
   allow_failures:
     - php: nightly
 
+cache:
+  directories:
+  - $HOME/.composer/cache
+
 install:
   - composer install --prefer-dist --ignore-platform-reqs
 
