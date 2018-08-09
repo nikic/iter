@@ -22,19 +22,19 @@ class IterTest extends TestCase {
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage If start < end the step must be positive
-     */
+    
     public function testRangeStepMustBePositive() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('If start < end the step must be positive');
+
         toArray(range(0, 10, -1));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage If start > end the step must be negative
-     */
+    
     public function testRangeStepMustBeNegative() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('If start > end the step must be negative');
+
         toArray(range(10, 0, 1));
     }
 
@@ -162,19 +162,19 @@ class IterTest extends TestCase {
         $this->assertSame([], toArray(slice(range(0, INF), 0, 0)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Length must be non-negative
-     */
+    
     public function testSliceNegativeLengthError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Length must be non-negative');
+
         toArray(slice(range(0, INF), 0, -1));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Start offset must be non-negative
-     */
+    
     public function testSliceNegativeStartOffsetError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Start offset must be non-negative');
+
         toArray(slice(range(0, INF), -1, 5));
     }
 
@@ -190,11 +190,11 @@ class IterTest extends TestCase {
         $this->assertSame([], toArray(repeat(1, 0)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Number of repetitions must be non-negative
-     */
+    
     public function testRepeatNegativeNumError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Number of repetitions must be non-negative');
+
         toArray(repeat(1, -1));
     }
 
@@ -324,11 +324,11 @@ class IterTest extends TestCase {
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Number of levels must be non-negative
-     */
+    
     public function testFlattenNegativeLevelError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Number of levels must be non-negative');
+
         toArray(flatten([1, 2, 3], -1));
     }
 
@@ -354,9 +354,9 @@ class IterTest extends TestCase {
     }
 
     public function testCount() {
-        $this->assertSame(5, count([1, 2, 3, 4, 5]));
-        $this->assertSame(5, count(toIter([1, 2, 3, 4, 5])));
-        $this->assertSame(42, count(new _CountableTestDummy));
+        $this->assertCount(5, [1, 2, 3, 4, 5]);
+        $this->assertCount(5, toIter([1, 2, 3, 4, 5]));
+        $this->assertCount(42, new _CountableTestDummy);
     }
 
     public function testIsEmpty() {
@@ -438,19 +438,19 @@ class IterTest extends TestCase {
         $this->assertSame([], toArray(chunk([], 100000)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Chunk size must be positive
-     */
+    
     public function testZeroChunkSizeError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Chunk size must be positive');
+
         toArray(chunk([1, 2, 3], 0));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Chunk size must be positive
-     */
+    
     public function testNegativeChunkSizeError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Chunk size must be positive');
+
         toArray(chunk([1, 2, 3], -1));
     }
 
