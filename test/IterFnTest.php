@@ -112,11 +112,11 @@ class IterFnTest extends TestCase {
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown operator "***"
-     */
+    
     public function testInvalidOperator() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown operator "***"');
+
         fn\operator('***');
     }
 }
