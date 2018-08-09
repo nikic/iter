@@ -736,6 +736,21 @@ function dropWhile(callable $predicate, iterable $iterable): \Iterator {
 }
 
 /**
+ * Takes a non-empty iterable and returns the first element.
+ *
+ * @param iterable $iterable
+ * @return mixed
+ * @throws \InvalidArgumentException if argument is empty
+ */
+function head(iterable $iterable) {
+    foreach ($iterable as $value) {
+        return $value;
+    }
+
+    throw new \InvalidArgumentException('Argument must be non-empty');
+}
+
+/**
  * Takes an iterable containing any amount of nested iterables and returns
  * a flat iterable with just the values.
  *
