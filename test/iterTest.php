@@ -162,7 +162,23 @@ class IterTest extends TestCase {
         $this->assertSame([], toArray(slice(range(0, INF), 0, 0)));
     }
 
-    
+    public function testSliceDoNotTakeElementsAboveEndIndex() {
+        $takenElements = 0;
+        $iterator = function () use (&$takenElements) {
+            foreach (range(0, INF) as $item) {
+                $takenElements++;
+                yield $item;
+            }
+        };
+
+        $this->assertSame(
+            [0, 1, 2],
+            toArray(slice($iterator(), 0, 3))
+        );
+
+        $this->assertSame(3, $takenElements);
+    }
+
     public function testSliceNegativeLengthError() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Length must be non-negative');
@@ -176,6 +192,13 @@ class IterTest extends TestCase {
         $this->expectExceptionMessage('Start offset must be non-negative');
 
         toArray(slice(range(0, INF), -1, 5));
+    }
+
+    public function testSliceNegativeStartOffsetErrorWithZeroLength() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Start offset must be non-negative');
+
+        toArray(slice(range(0, INF), -1, 0));
     }
 
     public function testTakeDrop() {

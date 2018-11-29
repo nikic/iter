@@ -484,16 +484,19 @@ function slice(iterable $iterable, int $start, $length = INF): \Iterator {
     if ($length < 0) {
         throw new \InvalidArgumentException('Length must be non-negative');
     }
+    if ($length === 0) {
+        return;
+    }
 
     $i = 0;
     foreach ($iterable as $key => $value) {
-        if ($i >= $start + $length) {
-            break;
-        }
         if ($i++ < $start) {
             continue;
         }
         yield $key => $value;
+        if ($i >= $start + $length) {
+            break;
+        }
     }
 }
 
