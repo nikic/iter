@@ -487,13 +487,13 @@ function slice(iterable $iterable, int $start, $length = INF): \Iterator {
 
     $i = 0;
     foreach ($iterable as $key => $value) {
-        if ($i >= $start + $length) {
-            break;
-        }
         if ($i++ < $start) {
             continue;
         }
         yield $key => $value;
+        if ($i >= $start + $length) {
+            break;
+        }
     }
 }
 
