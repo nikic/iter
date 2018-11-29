@@ -478,15 +478,14 @@ function product(iterable ...$iterables): \Iterator {
  * @return \Iterator
  */
 function slice(iterable $iterable, int $start, $length = INF): \Iterator {
-    if ($length === 0) {
-        return;
-    }
-    
     if ($start < 0) {
         throw new \InvalidArgumentException('Start offset must be non-negative');
     }
     if ($length < 0) {
         throw new \InvalidArgumentException('Length must be non-negative');
+    }
+    if ($length === 0) {
+        return;
     }
 
     $i = 0;
