@@ -111,3 +111,25 @@ The above functions are only useful for your own generators though, for the
 
     $res = iter\rewindable\map(fn\operator('*', 3), [1, 2, 3]);
     // etc
+
+
+Fluent interface
+----------------
+
+Since version xxx a fluent interface is also available.
+While a little more verbose, the fluent interface results in more readable code:
+```php
+
+$fluent = new \iter\FluentIterator([1, 2, 3, 4, 5, 6]);
+$fluent
+    ->take(5) // 1, 2, 3, 4, 5
+    ->map(fn\operator('*', 5)) // 5, 10, 15, 20, 25
+    ->map(fn\operator('+', 3)) // 8, 13, 18, 23, 28
+    ->map(fn\operator('*', 2)) // 16, 26, 36, 46, 56
+    ->reduce(fn\operator('+'), 0); // 180
+
+    
+```
+
+Other benefits could (not yet implemented) include validation of arguments before iteration. 
+
