@@ -305,4 +305,27 @@ class FluentIterator implements \IteratorAggregate
     {
         return toArrayWithKeys($this->iterator);
     }
+
+    /**
+     * Passes the iterator through a callable that takes an iterator and returns an iterator.
+     * This allows applying functions to the iterator instead of its element.
+     * Example:
+     * ```php
+     * $fluent
+     *     ->map(...)
+     *     ->via(function(FluentIterator $iterator) {
+     *         return slice($iterator, 1, 5);
+     *     })
+     *     ->take(5);
+     *
+     *
+     *
+     * ```
+     * @param callable $callable
+     * @return iterable
+     */
+    public function via(callable $callable): self
+    {
+        return new static(call_user_func($callable, $this));
+    }
 }
