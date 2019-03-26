@@ -482,4 +482,21 @@ class FluentIteratorTest extends TestCase
         $this->assertSame(['a'], $rewindable->take(1)->toArray());
     }
 
+
+    public function testVia()
+    {
+        $iterator = new FluentIterator(range(1, 1000000));
+
+
+        $this->assertSame([11, 12, 13, 14 , 15], $iterator
+            ->drop(5)
+            ->via(function(iterable $iterator) {
+                return take(10, $iterator);
+            })
+            ->drop(5)
+            ->toArray()
+        );
+
+    }
+
 }
