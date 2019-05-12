@@ -11,7 +11,7 @@ namespace iter {
      * Example:
      *
      *      $rewindableMap = iter\makeRewindable('iter\\map');
-     *      $res = $rewindableMap(fn\operator('*', 3), [1, 2, 3]);
+     *      $res = $rewindableMap(func\operator('*', 3), [1, 2, 3]);
      *      // $res is a rewindable iterator with elements [3, 6, 9]
      *
      * @param callable $function Generator function to make rewindable
@@ -34,7 +34,7 @@ namespace iter {
      *
      * Example:
      *
-     *      $res = iter\callRewindable('iter\\map', fn\operator('*', 3), [1, 2, 3]);
+     *      $res = iter\callRewindable('iter\\map', func\operator('*', 3), [1, 2, 3]);
      *      // $res is a rewindable iterator with elements [3, 6, 9]
      *
      * @param callable $function Generator function to call rewindably

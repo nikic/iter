@@ -66,10 +66,10 @@ function range($start, $end, $step = null): \Iterator {
  *
  * Examples:
  *
- *     iter\map(iter\fn\operator('*', 2), [1, 2, 3, 4, 5]);
+ *     iter\map(iter\func\operator('*', 2), [1, 2, 3, 4, 5]);
  *     => iter(2, 4, 6, 8, 10)
  *
- *     $column = map(fn\index('name'), $iter);
+ *     $column = map(iter\func\index('name'), $iter);
  *
  * @param callable $function Mapping function: mixed function(mixed $value)
  * @param iterable $iterable Iterable to be mapped over
@@ -143,7 +143,7 @@ function flatMap(callable $function, iterable $iterable): \Iterator {
  *         ['id' => 42, 'name' => 'foo'],
  *         ['id' => 24, 'name' => 'bar']
  *     ];
- *     iter\reindex(iter\fn\index('id'), $users)
+ *     iter\reindex(iter\func\index('id'), $users)
  *     => iter(
  *         42 => ['id' => 42, 'name' => 'foo'],
  *         24 => ['id' => 24, 'name' => 'bar']
@@ -170,7 +170,7 @@ function reindex(callable $function, iterable $iterable): \Iterator {
  *
  * Examples:
  *
- *     iter\apply(iter\fn\method('rewind'), $iterators);
+ *     iter\apply(iter\func\method('rewind'), $iterators);
  *
  * @param callable $function Apply function: void function(mixed $value)
  * @param iterable $iterable Iterator to apply on
@@ -190,10 +190,10 @@ function apply(callable $function, iterable $iterable): void {
  *
  * Examples:
  *
- *     iter\filter(iter\fn\operator('<', 0), [0, -1, -10, 7, 20, -5, 7]);
+ *     iter\filter(iter\func\operator('<', 0), [0, -1, -10, 7, 20, -5, 7]);
  *     => iter(-1, -10, -5)
  *
- *     iter\filter(iter\fn\operator('instanceof', 'SomeClass'), $objects);
+ *     iter\filter(iter\func\operator('instanceof', 'SomeClass'), $objects);
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
  * @param iterable $iterable Iterable to filter
@@ -275,9 +275,9 @@ function fromPairs(iterable $iterable): \Iterator {
  *
  * Examples:
  *
- *      reduce(fn\operator('+'), range(1, 5), 0)
+ *      iter\reduce(iter\func\operator('+'), range(1, 5), 0)
  *      => 15
- *      reduce(fn\operator('*'), range(1, 5), 1)
+ *      iter\reduce(iter\func\operator('*'), range(1, 5), 1)
  *      => 120
  *
  * @param callable $function Reduction function:
@@ -307,9 +307,9 @@ function reduce(callable $function, iterable $iterable, $startValue = null) {
  *
  * Examples:
  *
- *      reductions(fn\operator('+'), range(1, 5), 0)
+ *      iter\reductions(iter\func\operator('+'), range(1, 5), 0)
  *      => iter(1, 3, 6, 10, 15)
- *      reductions(fn\operator('*'), range(1, 5), 1)
+ *      iter\reductions(iter\func\operator('*'), range(1, 5), 1)
  *      => iter(1, 2, 6, 24, 120)
  *
  * @param callable $function Reduction function:
@@ -351,12 +351,12 @@ function zip(iterable ...$iterables): \Iterator {
 
     $iterators = array_map('iter\\toIter', $iterables);
     for (
-        apply(fn\method('rewind'), $iterators);
-        all(fn\method('valid'), $iterators);
-        apply(fn\method('next'), $iterators)
+        apply(func\method('rewind'), $iterators);
+        all(func\method('valid'), $iterators);
+        apply(func\method('next'), $iterators)
     ) {
-        yield toArray(map(fn\method('key'), $iterators))
-           => toArray(map(fn\method('current'), $iterators));
+        yield toArray(map(func\method('key'), $iterators))
+           => toArray(map(func\method('current'), $iterators));
     }
 }
 
@@ -608,9 +608,9 @@ function values(iterable $iterable): \Iterator {
  *
  * Examples:
  *
- *      iter\all(fn\operator('>', 0), range(1, 10))
+ *      iter\all(iter\func\operator('>', 0), range(1, 10))
  *      => true
- *      iter\all(fn\operator('>', 0), range(-5, 5))
+ *      iter\all(iter\func\operator('>', 0), range(-5, 5))
  *      => false
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
@@ -636,9 +636,9 @@ function any(callable $predicate, iterable $iterable): bool {
  *
  * Examples:
  *
- *      iter\all(fn\operator('>', 0), range(1, 10))
+ *      iter\all(iter\func\operator('>', 0), range(1, 10))
  *      => true
- *      iter\all(fn\operator('>', 0), range(-5, 5))
+ *      iter\all(iter\func\operator('>', 0), range(-5, 5))
  *      => false
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
@@ -662,10 +662,10 @@ function all(callable $predicate, iterable $iterable): bool {
  *
  * Examples:
  *
- *      iter\search(iter\fn\operator('===', 'baz'), ['foo', 'bar', 'baz'])
+ *      iter\search(iter\func\operator('===', 'baz'), ['foo', 'bar', 'baz'])
  *      => 'baz'
  *
- *      iter\search(iter\fn\operator('===', 'qux'), ['foo', 'bar', 'baz'])
+ *      iter\search(iter\func\operator('===', 'qux'), ['foo', 'bar', 'baz'])
  *      => null
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
@@ -691,7 +691,7 @@ function search(callable $predicate, iterable $iterable) {
  *
  * Examples:
  *
- *      iter\takeWhile(fn\operator('>', 0), [3, 1, 4, -1, 5])
+ *      iter\takeWhile(iter\func\operator('>', 0), [3, 1, 4, -1, 5])
  *      => iter(3, 1, 4)
  *
  * @param callable $predicate Predicate: bool function(mixed $value)
@@ -717,7 +717,7 @@ function takeWhile(callable $predicate, iterable $iterable): \Iterator {
  *
  * Examples:
  *
- *      iter\dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5])
+ *      iter\dropWhile(iter\func\operator('>', 0), [3, 1, 4, -1, 5])
  *      => iter(-1, 5)
  *
  * @param callable $predicate Predicate: bool function(mixed $value)

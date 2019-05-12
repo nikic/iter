@@ -26,7 +26,7 @@
     },
     "autoload": {
         "files": [
-            "src/iter.fn.php",
+            "src/iter.func.php",
             "src/iter.php",
             "src/iter.rewindable.php"
         ]

@@ -79,7 +79,7 @@ class IterTest extends TestCase {
             toArrayWithKeys($iter)
         );
 
-        $iter = reindex(fn\operator('*', 2), [1, 2, 3, 4]);
+        $iter = reindex(func\operator('*', 2), [1, 2, 3, 4]);
         $this->assertSame(
             [2 => 1, 4 => 2, 6 => 3, 8 => 4],
             toArrayWithKeys($iter)
@@ -228,8 +228,8 @@ class IterTest extends TestCase {
     }
 
     public function testReduce() {
-        $this->assertSame(15, reduce(fn\operator('+'), range(1, 5), 0));
-        $this->assertSame(120, reduce(fn\operator('*'), range(1, 5), 1));
+        $this->assertSame(15, reduce(func\operator('+'), range(1, 5), 0));
+        $this->assertSame(120, reduce(func\operator('*'), range(1, 5), 1));
     }
 
     public function testComplexReduce() {
@@ -241,11 +241,11 @@ class IterTest extends TestCase {
     public function testReductions() {
         $this->assertSame(
             [1, 3, 6, 10, 15],
-            toArrayWithKeys(reductions(fn\operator('+'), range(1, 5), 0))
+            toArrayWithKeys(reductions(func\operator('+'), range(1, 5), 0))
         );
         $this->assertSame(
             [1, 2, 6, 24, 120],
-            toArrayWithKeys(reductions(fn\operator('*'), range(1, 5), 1))
+            toArrayWithKeys(reductions(func\operator('*'), range(1, 5), 1))
         );
     }
 
@@ -259,39 +259,39 @@ class IterTest extends TestCase {
     }
 
     public function testAnyAll() {
-        $this->assertTrue(all(fn\operator('>', 0), range(1, 10)));
-        $this->assertFalse(all(fn\operator('>', 0), range(-5, 5)));
-        $this->assertTrue(any(fn\operator('>', 0), range(-5, 5)));
-        $this->assertFalse(any(fn\operator('>', 0), range(-10, 0)));
+        $this->assertTrue(all(func\operator('>', 0), range(1, 10)));
+        $this->assertFalse(all(func\operator('>', 0), range(-5, 5)));
+        $this->assertTrue(any(func\operator('>', 0), range(-5, 5)));
+        $this->assertFalse(any(func\operator('>', 0), range(-10, 0)));
     }
 
     public function testSearch() {
         $iter = new \ArrayIterator(['foo', 'bar', 'baz']);
-        $this->assertSame('baz', search(fn\operator('===', 'baz'), $iter));
+        $this->assertSame('baz', search(func\operator('===', 'baz'), $iter));
 
         $iter = new \ArrayIterator(['foo', 'bar', 'baz']);
-        $this->assertSame(null, search(fn\operator('===', 'qux'), $iter));
+        $this->assertSame(null, search(func\operator('===', 'qux'), $iter));
 
         $iter = new \ArrayIterator([]);
-        $this->assertSame(null, search(fn\operator('===', 'qux'), $iter));
+        $this->assertSame(null, search(func\operator('===', 'qux'), $iter));
     }
 
     public function testTakeOrDropWhile() {
         $this->assertSame(
             [3, 1, 4],
-            toArray(takeWhile(fn\operator('>', 0), [3, 1, 4, -1, 5]))
+            toArray(takeWhile(func\operator('>', 0), [3, 1, 4, -1, 5]))
         );
         $this->assertSame(
             [-1, 5],
-            toArray(dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5]))
+            toArray(dropWhile(func\operator('>', 0), [3, 1, 4, -1, 5]))
         );
         $this->assertSame(
             [1, 2, 3],
-            toArray(takeWhile(fn\operator('>', 0), [1, 2, 3]))
+            toArray(takeWhile(func\operator('>', 0), [1, 2, 3]))
         );
         $this->assertSame(
             [],
-            toArray(dropWhile(fn\operator('>', 0), [1, 2, 3]))
+            toArray(dropWhile(func\operator('>', 0), [1, 2, 3]))
         );
     }
 
@@ -372,7 +372,7 @@ class IterTest extends TestCase {
         $this->assertInstanceOf('Iterator', $iter);
         $this->assertSame(
             ['2012-07-01', '2012-07-08', '2012-07-15'],
-            toArray(map(fn\method('format', ['Y-m-d']), $iter))
+            toArray(map(func\method('format', ['Y-m-d']), $iter))
         );
     }
 
