@@ -65,6 +65,7 @@ list the function signatures as an overview:
     Iterator flatten(iterable $iterable, int $levels = INF)
     Iterator flip(iterable $iterable)
     Iterator chunk(iterable $iterable, int $size, bool $preserveKeys = false)
+    Iterator chunkWithKeys(iterable $iterable, int $size)
     Iterator toIter(iterable $iterable)
 
     Iterator range(number $start, number $end, number $step = null)

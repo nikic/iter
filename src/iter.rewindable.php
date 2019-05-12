@@ -53,31 +53,32 @@ namespace iter\rewindable {
      * non-rewindable functions from the iter namespace
      */
 
-    function range()       { return new _RewindableGenerator('iter\range',       func_get_args()); }
-    function map()         { return new _RewindableGenerator('iter\map',         func_get_args()); }
-    function mapKeys()     { return new _RewindableGenerator('iter\mapKeys',     func_get_args()); }
-    function flatMap()     { return new _RewindableGenerator('iter\flatMap',     func_get_args()); }
-    function reindex()     { return new _RewindableGenerator('iter\reindex',     func_get_args()); }
-    function filter()      { return new _RewindableGenerator('iter\filter',      func_get_args()); }
-    function enumerate()   { return new _RewindableGenerator('iter\enumerate',   func_get_args()); }
-    function toPairs()     { return new _RewindableGenerator('iter\toPairs',     func_get_args()); }
-    function fromPairs()   { return new _RewindableGenerator('iter\fromPairs',   func_get_args()); }
-    function reductions()  { return new _RewindableGenerator('iter\reductions',  func_get_args()); }
-    function zip()         { return new _RewindableGenerator('iter\zip',         func_get_args()); }
-    function zipKeyValue() { return new _RewindableGenerator('iter\zipKeyValue', func_get_args()); }
-    function chain()       { return new _RewindableGenerator('iter\chain',       func_get_args()); }
-    function product()     { return new _RewindableGenerator('iter\product',     func_get_args()); }
-    function slice()       { return new _RewindableGenerator('iter\slice',       func_get_args()); }
-    function take()        { return new _RewindableGenerator('iter\take',        func_get_args()); }
-    function drop()        { return new _RewindableGenerator('iter\drop',        func_get_args()); }
-    function repeat()      { return new _RewindableGenerator('iter\repeat',      func_get_args()); }
-    function takeWhile()   { return new _RewindableGenerator('iter\takeWhile',   func_get_args()); }
-    function dropWhile()   { return new _RewindableGenerator('iter\dropWhile',   func_get_args()); }
-    function keys()        { return new _RewindableGenerator('iter\keys',        func_get_args()); }
-    function values()      { return new _RewindableGenerator('iter\values',      func_get_args()); }
-    function flatten()     { return new _RewindableGenerator('iter\flatten',     func_get_args()); }
-    function flip()        { return new _RewindableGenerator('iter\flip',        func_get_args()); }
-    function chunk()       { return new _RewindableGenerator('iter\chunk',       func_get_args()); }
+    function range()         { return new _RewindableGenerator('iter\range',         func_get_args()); }
+    function map()           { return new _RewindableGenerator('iter\map',           func_get_args()); }
+    function mapKeys()       { return new _RewindableGenerator('iter\mapKeys',       func_get_args()); }
+    function flatMap()       { return new _RewindableGenerator('iter\flatMap',       func_get_args()); }
+    function reindex()       { return new _RewindableGenerator('iter\reindex',       func_get_args()); }
+    function filter()        { return new _RewindableGenerator('iter\filter',        func_get_args()); }
+    function enumerate()     { return new _RewindableGenerator('iter\enumerate',     func_get_args()); }
+    function toPairs()       { return new _RewindableGenerator('iter\toPairs',       func_get_args()); }
+    function fromPairs()     { return new _RewindableGenerator('iter\fromPairs',     func_get_args()); }
+    function reductions()    { return new _RewindableGenerator('iter\reductions',    func_get_args()); }
+    function zip()           { return new _RewindableGenerator('iter\zip',           func_get_args()); }
+    function zipKeyValue()   { return new _RewindableGenerator('iter\zipKeyValue',   func_get_args()); }
+    function chain()         { return new _RewindableGenerator('iter\chain',         func_get_args()); }
+    function product()       { return new _RewindableGenerator('iter\product',       func_get_args()); }
+    function slice()         { return new _RewindableGenerator('iter\slice',         func_get_args()); }
+    function take()          { return new _RewindableGenerator('iter\take',          func_get_args()); }
+    function drop()          { return new _RewindableGenerator('iter\drop',          func_get_args()); }
+    function repeat()        { return new _RewindableGenerator('iter\repeat',        func_get_args()); }
+    function takeWhile()     { return new _RewindableGenerator('iter\takeWhile',     func_get_args()); }
+    function dropWhile()     { return new _RewindableGenerator('iter\dropWhile',     func_get_args()); }
+    function keys()          { return new _RewindableGenerator('iter\keys',          func_get_args()); }
+    function values()        { return new _RewindableGenerator('iter\values',        func_get_args()); }
+    function flatten()       { return new _RewindableGenerator('iter\flatten',       func_get_args()); }
+    function flip()          { return new _RewindableGenerator('iter\flip',          func_get_args()); }
+    function chunk()         { return new _RewindableGenerator('iter\chunk',         func_get_args()); }
+    function chunkWithKeys() { return new _RewindableGenerator('iter\chunkWithKeys', func_get_args()); }
 
     /**
      * This class is used for the internal implementation of rewindable

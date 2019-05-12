@@ -809,11 +809,12 @@ function flip(iterable $iterable): \Iterator {
  * Chunks an iterable into arrays of the specified size.
  *
  * Each chunk is an array (non-lazy), but the chunks are yielded lazily.
+ * By default keys are not preserved.
  *
  * Examples:
  *
- *      iter\chunk([1, 2, 3, 4, 5], 3)
- *      => iter([1, 2, 3], [4, 5])
+ *      iter\chunk([1, 2, 3, 4, 5], 2)
+ *      => iter([1, 2], [3, 4], [5])
  *
  * @param iterable $iterable The iterable to chunk
  * @param int $size The size of each chunk
@@ -846,6 +847,23 @@ function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Iter
     if ($count !== 0) {
         yield $chunk;
     }
+}
+
+/**
+ * The same as chunk(), but preserving keys.
+ *
+ * Examples:
+ *
+ *     iter\chunkWithKeys(['a' => 1, 'b' => 2, 'c' => 3], 2)
+ *     => iter(['a' => 1, 'b' => 2], ['c' => 3])
+ *
+ * @param iterable $iterable The iterable to chunk
+ * @param int $size The size of each chunk
+ *
+ * @return \Iterator An iterator of arrays
+ */
+function chunkWithKeys(iterable $iterable, int $size): \Iterator {
+    return chunk($iterable, $size, true);
 }
 
 /**
