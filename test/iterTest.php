@@ -441,20 +441,20 @@ class IterTest extends TestCase {
 
         $this->assertSame(
             [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
-            toArray(chunk($iterable, 2))
+            toArray(chunk($iterable, 2, true))
         );
         $this->assertSame(
             [[1, 2], [3, 4], [5]],
-            toArray(chunk($iterable, 2, false))
+            toArray(chunk($iterable, 2))
         );
 
         $this->assertSame(
             [[0=>0, 1=>1], [2=>2, 3=>3]],
-            toArray(chunk([0, 1, 2, 3], 2))
+            toArray(chunk([0, 1, 2, 3], 2, true))
         );
         $this->assertSame(
             [[0, 1], [2, 3]],
-            toArray(chunk([0, 1, 2, 3], 2, false))
+            toArray(chunk([0, 1, 2, 3], 2))
         );
 
         $this->assertSame([[0, 1, 2]], toArray(chunk([0, 1, 2], 100000)));

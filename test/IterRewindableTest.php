@@ -115,7 +115,7 @@ class IterRewindableTest extends TestCase {
         );
         $this->assertRewindableEquals(
             [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
-            rewindable\chunk(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], 2),
+            rewindable\chunk(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], 2, true),
             true
         );
         $this->assertRewindableEquals(

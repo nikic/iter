@@ -821,7 +821,7 @@ function flip(iterable $iterable): \Iterator {
  *
  * @return \Iterator An iterator of arrays
  */
-function chunk(iterable $iterable, int $size, bool $preserveKeys = true): \Iterator {
+function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Iterator {
     if ($size <= 0) {
         throw new \InvalidArgumentException('Chunk size must be positive');
     }
