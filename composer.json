@@ -25,6 +25,9 @@
         }
     },
     "autoload": {
+        "classmap": [
+            "src/FluentIterator.php"
+        ],
         "files": [
             "src/iter.func.php",
             "src/iter.php",
