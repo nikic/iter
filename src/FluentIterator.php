@@ -9,16 +9,16 @@ class FluentIterator implements \IteratorAggregate
     /**
      * @var iterable
      */
-    private $iterator;
+    private $iterable;
 
-    public function __construct(iterable $iterator)
+    public function __construct(iterable $iterable)
     {
-        $this->iterator = $iterator;
+        $this->iterable = $iterable;
     }
 
     public function getIterator()
     {
-        return $this->iterator;
+        return $this->iterable;
     }
 
     /**
@@ -26,7 +26,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function map(callable $function): self
     {
-        return new static(map($function, $this->iterator));
+        return new static(map($function, $this->iterable));
     }
 
     /**
@@ -34,7 +34,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function mapKeys(callable $function): self
     {
-        return new static(mapKeys($function, $this->iterator));
+        return new static(mapKeys($function, $this->iterable));
     }
 
     /**
@@ -42,7 +42,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function flatMap(callable $function): self
     {
-        return new static(flatMap($function, $this->iterator));
+        return new static(flatMap($function, $this->iterable));
     }
 
     /**
@@ -50,7 +50,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function reindex(callable $function): self
     {
-        return new static(reindex($function, $this->iterator));
+        return new static(reindex($function, $this->iterable));
     }
 
     /**
@@ -58,7 +58,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function apply(callable $function): void
     {
-        apply($function, $this->iterator);
+        apply($function, $this->iterable);
     }
 
     /**
@@ -66,7 +66,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function filter(callable $function): self
     {
-        return new static(filter($function, $this->iterator));
+        return new static(filter($function, $this->iterable));
     }
 
     /**
@@ -82,7 +82,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function toPairs(): self
     {
-        return new static(toPairs($this->iterator));
+        return new static(toPairs($this->iterable));
     }
 
     /**
@@ -90,7 +90,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function fromPairs(): self
     {
-        return new static(fromPairs($this->iterator));
+        return new static(fromPairs($this->iterable));
     }
 
     /**
@@ -98,7 +98,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function reduce(callable $function, $startValue = null)
     {
-        return reduce($function, $this->iterator, $startValue);
+        return reduce($function, $this->iterable, $startValue);
     }
 
     /**
@@ -106,7 +106,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function reductions(callable $function, $startValue = null): self
     {
-        return new static(reductions($function, $this->iterator, $startValue));
+        return new static(reductions($function, $this->iterable, $startValue));
     }
 
     /**
@@ -123,7 +123,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function zipValues(iterable $values): self
     {
-        return new static(zipKeyValue($this->iterator, $values));
+        return new static(zipKeyValue($this->iterable, $values));
     }
 
     /**
@@ -140,7 +140,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function zipKeys(iterable $keys): self
     {
-        return new static(zipKeyValue($keys, $this->iterator));
+        return new static(zipKeyValue($keys, $this->iterable));
     }
 
     /**
@@ -148,7 +148,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function chain(iterable $iterable): self
     {
-        return new static(chain($this->iterator, $iterable));
+        return new static(chain($this->iterable, $iterable));
     }
 
     /**
@@ -156,7 +156,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function slice(int $start, $length = INF): self
     {
-        return new static(slice($this->iterator, $start, $length));
+        return new static(slice($this->iterable, $start, $length));
     }
 
     /**
@@ -164,7 +164,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function take(int $num): self
     {
-        return new static(take($num, $this->iterator));
+        return new static(take($num, $this->iterable));
     }
 
     /**
@@ -172,7 +172,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function drop(int $num): self
     {
-        return new static(drop($num, $this->iterator));
+        return new static(drop($num, $this->iterable));
     }
 
     /**
@@ -180,7 +180,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function keys(): self
     {
-        return new static(keys($this->iterator));
+        return new static(keys($this->iterable));
     }
 
     /**
@@ -188,7 +188,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function values(): self
     {
-        return new static(values($this->iterator));
+        return new static(values($this->iterable));
     }
 
     /**
@@ -196,7 +196,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function any(callable $predicate): bool
     {
-        return any($predicate, $this->iterator);
+        return any($predicate, $this->iterable);
     }
 
     /**
@@ -204,7 +204,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function all(callable $predicate): bool
     {
-        return all($predicate, $this->iterator);
+        return all($predicate, $this->iterable);
     }
 
     /**
@@ -212,7 +212,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function search(callable $predicate)
     {
-        return search($predicate, $this->iterator);
+        return search($predicate, $this->iterable);
     }
 
     /**
@@ -220,7 +220,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function takeWhile(callable $predicate): self
     {
-        return new static(takeWhile($predicate, $this->iterator));
+        return new static(takeWhile($predicate, $this->iterable));
     }
 
     /**
@@ -228,7 +228,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function dropWhile(callable $predicate): self
     {
-        return new static(dropWhile($predicate, $this->iterator));
+        return new static(dropWhile($predicate, $this->iterable));
     }
 
     /**
@@ -236,7 +236,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function flatten(int $levels = PHP_INT_MAX): self
     {
-        return new static(flatten($this->iterator, $levels));
+        return new static(flatten($this->iterable, $levels));
     }
 
     /**
@@ -244,7 +244,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function flip(): self
     {
-        return new static(flip($this->iterator));
+        return new static(flip($this->iterable));
     }
 
     /**
@@ -252,7 +252,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function chunk(int $size, bool $preserveKeys = true): self
     {
-        return new static(chunk($this->iterator, $size, $preserveKeys));
+        return new static(chunk($this->iterable, $size, $preserveKeys));
     }
 
     /**
@@ -260,7 +260,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function join(string $separator): string
     {
-        return join($separator, $this->iterator);
+        return join($separator, $this->iterable);
     }
 
     /**
@@ -268,7 +268,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function count(): int
     {
-        return count($this->iterator);
+        return count($this->iterable);
     }
 
     /**
@@ -276,7 +276,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function isEmpty(): bool
     {
-        return isEmpty($this->iterator);
+        return isEmpty($this->iterable);
     }
 
     /**
@@ -284,7 +284,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function recurse(callable $function)
     {
-        return recurse($function, $this->iterator);
+        return recurse($function, $this->iterable);
     }
 
     /**
@@ -292,7 +292,7 @@ class FluentIterator implements \IteratorAggregate
      */
     public function toArray(): array
     {
-        return toArray($this->iterator);
+        return toArray($this->iterable);
     }
 
     /**
@@ -300,12 +300,12 @@ class FluentIterator implements \IteratorAggregate
      */
     public function toArrayWithKeys(): array
     {
-        return toArrayWithKeys($this->iterator);
+        return toArrayWithKeys($this->iterable);
     }
 
     /**
      * Passes the iterator through a callable that takes an iterator and returns an iterator.
-     * This allows applying functions to the iterator instead of its element.
+     * This allows applying functions to the iterator instead of its elements.
      * Example:
      * ```php
      * $fluent
