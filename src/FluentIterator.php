@@ -4,9 +4,6 @@
 namespace iter;
 
 
-use phpDocumentor\Reflection\Types\Static_;
-use Traversable;
-
 class FluentIterator implements \IteratorAggregate
 {
     /**
