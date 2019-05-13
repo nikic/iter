@@ -65,7 +65,7 @@ class FluentIterator implements \IteratorAggregate
     }
 
     /**
-     * @see \iter\apply()
+     * @see \iter\filter()
      */
     public function filter(callable $function): self
     {
@@ -117,7 +117,7 @@ class FluentIterator implements \IteratorAggregate
      *
      * Examples:
      *
-     *     new FluentIterator(['a', 'b', 'c'])->zipKeys([1, 2, 3])
+     *     new FluentIterator(['a', 'b', 'c'])->zipValues([1, 2, 3])
      *     => iter('a' => 1, 'b' => 2, 'c' => 3)
      *
      * @param iterable $values Iterable of values
@@ -134,7 +134,7 @@ class FluentIterator implements \IteratorAggregate
      *
      * Examples:
      *
-     *     new FluentIterator(['a', 'b', 'c'])->zipKeys([1, 2, 3])
+     *     (new FluentIterator(['a', 'b', 'c']))->zipKeys([1, 2, 3])
      *     => iter('a' => 1, 'b' => 2, 'c' => 3)
      *
      * @param iterable $values Iterable of values
@@ -149,7 +149,7 @@ class FluentIterator implements \IteratorAggregate
     /**
      * @see \iter\chain()
      */
-    public function chain(Iterable $iterable): self
+    public function chain(iterable $iterable): self
     {
         return new static(chain($this->iterator, $iterable));
     }
