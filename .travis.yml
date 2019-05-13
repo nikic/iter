@@ -4,9 +4,20 @@ language: php
 php:
   - 7.1
   - 7.2
+  - 7.3
+  - 7.4snapshot
+  - nightly
+
+matrix:
+  allow_failures:
+    - php: nightly
+
+cache:
+  directories:
+  - $HOME/.composer/cache
 
 install:
-  - composer install --prefer-dist
+  - composer install --prefer-dist --ignore-platform-reqs
 
 script:
   - vendor/bin/phpunit

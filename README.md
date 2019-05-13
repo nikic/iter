@@ -29,12 +29,12 @@ A small usage example for the ``map()`` and ``range()`` functions:
 ```php
 <?php
 
-use iter\fn;
+use iter\func;
 
 require 'path/to/vendor/autoload.php';
 
 $nums = iter\range(1, 10);
-$numsTimesTen = iter\map(fn\operator('*', 10), $nums);
+$numsTimesTen = iter\map(func\operator('*', 10), $nums);
 // => iter(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
 ```
 
@@ -64,7 +64,8 @@ list the function signatures as an overview:
     Iterator values(iterable $iterable)
     Iterator flatten(iterable $iterable, int $levels = INF)
     Iterator flip(iterable $iterable)
-    Iterator chunk(iterable $iterable, int $size, bool $preserveKeys = true)
+    Iterator chunk(iterable $iterable, int $size, bool $preserveKeys = false)
+    Iterator chunkWithKeys(iterable $iterable, int $size)
     Iterator toIter(iterable $iterable)
 
     Iterator range(number $start, number $end, number $step = null)
@@ -93,23 +94,23 @@ here is just a small usage example of the two main functions:
 ```php
 <?php
 
-use iter\fn;
+use iter\func;
 
 require 'path/to/vendor/autoload.php';
 
 /* Create a rewindable map function which can be used multiple times */
 $rewindableMap = iter\makeRewindable('iter\\map');
-$res = $rewindableMap(fn\operator('*', 3), [1, 2, 3]);
+$res = $rewindableMap(func\operator('*', 3), [1, 2, 3]);
 
 /* Do a rewindable call to map, just once */
-$res = iter\callRewindable('iter\\map', fn\operator('*', 3), [1, 2, 3]);
+$res = iter\callRewindable('iter\\map', func\operator('*', 3), [1, 2, 3]);
 ```
 
 The above functions are only useful for your own generators though, for the
 `iter` generators rewindable variants are directly provided with an
 `iter\rewindable` prefix:
 
-    $res = iter\rewindable\map(fn\operator('*', 3), [1, 2, 3]);
+    $res = iter\rewindable\map(func\operator('*', 3), [1, 2, 3]);
     // etc
 
 

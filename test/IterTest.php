@@ -22,19 +22,19 @@ class IterTest extends TestCase {
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage If start < end the step must be positive
-     */
+    
     public function testRangeStepMustBePositive() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('If start < end the step must be positive');
+
         toArray(range(0, 10, -1));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage If start > end the step must be negative
-     */
+    
     public function testRangeStepMustBeNegative() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('If start > end the step must be negative');
+
         toArray(range(10, 0, 1));
     }
 
@@ -79,7 +79,7 @@ class IterTest extends TestCase {
             toArrayWithKeys($iter)
         );
 
-        $iter = reindex(fn\operator('*', 2), [1, 2, 3, 4]);
+        $iter = reindex(func\operator('*', 2), [1, 2, 3, 4]);
         $this->assertSame(
             [2 => 1, 4 => 2, 6 => 3, 8 => 4],
             toArrayWithKeys($iter)
@@ -162,20 +162,43 @@ class IterTest extends TestCase {
         $this->assertSame([], toArray(slice(range(0, INF), 0, 0)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Length must be non-negative
-     */
+    public function testSliceDoNotTakeElementsAboveEndIndex() {
+        $takenElements = 0;
+        $iterator = function () use (&$takenElements) {
+            foreach (range(0, INF) as $item) {
+                $takenElements++;
+                yield $item;
+            }
+        };
+
+        $this->assertSame(
+            [0, 1, 2],
+            toArray(slice($iterator(), 0, 3))
+        );
+
+        $this->assertSame(3, $takenElements);
+    }
+
     public function testSliceNegativeLengthError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Length must be non-negative');
+
         toArray(slice(range(0, INF), 0, -1));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Start offset must be non-negative
-     */
+    
     public function testSliceNegativeStartOffsetError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Start offset must be non-negative');
+
         toArray(slice(range(0, INF), -1, 5));
+    }
+
+    public function testSliceNegativeStartOffsetErrorWithZeroLength() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Start offset must be non-negative');
+
+        toArray(slice(range(0, INF), -1, 0));
     }
 
     public function testTakeDrop() {
@@ -190,11 +213,11 @@ class IterTest extends TestCase {
         $this->assertSame([], toArray(repeat(1, 0)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Number of repetitions must be non-negative
-     */
+    
     public function testRepeatNegativeNumError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Number of repetitions must be non-negative');
+
         toArray(repeat(1, -1));
     }
 
@@ -205,8 +228,8 @@ class IterTest extends TestCase {
     }
 
     public function testReduce() {
-        $this->assertSame(15, reduce(fn\operator('+'), range(1, 5), 0));
-        $this->assertSame(120, reduce(fn\operator('*'), range(1, 5), 1));
+        $this->assertSame(15, reduce(func\operator('+'), range(1, 5), 0));
+        $this->assertSame(120, reduce(func\operator('*'), range(1, 5), 1));
     }
 
     public function testComplexReduce() {
@@ -218,11 +241,11 @@ class IterTest extends TestCase {
     public function testReductions() {
         $this->assertSame(
             [1, 3, 6, 10, 15],
-            toArrayWithKeys(reductions(fn\operator('+'), range(1, 5), 0))
+            toArrayWithKeys(reductions(func\operator('+'), range(1, 5), 0))
         );
         $this->assertSame(
             [1, 2, 6, 24, 120],
-            toArrayWithKeys(reductions(fn\operator('*'), range(1, 5), 1))
+            toArrayWithKeys(reductions(func\operator('*'), range(1, 5), 1))
         );
     }
 
@@ -236,39 +259,39 @@ class IterTest extends TestCase {
     }
 
     public function testAnyAll() {
-        $this->assertTrue(all(fn\operator('>', 0), range(1, 10)));
-        $this->assertFalse(all(fn\operator('>', 0), range(-5, 5)));
-        $this->assertTrue(any(fn\operator('>', 0), range(-5, 5)));
-        $this->assertFalse(any(fn\operator('>', 0), range(-10, 0)));
+        $this->assertTrue(all(func\operator('>', 0), range(1, 10)));
+        $this->assertFalse(all(func\operator('>', 0), range(-5, 5)));
+        $this->assertTrue(any(func\operator('>', 0), range(-5, 5)));
+        $this->assertFalse(any(func\operator('>', 0), range(-10, 0)));
     }
 
     public function testSearch() {
         $iter = new \ArrayIterator(['foo', 'bar', 'baz']);
-        $this->assertSame('baz', search(fn\operator('===', 'baz'), $iter));
+        $this->assertSame('baz', search(func\operator('===', 'baz'), $iter));
 
         $iter = new \ArrayIterator(['foo', 'bar', 'baz']);
-        $this->assertSame(null, search(fn\operator('===', 'qux'), $iter));
+        $this->assertSame(null, search(func\operator('===', 'qux'), $iter));
 
         $iter = new \ArrayIterator([]);
-        $this->assertSame(null, search(fn\operator('===', 'qux'), $iter));
+        $this->assertSame(null, search(func\operator('===', 'qux'), $iter));
     }
 
     public function testTakeOrDropWhile() {
         $this->assertSame(
             [3, 1, 4],
-            toArray(takeWhile(fn\operator('>', 0), [3, 1, 4, -1, 5]))
+            toArray(takeWhile(func\operator('>', 0), [3, 1, 4, -1, 5]))
         );
         $this->assertSame(
             [-1, 5],
-            toArray(dropWhile(fn\operator('>', 0), [3, 1, 4, -1, 5]))
+            toArray(dropWhile(func\operator('>', 0), [3, 1, 4, -1, 5]))
         );
         $this->assertSame(
             [1, 2, 3],
-            toArray(takeWhile(fn\operator('>', 0), [1, 2, 3]))
+            toArray(takeWhile(func\operator('>', 0), [1, 2, 3]))
         );
         $this->assertSame(
             [],
-            toArray(dropWhile(fn\operator('>', 0), [1, 2, 3]))
+            toArray(dropWhile(func\operator('>', 0), [1, 2, 3]))
         );
     }
 
@@ -324,11 +347,11 @@ class IterTest extends TestCase {
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Number of levels must be non-negative
-     */
+    
     public function testFlattenNegativeLevelError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Number of levels must be non-negative');
+
         toArray(flatten([1, 2, 3], -1));
     }
 
@@ -349,14 +372,14 @@ class IterTest extends TestCase {
         $this->assertInstanceOf('Iterator', $iter);
         $this->assertSame(
             ['2012-07-01', '2012-07-08', '2012-07-15'],
-            toArray(map(fn\method('format', ['Y-m-d']), $iter))
+            toArray(map(func\method('format', ['Y-m-d']), $iter))
         );
     }
 
     public function testCount() {
-        $this->assertSame(5, count([1, 2, 3, 4, 5]));
-        $this->assertSame(5, count(toIter([1, 2, 3, 4, 5])));
-        $this->assertSame(42, count(new _CountableTestDummy));
+        $this->assertCount(5, [1, 2, 3, 4, 5]);
+        $this->assertCount(5, toIter([1, 2, 3, 4, 5]));
+        $this->assertCount(42, new _CountableTestDummy);
     }
 
     public function testIsEmpty() {
@@ -417,40 +440,49 @@ class IterTest extends TestCase {
         );
 
         $this->assertSame(
-            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            [[1, 2], [3, 4], [5]],
             toArray(chunk($iterable, 2))
         );
         $this->assertSame(
-            [[1, 2], [3, 4], [5]],
-            toArray(chunk($iterable, 2, false))
-        );
-
-        $this->assertSame(
-            [[0=>0, 1=>1], [2=>2, 3=>3]],
-            toArray(chunk([0, 1, 2, 3], 2))
-        );
-        $this->assertSame(
             [[0, 1], [2, 3]],
-            toArray(chunk([0, 1, 2, 3], 2, false))
+            toArray(chunk([0, 1, 2, 3], 2))
         );
 
         $this->assertSame([[0, 1, 2]], toArray(chunk([0, 1, 2], 100000)));
         $this->assertSame([], toArray(chunk([], 100000)));
+
+        $this->assertSame(
+            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            toArray(chunk($iterable, 2, true))
+        );
+        $this->assertSame(
+            [[0=>0, 1=>1], [2=>2, 3=>3]],
+            toArray(chunk([0, 1, 2, 3], 2, true))
+        );
+
+        $this->assertSame(
+            [['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4], ['e' => 5]],
+            toArray(chunkWithKeys($iterable, 2))
+        );
+        $this->assertSame(
+            [[0=>0, 1=>1], [2=>2, 3=>3]],
+            toArray(chunkWithKeys([0, 1, 2, 3], 2))
+        );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Chunk size must be positive
-     */
+    
     public function testZeroChunkSizeError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Chunk size must be positive');
+
         toArray(chunk([1, 2, 3], 0));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Chunk size must be positive
-     */
+    
     public function testNegativeChunkSizeError() {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Chunk size must be positive');
+
         toArray(chunk([1, 2, 3], -1));
     }
 

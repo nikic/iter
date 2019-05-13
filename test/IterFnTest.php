@@ -2,13 +2,13 @@
 
 namespace iter;
 
-use iter\fn;
+use iter\func;
 use PHPUnit\Framework\TestCase;
 
 class IterFnTest extends TestCase {
     public function testIndex() {
-        $getIndex3 = fn\index(3);
-        $getIndexTest = fn\index('test');
+        $getIndex3 = func\index(3);
+        $getIndexTest = func\index('test');
 
         $arr1 = [10, 11, 12, 13, 14, 15];
         $arr2 = ['foo' => 'bar', 'test' => 'tset', 'bar' => 'foo'];
@@ -18,9 +18,9 @@ class IterFnTest extends TestCase {
     }
 
     public function testNestedIndex() {
-        $getIndexFooBar = fn\nested_index('foo', 'bar');
-        $getIndexFooBarBaz = fn\nested_index('foo', 'bar', 'baz');
-        $getEmptyIndex = fn\nested_index();
+        $getIndexFooBar = func\nested_index('foo', 'bar');
+        $getIndexFooBarBaz = func\nested_index('foo', 'bar', 'baz');
+        $getEmptyIndex = func\nested_index();
 
         $array = [
             'foo' => [
@@ -36,8 +36,8 @@ class IterFnTest extends TestCase {
     }
 
     public function testProperty() {
-        $getPropertyFoo = fn\property('foo');
-        $getPropertyBar = fn\property('bar');
+        $getPropertyFoo = func\property('foo');
+        $getPropertyBar = func\property('bar');
 
         $obj = (object) ['foo' => 'bar', 'bar' => 'foo'];
 
@@ -46,9 +46,9 @@ class IterFnTest extends TestCase {
     }
 
     public function testMethod() {
-        $callMethod1 = fn\method('test');
-        $callMethod2 = fn\method('test', []);
-        $callMethod3 = fn\method('test', ['a', 'b']);
+        $callMethod1 = func\method('test');
+        $callMethod2 = func\method('test', []);
+        $callMethod3 = func\method('test', ['a', 'b']);
 
         $obj = new _MethodTestDummy;
 
@@ -58,10 +58,10 @@ class IterFnTest extends TestCase {
     }
 
     public function testNot() {
-        $constFalse = fn\not(function() { return true; });
-        $constTrue = fn\not(function() { return false; });
-        $invert = fn\not(function($bool) { return $bool; });
-        $nand = fn\not(fn\operator('&&'));
+        $constFalse = func\not(function() { return true; });
+        $constTrue = func\not(function() { return false; });
+        $invert = func\not(function($bool) { return $bool; });
+        $nand = func\not(func\operator('&&'));
 
         $this->assertFalse($constFalse());
         $this->assertTrue($constTrue());
@@ -73,8 +73,8 @@ class IterFnTest extends TestCase {
 
     /** @dataProvider provideTestOperator */
     public function testOperator($op, $a, $b, $result) {
-        $fn1 = fn\operator($op);
-        $fn2 = fn\operator($op, $b);
+        $fn1 = func\operator($op);
+        $fn2 = func\operator($op, $b);
 
         $this->assertSame($result, $fn1($a, $b));
         $this->assertSame($result, $fn2($a));
@@ -112,12 +112,12 @@ class IterFnTest extends TestCase {
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown operator "***"
-     */
+    
     public function testInvalidOperator() {
-        fn\operator('***');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown operator "***"');
+
+        func\operator('***');
     }
 }
 

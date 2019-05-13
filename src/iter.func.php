@@ -1,6 +1,6 @@
 <?php
 
-namespace iter\fn;
+namespace iter\func;
 
 function index($index) {
     return function($array) use ($index) {
@@ -22,8 +22,8 @@ function index($index) {
  *         ]
  *     ];
  *
- *     $getIndexFooBar = fn\nested_index('foo', 'bar');
- *     $getIndexFooBarBaz = fn\nested_index('foo', 'bar', 'baz');
+ *     $getIndexFooBar = func\nested_index('foo', 'bar');
+ *     $getIndexFooBarBaz = func\nested_index('foo', 'bar', 'baz');
  *
  *     $getIndexFooBar($array)
  *     => ['baz' => 42]
