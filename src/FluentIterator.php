@@ -18,7 +18,7 @@ class FluentIterator implements \IteratorAggregate
 
     public function getIterator()
     {
-        return $this->iterable;
+        return is_array($this->iterable) ? new \ArrayIterator($this->iterable) : $this->iterable;
     }
 
     /**
