@@ -323,6 +323,6 @@ class FluentIterator implements \IteratorAggregate
      */
     public function via(callable $callable): self
     {
-        return new static(call_user_func($callable, $this));
+        return new static($callable($this));
     }
 }
