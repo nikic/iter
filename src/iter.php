@@ -1086,6 +1086,16 @@ function toArrayWithKeys(iterable $iterable): array {
 function isIterable($value) {
     return is_array($value) || $value instanceof \Traversable;
 }
+
+/**
+ * Factory function for FluentIterator class
+ * @param iterable $iterable
+ * @return FluentIterator
+ */
+function fluent(iterable $iterable): FluentIterator {
+    return new FluentIterator($iterable);
+}
+
 /*
  * Python:
  * compress()
