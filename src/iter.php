@@ -908,6 +908,10 @@ function join(string $separator, iterable $iterable): string {
  */
 function split(string $separator, string $data): iterable
 {
+    if (strlen($separator) === 0) {
+        throw new \InvalidArgumentException('Separator must be non-empty string');
+    }
+
     $offset = 0;
     while (
         $offset < strlen($data)

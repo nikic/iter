@@ -437,6 +437,13 @@ class IterTest extends TestCase {
     public function testSplit() {
         $this->assertSame(['a', 'b', 'c'], toArray(split(', ', 'a, b, c')));
         $this->assertSame(['b', 'b', 'b', 'b', 'b', 'b', 'b'], toArray(split('a', 'babababababab')));
+
+        $this->assertSame(['a', 'b', '', '', 'c'], toArray(split(',', 'a,b,,,c')));
+        $this->assertSame(['', '', 'c'], toArray(split(',', ',,c')));
+        $this->assertSame(['c', '', ''], toArray(split(',', 'c,,')));
+
+        $this->expectException(\InvalidArgumentException::class);
+        toArray(split('', 'a'));
     }
 
     public function testChunk() {
