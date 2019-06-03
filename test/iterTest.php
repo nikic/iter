@@ -436,7 +436,6 @@ class IterTest extends TestCase {
 
     public function testSplit() {
         $this->assertSame(['a', 'b', 'c'], toArray(split(', ', 'a, b, c')));
-
         $this->assertSame(['b', 'b', 'b', 'b', 'b', 'b', 'b'], toArray(split('a', 'babababababab')));
     }
 

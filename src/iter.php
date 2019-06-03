@@ -908,28 +908,15 @@ function join(string $separator, iterable $iterable): string {
  */
 function split(string $separator, string $data): iterable
 {
-    $separatorParts = str_split($separator, 1);
-    $separatorLength = count($separatorParts);
-    $separatorMatch = 0;
-
-    $elem = '';
-    for($i = 0, $l = strlen($data); $i < $l; $i++) {
-        if ($data[$i] === $separator[$separatorMatch]) {
-            $separatorMatch++;
-        }
-
-        $elem .= $data[$i];
-        if ($separatorMatch === $separatorLength) {
-            yield substr($elem, 0, -1 * $separatorLength);
-            $elem = '';
-            $separatorMatch = 0;
-        }
-
+    $offset = 0;
+    while (
+        $offset < strlen($data)
+        && false !== $nextOffset = strpos($data, $separator, $offset)
+    ) {
+        yield substr($data, $offset, $nextOffset - $offset);
+        $offset = $nextOffset + strlen($separator);
     }
-
-    if (!empty($elem)) {
-        yield $elem;
-    }
+    yield substr($data, $offset);
 }
 
 /**
