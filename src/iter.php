@@ -894,6 +894,45 @@ function join(string $separator, iterable $iterable): string {
 }
 
 /**
+ * Splits a string by a separator
+ *
+ * Examples:
+ *
+ *      iter\split(', ', 'a, b, c')
+ *      => iterable with values 'a', 'b' and 'c'
+ *
+ * @param string $separator Separator to use between elements
+ * @param string $data The iterable to join
+ *
+ * @return iterable
+ */
+function split(string $separator, string $data): iterable
+{
+    $separatorParts = str_split($separator, 1);
+    $separatorLength = count($separatorParts);
+    $separatorMatch = 0;
+
+    $elem = '';
+    for($i = 0, $l = strlen($data); $i < $l; $i++) {
+        if ($data[$i] === $separator[$separatorMatch]) {
+            $separatorMatch++;
+        }
+
+        $elem .= $data[$i];
+        if ($separatorMatch === $separatorLength) {
+            yield substr($elem, 0, -1 * $separatorLength);
+            $elem = '';
+            $separatorMatch = 0;
+        }
+
+    }
+
+    if (!empty($elem)) {
+        yield $elem;
+    }
+}
+
+/**
  * Returns the number of elements an iterable contains.
  *
  * This function is not recursive, it counts only the number of elements in the
