@@ -914,7 +914,7 @@ function split(string $separator, string $data): iterable
 
     $offset = 0;
     while (
-        $offset < strlen($data)
+        $offset < \strlen($data)
         && false !== $nextOffset = strpos($data, $separator, $offset)
     ) {
         yield substr($data, $offset, $nextOffset - $offset);
