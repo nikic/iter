@@ -899,7 +899,7 @@ function join(string $separator, iterable $iterable): string {
  * Examples:
  *
  *      iter\split(', ', 'a, b, c')
- *      => iterable with values 'a', 'b' and 'c'
+ *      => iter('a', 'b', 'c')
  *
  * @param string $separator Separator to use between elements
  * @param string $data The iterable to join
