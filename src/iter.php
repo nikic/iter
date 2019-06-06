@@ -902,7 +902,7 @@ function join(string $separator, iterable $iterable): string {
  *      => iter('a', 'b', 'c')
  *
  * @param string $separator Separator to use between elements
- * @param string $data The iterable to join
+ * @param string $data The string to split
  *
  * @return iterable
  */
