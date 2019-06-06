@@ -443,7 +443,7 @@ class IterTest extends TestCase {
         $this->assertSame(['c', '', ''], toArray(split(',', 'c,,')));
 
         $this->expectException(\InvalidArgumentException::class);
-        toArray(split('', 'a'));
+        split('', 'a');
     }
 
     public function testChunk() {
