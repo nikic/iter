@@ -908,20 +908,20 @@ function join(string $separator, iterable $iterable): string {
  */
 function split(string $separator, string $data): iterable
 {
-    if (strlen($separator) === 0) {
+    if (\strlen($separator) === 0) {
         throw new \InvalidArgumentException('Separator must be non-empty string');
     }
 
     return (function() use ($separator, $data) {
         $offset = 0;
         while (
-            $offset < strlen($data)
+            $offset < \strlen($data)
             && false !== $nextOffset = strpos($data, $separator, $offset)
         ) {
-            yield substr($data, $offset, $nextOffset - $offset);
-            $offset = $nextOffset + strlen($separator);
+            yield \substr($data, $offset, $nextOffset - $offset);
+            $offset = $nextOffset + \strlen($separator);
         }
-        yield substr($data, $offset);
+        yield \substr($data, $offset);
     })();
 }
 
