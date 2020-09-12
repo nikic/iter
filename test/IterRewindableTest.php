@@ -27,6 +27,10 @@ class IterRewindableTest extends TestCase {
             true
         );
         $this->assertRewindableEquals(
+            [0, 1, 4, 9, 16, 25],
+            rewindable\mapWithKeys(func\operator('*'), rewindable\range(0, 5))
+        );
+        $this->assertRewindableEquals(
             [-1, 1, -2, 2, -3, 3, -4, 4, -5, 5],
             rewindable\flatMap(function($v) {
                 return [-$v, $v];
