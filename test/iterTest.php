@@ -59,6 +59,21 @@ class IterTest extends TestCase {
         );
     }
 
+    public function testMapWithKeys()
+    {
+        $mapped = mapWithKeys(func\operator('*'), range(0, 5));
+        $this->assertSame([0, 1, 4, 9, 16, 25], toArray($mapped));
+
+        $mapped = mapWithKeys(
+            function ($v, $k) { return sprintf('%s%s', $k, $v); },
+            ['foo' => 'bar', 'bing' => 'baz']
+        );
+        $this->assertSame(
+            ['foo' => 'foobar', 'bing' => 'bingbaz'],
+            toArrayWithKeys($mapped)
+        );
+    }
+
     public function testFlatMap() {
         $this->assertSame(
             [-1, 1, -2, 2, -3, 3, -4, 4, -5, 5],

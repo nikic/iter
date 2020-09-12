@@ -106,6 +106,35 @@ function mapKeys(callable $function, iterable $iterable): \Iterator {
 }
 
 /**
+ * Applies a mapping function to all values of an iterator, passing both the key and the value into the callback.
+ *
+ * The function is passed the current iterator value and key and should return a
+ * modified iterator value. The key is left as-is but passed to the mapping
+ * function as the second parameter.
+ *
+ * Examples:
+ *
+ *     iter\mapWithKeys(iter\func\operator('*'), range(0, 5));
+ *     => iter(0, 1, 4, 9, 16, 25)
+ *
+ *     iter\mapWithKeys(
+ *         function ($v, $k) { return sprintf('%s%s', $k, $v); },
+ *         ['foo' => 'bar', 'bing' => 'baz']
+ *     );
+ *     => iter(['foo' => 'foobar', 'bing' => 'bingbaz'])
+ *
+ * @param callable $function Mapping function: mixed function(mixed $value, mixed $key)
+ * @param iterable $iterable Iterable to be mapped over
+ *
+ * @return \Iterator
+ */
+function mapWithKeys(callable $function, iterable $iterable): \Iterator {
+    foreach ($iterable as $key => $value) {
+        yield $key => $function($value, $key);
+    }
+}
+
+/**
  *
  * Applies a function to each value in an iterator and flattens the result.
  *
