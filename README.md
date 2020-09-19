@@ -43,6 +43,7 @@ You can find documentation and usage examples for the individual functions in
 list the function signatures as an overview:
 
     Iterator map(callable $function, iterable $iterable)
+    Iterator mapWithKeys(callable $function, iterable $iterable)
     Iterator mapKeys(callable $function, iterable $iterable)
     Iterator flatMap(callable $function, iterable $iterable)
     Iterator reindex(callable $function, iterable $iterable)
@@ -70,6 +71,7 @@ list the function signatures as an overview:
 
     Iterator range(number $start, number $end, number $step = null)
     Iterator repeat(mixed $value, int $num = INF)
+    Iterator split(string $separator, string $data)
 
     mixed    reduce(callable $function, iterable $iterable, mixed $startValue = null)
     bool     any(callable $predicate, iterable $iterable)
