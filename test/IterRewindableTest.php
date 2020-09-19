@@ -177,4 +177,23 @@ class IterRewindableTest extends TestCase {
             $this->assertEquals('end', $gen->current());
         }
     }
+
+    public function testFirstMethod() {
+        $genFn = makeRewindable(function() {
+            try {
+                yield 1 => 2;
+            } catch (\Exception $e) {
+                yield 4;
+            }
+            yield 3;
+        });
+
+        $this->assertNull($genFn()->rewind());
+        $this->assertTrue($genFn()->valid());
+        $this->assertNull($genFn()->next());
+        $this->assertSame(1, $genFn()->key());
+        $this->assertSame(2, $genFn()->current());
+        $this->assertSame(3, $genFn()->send(null));
+        $this->assertSame(4, $genFn()->throw(new \Exception));
+    }
 }
