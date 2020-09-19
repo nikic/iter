@@ -17,12 +17,7 @@
         "php": ">=7.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0-dev"
-        }
+        "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
     },
     "autoload": {
         "files": [
