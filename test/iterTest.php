@@ -622,7 +622,7 @@ class IterTest extends TestCase {
 }
 
 class _CountableTestDummy implements \Countable {
-    public function count() {
+    public function count(): int {
         return 42;
     }
 }
