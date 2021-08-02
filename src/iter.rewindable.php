@@ -48,6 +48,9 @@ namespace iter {
 }
 
 namespace iter\rewindable {
+
+    use ReturnTypeWillChange;
+
     /**
      * These functions are just rewindable wrappers around the normal
      * non-rewindable functions from the iter namespace
@@ -100,26 +103,28 @@ namespace iter\rewindable {
             $this->generator = null;
         }
 
-        public function rewind() {
+        public function rewind(): void {
             $function = $this->function;
             $this->generator = $function(...$this->args);
         }
 
-        public function next() {
+        public function next(): void {
             if (!$this->generator) { $this->rewind(); }
             $this->generator->next();
         }
 
-        public function valid() {
+        public function valid(): bool {
             if (!$this->generator) { $this->rewind(); }
             return $this->generator->valid();
         }
 
+        #[ReturnTypeWillChange]
         public function key() {
             if (!$this->generator) { $this->rewind(); }
             return $this->generator->key();
         }
 
+        #[ReturnTypeWillChange]
         public function current() {
             if (!$this->generator) { $this->rewind(); }
             return $this->generator->current();
