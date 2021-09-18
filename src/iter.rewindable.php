@@ -118,12 +118,18 @@ namespace iter\rewindable {
             return $this->generator->valid();
         }
 
+        /**
+         * @return mixed
+         */
         #[ReturnTypeWillChange]
         public function key() {
             if (!$this->generator) { $this->rewind(); }
             return $this->generator->key();
         }
 
+        /**
+         * @return mixed
+         */
         #[ReturnTypeWillChange]
         public function current() {
             if (!$this->generator) { $this->rewind(); }
