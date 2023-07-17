@@ -25,7 +25,7 @@ namespace iter;
  *
  * @throws \InvalidArgumentException if step is not valid
  *
- * @return \Iterator
+ * @return \Iterator<int|float>
  */
 function range($start, $end, $step = null): \Iterator {
     if ($start == $end) {
@@ -71,10 +71,14 @@ function range($start, $end, $step = null): \Iterator {
  *
  *     $column = map(iter\func\index('name'), $iter);
  *
- * @param callable $function Mapping function: mixed function(mixed $value)
- * @param iterable $iterable Iterable to be mapped over
+ * @template T
+ * @template U
  *
- * @return \Iterator
+ * @param callable $function Mapping function: mixed function(mixed $value)
+ * @param iterable<T> $iterable Iterable to be mapped over
+ * @psalm-param callable(T):U $function
+ *
+ * @return \Iterator<U>
  */
 function map(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -94,10 +98,15 @@ function map(callable $function, iterable $iterable): \Iterator {
  *     iter\mapKeys('strtolower', ['A' => 1, 'B' => 2, 'C' => 3, 'D' => 4]);
  *     => iter('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4)
  *
- * @param callable $function Mapping function: mixed function(mixed $key)
- * @param iterable $iterable Iterable those keys are to be mapped over
+ * @template TKey
+ * @template UKey
+ * @template Value
  *
- * @return \Iterator
+ * @param callable $function Mapping function: mixed function(mixed $key)
+ * @param iterable<TKey,Value> $iterable Iterable those keys are to be mapped over
+ * @psalm-param callable(TKey):UKey $function
+ *
+ * @return \Iterator<UKey,Value>
  */
 function mapKeys(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -123,10 +132,15 @@ function mapKeys(callable $function, iterable $iterable): \Iterator {
  *     );
  *     => iter(['foo' => 'foobar', 'bing' => 'bingbaz'])
  *
- * @param callable $function Mapping function: mixed function(mixed $value, mixed $key)
- * @param iterable $iterable Iterable to be mapped over
+ * @template TKey
+ * @template T
+ * @template U
  *
- * @return \Iterator
+ * @param callable $function Mapping function: mixed function(mixed $value, mixed $key)
+ * @param iterable<TKey,T> $iterable Iterable to be mapped over
+ * @psalm-param callable(T,TKey):U $function
+ *
+ * @return \Iterator<TKey,U>
  */
 function mapWithKeys(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -135,7 +149,6 @@ function mapWithKeys(callable $function, iterable $iterable): \Iterator {
 }
 
 /**
- *
  * Applies a function to each value in an iterator and flattens the result.
  *
  * The function is passed the current iterator value and should return an
@@ -147,10 +160,14 @@ function mapWithKeys(callable $function, iterable $iterable): \Iterator {
  *     iter\flatMap(function($v) { return [-$v, $v]; }, [1, 2, 3, 4, 5]);
  *     => iter(-1, 1, -2, 2, -3, 3, -4, 4, -5, 5)
  *
- * @param callable $function Mapping function: \Iterator function(mixed $value)
- * @param iterable $iterable Iterable to be mapped over
+ * @template T
+ * @template U
  *
- * @return \Iterator
+ * @param callable $function Mapping function: \Iterator function(mixed $value)
+ * @param iterable<T> $iterable Iterable to be mapped over
+ * @psalm-param callable(T):iterable<U> $function
+ *
+ * @return \Iterator<U>
  */
 function flatMap(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $value) {
@@ -178,10 +195,15 @@ function flatMap(callable $function, iterable $iterable): \Iterator {
  *         24 => ['id' => 24, 'name' => 'bar']
  *     )
  *
- * @param callable $function Mapping function mixed function(mixed $value)
- * @param iterable $iterable Iterable to reindex
+ * @template TKey
+ * @template UKey
+ * @template Value
  *
- * @return \Iterator
+ * @param callable $function Mapping function mixed function(mixed $value)
+ * @param iterable<TKey,Value> $iterable Iterable to reindex
+ * @psalm-param callable(Value):UKey $function
+ *
+ * @return \Iterator<UKey,Value>
  */
 function reindex(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $value) {
@@ -201,8 +223,11 @@ function reindex(callable $function, iterable $iterable): \Iterator {
  *
  *     iter\apply(iter\func\method('rewind'), $iterators);
  *
+ * @template T
+ *
  * @param callable $function Apply function: void function(mixed $value)
- * @param iterable $iterable Iterator to apply on
+ * @param iterable<T> $iterable Iterator to apply on
+ * @psalm-param callable(T):void $function
  */
 function apply(callable $function, iterable $iterable): void {
     foreach ($iterable as $value) {
@@ -224,10 +249,13 @@ function apply(callable $function, iterable $iterable): void {
  *
  *     iter\filter(iter\func\operator('instanceof', 'SomeClass'), $objects);
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
- * @param iterable $iterable Iterable to filter
+ * @template T
  *
- * @return \Iterator
+ * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param iterable<T> $iterable Iterable to filter
+ * @psalm-param callable(T):bool $predicate
+ *
+ * @return \Iterator<T>
  */
 function filter(callable $predicate, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -240,9 +268,13 @@ function filter(callable $predicate, iterable $iterable): \Iterator {
 /**
  * Alias of toPairs().
  *
- * @param iterable $iterable Iterable to enumerate
+ * @template TKey
+ * @template TValue
  *
- * @return \Iterator
+ * @param iterable<TKey,TValue> $iterable Iterable to enumerate
+ *
+ * @return \Iterator<array>
+ * @psalm-return \Iterator<array{0:TKey, 1:TValue}>
  */
 function enumerate(iterable $iterable): \Iterator {
     return toPairs($iterable);
@@ -261,9 +293,13 @@ function enumerate(iterable $iterable): \Iterator {
  *      iter\fromPairs(iter\filter($filter, iter\toPairs($values)));
  *      => iter('a', 'c')
  *
- * @param iterable $iterable Iterable to convert to pairs
+ * @template TKey
+ * @template TValue
  *
- * @return \Iterator
+ * @param iterable<TKey,TValue> $iterable Iterable to convert to pairs
+ *
+ * @return \Iterator<array>
+ * @psalm-return \Iterator<array{0:TKey, 1:TValue}>
  */
 function toPairs(iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -285,9 +321,13 @@ function toPairs(iterable $iterable): \Iterator {
  *      iter\fromPairs(iter\toPairs($map))
  *      => iter('a' => 1, 'b' => 2)
  *
- * @param iterable $iterable Iterable of [key, value] pairs
+ * @template TKey
+ * @template TValue
  *
- * @return \Iterator
+ * @param iterable<array> $iterable Iterable of [key, value] pairs
+ * @psalm-param iterable<array{0:TKey, 1:TValue}> $iterable
+ *
+ * @return \Iterator<TKey,TValue>
  */
 function fromPairs(iterable $iterable): \Iterator {
     foreach ($iterable as [$key, $value]) {
@@ -309,13 +349,18 @@ function fromPairs(iterable $iterable): \Iterator {
  *      iter\reduce(iter\func\operator('*'), range(1, 5), 1)
  *      => 120
  *
+ * @template TKey
+ * @template TValue
+ * @template TAcc
+ *
  * @param callable $function Reduction function:
  *                           mixed function(mixed $acc, mixed $value, mixed $key)
- * @param iterable $iterable Iterable to reduce
- * @param mixed $startValue Start value for accumulator.
+ * @param iterable<TKey,TValue> $iterable Iterable to reduce
+ * @param TAcc $startValue Start value for accumulator.
  *                          Usually identity value of $function.
+ * @psalm-param callable(TAcc,TValue,TKey):TAcc $function
  *
- * @return mixed Result of the reduction
+ * @return TAcc Result of the reduction
  */
 function reduce(callable $function, iterable $iterable, $startValue = null) {
     $acc = $startValue;
@@ -341,13 +386,18 @@ function reduce(callable $function, iterable $iterable, $startValue = null) {
  *      iter\reductions(iter\func\operator('*'), range(1, 5), 1)
  *      => iter(1, 2, 6, 24, 120)
  *
+ * @template TKey
+ * @template TValue
+ * @template TAcc
+ *
  * @param callable $function Reduction function:
  *                           mixed function(mixed $acc, mixed $value, mixed $key)
- * @param iterable $iterable Iterable to reduce
- * @param mixed $startValue Start value for accumulator.
+ * @param iterable<TKey,TValue> $iterable Iterable to reduce
+ * @param TAcc $startValue Start value for accumulator.
  *                          Usually identity value of $function.
+ * @psalm-param callable(TAcc,TValue,TKey):TAcc $function
  *
- * @return \Iterator Intermediate results of the reduction
+ * @return \Iterator<TAcc> Intermediate results of the reduction
  */
 function reductions(callable $function, iterable $iterable, $startValue = null): \Iterator {
     $acc = $startValue;
@@ -371,7 +421,7 @@ function reductions(callable $function, iterable $iterable, $startValue = null):
  *
  * @param iterable[] ...$iterables Iterables to zip
  *
- * @return \Iterator
+ * @return \Iterator<array>
  */
 function zip(iterable ...$iterables): \Iterator {
     if (\count($iterables) === 0) {
@@ -397,10 +447,13 @@ function zip(iterable ...$iterables): \Iterator {
  *     iter\zipKeyValue(['a', 'b', 'c'], [1, 2, 3])
  *     => iter('a' => 1, 'b' => 2, 'c' => 3)
  *
- * @param iterable $keys Iterable of keys
- * @param iterable $values Iterable of values
+ * @template TKey
+ * @template TValue
  *
- * @return \Iterator
+ * @param iterable<TKey> $keys Iterable of keys
+ * @param iterable<TValue> $values Iterable of values
+ *
+ * @return \Iterator<TKey,TValue>
  */
 function zipKeyValue(iterable $keys, iterable $values): \Iterator {
     $keys = toIter($keys);
@@ -426,9 +479,11 @@ function zipKeyValue(iterable $keys, iterable $values): \Iterator {
  *     iter\chain(iter\range(0, 5), iter\range(6, 10), iter\range(11, 15))
  *     => iter(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
  *
- * @param iterable[] ...$iterables Iterables to chain
+ * @template T
  *
- * @return \Iterator
+ * @param iterable<T> ...$iterables Iterables to chain
+ *
+ * @return \Iterator<T>
  */
 function chain(iterable ...$iterables): \Iterator {
     foreach ($iterables as $iterable) {
@@ -451,10 +506,9 @@ function chain(iterable ...$iterables): \Iterator {
  *
  * @param iterable[] ...$iterables Iterables to combine
  *
- * @return \Iterator
+ * @return \Iterator<array>
  */
 function product(iterable ...$iterables): \Iterator {
-    /** @var \Iterator[] $iterators */
     $iterators = array_map('iter\\toIter', $iterables);
     $numIterators = \count($iterators);
     if (!$numIterators) {
@@ -499,14 +553,16 @@ function product(iterable ...$iterables): \Iterator {
  *      iter\slice([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], 5, 3)
  *      => iter(0, 1, 2, 3)
  *
- * @param iterable $iterable Iterable to take the slice from
+ * @template T
+ *
+ * @param iterable<T> $iterable Iterable to take the slice from
  * @param int $start Start offset
  * @param int $length Length (if not specified all remaining values from the
  *                    iterable are used)
  *
- * @return \Iterator
+ * @return \Iterator<T>
  */
-function slice(iterable $iterable, int $start, $length = INF): \Iterator {
+function slice(iterable $iterable, int $start, $length = PHP_INT_MAX): \Iterator {
     if ($start < 0) {
         throw new \InvalidArgumentException('Start offset must be non-negative');
     }
@@ -537,10 +593,12 @@ function slice(iterable $iterable, int $start, $length = INF): \Iterator {
  *      iter\take(3, [1, 2, 3, 4, 5])
  *      => iter(1, 2, 3)
  *
- * @param int $num Number of elements to take from the start
- * @param iterable $iterable Iterable to take the elements from
+ * @template T
  *
- * @return \Iterator
+ * @param int $num Number of elements to take from the start
+ * @param iterable<T> $iterable Iterable to take the elements from
+ *
+ * @return \Iterator<T>
  */
 function take(int $num, iterable $iterable): \Iterator {
     return slice($iterable, 0, $num);
@@ -554,10 +612,12 @@ function take(int $num, iterable $iterable): \Iterator {
  *      iter\drop(3, [1, 2, 3, 4, 5])
  *      => iter(4, 5)
  *
- * @param int $num Number of elements to drop from the start
- * @param iterable $iterable Iterable to drop the elements from
+ * @template T
  *
- * @return \Iterator
+ * @param int $num Number of elements to drop from the start
+ * @param iterable<T> $iterable Iterable to drop the elements from
+ *
+ * @return \Iterator<T>
  */
 function drop(int $num, iterable $iterable): \Iterator {
     return slice($iterable, $num);
@@ -574,14 +634,17 @@ function drop(int $num, iterable $iterable): \Iterator {
  *     iter\repeat(1)
  *     => iter(1, 1, 1, 1, 1, 1, 1, 1, 1, ...)
  *
+ * @template T
+ *
  * @param mixed $value Value to repeat
- * @param int   $num   Number of repetitions (defaults to INF)
+ * @param int   $num   Number of repetitions (defaults to PHP_INT_MAX)
+ * @psalm-param T $value
  *
  * @throws \InvalidArgumentException if num is negative
  *
- * @return \Iterator
+ * @return \Iterator<T>
  */
-function repeat($value, $num = INF): \Iterator {
+function repeat($value, $num = PHP_INT_MAX): \Iterator {
     if ($num < 0) {
         throw new \InvalidArgumentException(
             'Number of repetitions must be non-negative');
@@ -600,9 +663,12 @@ function repeat($value, $num = INF): \Iterator {
  *      iter\keys(['a' => 0, 'b' => 1, 'c' => 2])
  *      => iter('a', 'b', 'c')
  *
- * @param iterable $iterable Iterable to get keys from
+ * @template TKey
+ * @template TValue
  *
- * @return \Iterator
+ * @param iterable<TKey,TValue> $iterable Iterable to get keys from
+ *
+ * @return \Iterator<TKey>
  */
 function keys(iterable $iterable): \Iterator {
     foreach ($iterable as $key => $_) {
@@ -618,9 +684,11 @@ function keys(iterable $iterable): \Iterator {
  *      iter\values([17 => 1, 42 => 2, -2 => 100])
  *      => iter(0 => 1, 1 => 42, 2 => 100)
  *
- * @param iterable $iterable Iterable to get values from
+ * @template T
  *
- * @return \Iterator
+ * @param iterable<T> $iterable Iterable to get values from
+ *
+ * @return \Iterator<T>
  */
 function values(iterable $iterable): \Iterator {
     foreach ($iterable as $value) {
@@ -642,8 +710,11 @@ function values(iterable $iterable): \Iterator {
  *      iter\all(iter\func\operator('>', 0), range(-5, 5))
  *      => false
  *
+ * @template T
+ *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param iterable $iterable Iterable to check against the predicate
+ * @param iterable<T> $iterable Iterable to check against the predicate
+ * @psalm-param callable(T):bool $predicate
  *
  * @return bool Whether the predicate matches any value
  */
@@ -670,8 +741,11 @@ function any(callable $predicate, iterable $iterable): bool {
  *      iter\all(iter\func\operator('>', 0), range(-5, 5))
  *      => false
  *
+ * @template T
+ *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param iterable $iterable Iterable to check against the predicate
+ * @param iterable<T> $iterable Iterable to check against the predicate
+ * @psalm-param callable(T):bool $predicate
  *
  * @return bool Whether the predicate holds for all values
  */
@@ -697,10 +771,14 @@ function all(callable $predicate, iterable $iterable): bool {
  *      iter\search(iter\func\operator('===', 'qux'), ['foo', 'bar', 'baz'])
  *      => null
  *
+ * @template T
+ *
  * @param callable $predicate Predicate: bool function(mixed $value)
- * @param iterable $iterable The iterable to search
+ * @param iterable<T> $iterable The iterable to search
+ * @psalm-param callable(T):bool $predicate
  *
  * @return null|mixed
+ * @psalm-return T|null
  */
 function search(callable $predicate, iterable $iterable) {
     foreach ($iterable as $value) {
@@ -723,10 +801,13 @@ function search(callable $predicate, iterable $iterable) {
  *      iter\takeWhile(iter\func\operator('>', 0), [3, 1, 4, -1, 5])
  *      => iter(3, 1, 4)
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
- * @param iterable $iterable Iterable to take values from
+ * @template T
  *
- * @return \Iterator
+ * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param iterable<T> $iterable Iterable to take values from
+ * @psalm-param callable(T):bool $predicate
+ *
+ * @return \Iterator<T>
  */
 function takeWhile(callable $predicate, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -749,10 +830,13 @@ function takeWhile(callable $predicate, iterable $iterable): \Iterator {
  *      iter\dropWhile(iter\func\operator('>', 0), [3, 1, 4, -1, 5])
  *      => iter(-1, 5)
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
- * @param iterable $iterable Iterable to drop values from
+ * @template T
  *
- * @return \Iterator
+ * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param iterable<T> $iterable Iterable to drop values from
+ * @psalm-param callable(T):bool $predicate
+ *
+ * @return \Iterator<T>
  */
 function dropWhile(callable $predicate, iterable $iterable): \Iterator {
     $failed = false;
@@ -784,8 +868,14 @@ function dropWhile(callable $predicate, iterable $iterable): \Iterator {
  * @param int $levels Number of levels to flatten
  *
  * @return \Iterator
+ *
+ * Note: Psalm does not support recursive type definitions yet, so it is not
+ *       currently possible to correctly provide generic type information for
+ *       this function.
+ * @see https://github.com/vimeo/psalm/issues/2777
+ * @see https://github.com/vimeo/psalm/issues/5739
  */
-function flatten(iterable $iterable, $levels = INF): \Iterator {
+function flatten(iterable $iterable, int $levels = PHP_INT_MAX): \Iterator {
     if ($levels < 0) {
         throw new \InvalidArgumentException(
             'Number of levels must be non-negative'
@@ -824,9 +914,12 @@ function flatten(iterable $iterable, $levels = INF): \Iterator {
  *      iter\flip(['a' => 1, 'b' => 2, 'c' => 3])
  *      => iter(1 => 'a', 2 => 'b', 3 => 'c')
  *
- * @param iterable $iterable The iterable to flip
+ * @template TKey
+ * @template TValue
  *
- * @return \Iterator
+ * @param iterable<TKey,TValue> $iterable The iterable to flip
+ *
+ * @return \Iterator<TValue,TKey>
  */
 function flip(iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -845,11 +938,16 @@ function flip(iterable $iterable): \Iterator {
  *      iter\chunk([1, 2, 3, 4, 5], 2)
  *      => iter([1, 2], [3, 4], [5])
  *
- * @param iterable $iterable The iterable to chunk
- * @param int $size The size of each chunk
- * @param bool $preserveKeys Whether to preserve keys from the input iterable
+ * @template TKey
+ * @template TValue
+ * @template TPreserve of bool
  *
- * @return \Iterator An iterator of arrays
+ * @param iterable<TKey,TValue> $iterable The iterable to chunk
+ * @param int $size The size of each chunk
+ * @param TPreserve $preserveKeys Whether to preserve keys from the input iterable
+ *
+ * @return \Iterator<array> An iterator of arrays
+ * @psalm-return (TPreserve is true ? \Iterator<array<TKey,TValue>> : \Iterator<array<array-key,TValue>>)
  */
 function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Iterator {
     if ($size <= 0) {
@@ -886,10 +984,13 @@ function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Iter
  *     iter\chunkWithKeys(['a' => 1, 'b' => 2, 'c' => 3], 2)
  *     => iter(['a' => 1, 'b' => 2], ['c' => 3])
  *
- * @param iterable $iterable The iterable to chunk
+ * @template TKey
+ * @template TValue
+ *
+ * @param iterable<TKey,TValue> $iterable The iterable to chunk
  * @param int $size The size of each chunk
  *
- * @return \Iterator An iterator of arrays
+ * @return \Iterator<array<TKey,TValue>> An iterator of arrays
  */
 function chunkWithKeys(iterable $iterable, int $size): \Iterator {
     return chunk($iterable, $size, true);
@@ -904,7 +1005,7 @@ function chunkWithKeys(iterable $iterable, int $size): \Iterator {
  *      => "a, b, c"
  *
  * @param string $separator Separator to use between elements
- * @param iterable $iterable The iterable to join
+ * @param iterable<string|\Stringable> $iterable The iterable to join
  *
  * @return string
  */
@@ -933,7 +1034,7 @@ function join(string $separator, iterable $iterable): string {
  * @param string $separator Separator to use between elements
  * @param string $data The string to split
  *
- * @return iterable
+ * @return iterable<string>
  */
 function split(string $separator, string $data): iterable
 {
@@ -1044,6 +1145,12 @@ function isEmpty($iterable): bool {
  * @param callable $function
  * @param iterable $iterable
  * @return mixed
+ *
+ * Note: Psalm does not support recursive type definitions yet, so it is not
+ *       currently possible to correctly provide generic type information for
+ *       this function.
+ * @see https://github.com/vimeo/psalm/issues/2777
+ * @see https://github.com/vimeo/psalm/issues/5739
  */
 function recurse(callable $function, iterable $iterable) {
     return $function(map(function($value) use($function) {
@@ -1059,9 +1166,12 @@ function recurse(callable $function, iterable $iterable) {
  *      iter\toIter([1, 2, 3])
  *      => iter(1, 2, 3)
  *
- * @param iterable $iterable The iterable to turn into an iterator
+ * @template TKey
+ * @template TValue
  *
- * @return \Iterator
+ * @param iterable<TKey,TValue> $iterable The iterable to turn into an iterator
+ *
+ * @return \Iterator<TKey,TValue>
  */
 function toIter(iterable $iterable): \Iterator {
     if (\is_array($iterable)) {
@@ -1096,9 +1206,11 @@ function toIter(iterable $iterable): \Iterator {
  *      iter\toArray(iter\chain(['a' => 1, 'b' => 2], ['a' => 3]))
  *      => [1, 2, 3]
  *
- * @param iterable $iterable The iterable to convert to an array
+ * @template T
  *
- * @return array
+ * @param iterable<T> $iterable The iterable to convert to an array
+ *
+ * @return array<T>
  */
 function toArray(iterable $iterable): array {
     $array = [];
@@ -1123,9 +1235,12 @@ function toArray(iterable $iterable): array {
  *      iter\toArrayWithKeys(iter\chain(['a' => 1, 'b' => 2], ['a' => 3]))
  *      => ['a' => 3, 'b' => 2]
  *
- * @param iterable $iterable The iterable to convert to an array
+ * @template TKey
+ * @template TValue
  *
- * @return array
+ * @param iterable<TKey,TValue> $iterable The iterable to convert to an array
+ *
+ * @return array<TKey,TValue>
  */
 function toArrayWithKeys(iterable $iterable): array {
     $array = [];

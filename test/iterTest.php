@@ -22,7 +22,6 @@ class IterTest extends TestCase {
         ];
     }
 
-    
     public function testRangeStepMustBePositive() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('If start < end the step must be positive');
@@ -30,7 +29,6 @@ class IterTest extends TestCase {
         toArray(range(0, 10, -1));
     }
 
-    
     public function testRangeStepMustBeNegative() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('If start > end the step must be negative');
@@ -201,7 +199,6 @@ class IterTest extends TestCase {
         toArray(slice(range(0, INF), 0, -1));
     }
 
-    
     public function testSliceNegativeStartOffsetError() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Start offset must be non-negative');
@@ -228,7 +225,6 @@ class IterTest extends TestCase {
         $this->assertSame([], toArray(repeat(1, 0)));
     }
 
-    
     public function testRepeatNegativeNumError() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Number of repetitions must be non-negative');
@@ -362,7 +358,6 @@ class IterTest extends TestCase {
         );
     }
 
-    
     public function testFlattenNegativeLevelError() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Number of levels must be non-negative');
@@ -497,7 +492,6 @@ class IterTest extends TestCase {
         );
     }
 
-    
     public function testZeroChunkSizeError() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Chunk size must be positive');
@@ -505,7 +499,6 @@ class IterTest extends TestCase {
         toArray(chunk([1, 2, 3], 0));
     }
 
-    
     public function testNegativeChunkSizeError() {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Chunk size must be positive');
@@ -583,22 +576,26 @@ class IterTest extends TestCase {
 
     public function provideTestAssertIterableFails() {
         yield [
+            /** @psalm-suppress InvalidArgument as this is expected */
             function() { return count(new \stdClass()); },
             'Argument must be iterable or implement Countable',
             \InvalidArgumentException::class
         ];
         yield [
+            /** @psalm-suppress InvalidArgument as this is expected */
             function() { return isEmpty(new \stdClass()); },
             'Argument must be iterable or implement Countable',
             \InvalidArgumentException::class
         ];
         yield [
+            /** @psalm-suppress InvalidArgument as this is expected */
             function() { return toIter(new \stdClass()); },
             null,
             \TypeError::class
         ];
         yield [
             function() {
+                /** @psalm-suppress InvalidArgument as this is expected */
                 return map(function($v) { return $v; }, new \stdClass());
             },
             null,
@@ -606,6 +603,7 @@ class IterTest extends TestCase {
         ];
         yield [
             function() {
+                /** @psalm-suppress InvalidArgument as this is expected */
                 return chain([1], [2], new \stdClass());
             },
             null,
@@ -613,6 +611,7 @@ class IterTest extends TestCase {
         ];
         yield [
             function() {
+                /** @psalm-suppress InvalidArgument as this is expected */
                 return zip([1], [2], new \stdClass());
             },
             null,

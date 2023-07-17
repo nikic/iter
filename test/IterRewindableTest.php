@@ -154,6 +154,7 @@ class IterRewindableTest extends TestCase {
     public function testRewindableGenerator() {
         // Make sure that send() and throw() work with rewindable generator
         $genFn = makeRewindable(function() {
+            /** @psalm-suppress NoValue as this is to test send works */
             $startValue = yield;
             try {
                 for (;;) yield $startValue++;
@@ -179,6 +180,7 @@ class IterRewindableTest extends TestCase {
     }
 
     public function testFirstMethod() {
+        /** @psalm-var callable():rewindable\_RewindableGenerator $genFn */
         $genFn = makeRewindable(function() {
             try {
                 yield 1 => 2;

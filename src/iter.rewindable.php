@@ -14,9 +14,14 @@ namespace iter {
      *      $res = $rewindableMap(func\operator('*', 3), [1, 2, 3]);
      *      // $res is a rewindable iterator with elements [3, 6, 9]
      *
+     * @template TKey
+     * @template TValue
+     *
      * @param callable $function Generator function to make rewindable
+     * @psalm-param callable(...mixed):\Generator<TKey,TValue> $function
      *
      * @return callable Rewindable generator function
+     * @psalm-return callable(...mixed):\Iterator<TKey,TValue>
      */
     function makeRewindable(callable $function) {
         return function(...$args) use ($function) {
@@ -37,10 +42,15 @@ namespace iter {
      *      $res = iter\callRewindable('iter\\map', func\operator('*', 3), [1, 2, 3]);
      *      // $res is a rewindable iterator with elements [3, 6, 9]
      *
+     * @template TKey
+     * @template TValue
+     *
      * @param callable $function Generator function to call rewindably
      * @param mixed ...$args Function arguments
+     * @psalm-param callable(...mixed):\Generator<TKey,TValue> $function
      *
      * @return \Iterator Rewindable generator result
+     * @psalm-return \Iterator<TKey,TValue>
      */
     function callRewindable(callable $function, ...$args) {
         return new rewindable\_RewindableGenerator($function, $args);
@@ -89,12 +99,23 @@ namespace iter\rewindable {
      * generators. Should not be used directly, instead use makeRewindable() or
      * callRewindable().
      *
+     * @template TKey
+     * @template TYield
+     * @template TSend
+     * @template TReturn
+     *
+     * @implements \Iterator<TKey,TYield>
+     *
      * @internal
      */
     class _RewindableGenerator implements \Iterator {
+        /** @var callable */
         protected $function;
+
+        /** @var mixed[] */
         protected $args;
-        /** @var \Generator */
+
+        /** @var \Generator<TKey,TYield,TSend,TReturn>|null */
         protected $generator;
 
         public function __construct(callable $function, array $args) {
@@ -110,11 +131,13 @@ namespace iter\rewindable {
 
         public function next(): void {
             if (!$this->generator) { $this->rewind(); }
+            /** @var \Generator<TKey,TYield,TSend,TReturn> $this->generator */
             $this->generator->next();
         }
 
         public function valid(): bool {
             if (!$this->generator) { $this->rewind(); }
+            /** @var \Generator<TKey,TYield,TSend,TReturn> $this->generator */
             return $this->generator->valid();
         }
 
@@ -124,6 +147,7 @@ namespace iter\rewindable {
         #[ReturnTypeWillChange]
         public function key() {
             if (!$this->generator) { $this->rewind(); }
+            /** @var \Generator<TKey,TYield,TSend,TReturn> $this->generator */
             return $this->generator->key();
         }
 
@@ -133,16 +157,27 @@ namespace iter\rewindable {
         #[ReturnTypeWillChange]
         public function current() {
             if (!$this->generator) { $this->rewind(); }
+            /** @var \Generator<TKey,TYield,TSend,TReturn> $this->generator */
             return $this->generator->current();
         }
 
+        /**
+         * @param mixed $value
+         * @return TYield|null
+         */
         public function send($value = null) {
             if (!$this->generator) { $this->rewind(); }
+            /** @var \Generator<TKey,TYield,TSend,TReturn> $this->generator */
             return $this->generator->send($value);
         }
 
+        /**
+         * @param \Throwable $exception
+         * @return TYield
+         */
         public function throw($exception) {
             if (!$this->generator) { $this->rewind(); }
+            /** @var \Generator<TKey,TYield,TSend,TReturn> $this->generator */
             return $this->generator->throw($exception);
         }
     }

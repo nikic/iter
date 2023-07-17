@@ -2,6 +2,23 @@
 
 namespace iter\func;
 
+/**
+ * Returns a callable which extracts a given property from an array.
+ *
+ * Example:
+ *
+ *     $array = [ 'foo' => 42 ];
+ *
+ *     func\index('foo')($array);
+ *     => 42
+ *
+ *
+ * @param string|int $index
+ * @psalm-param array-key $index
+ *
+ * @return callable
+ * @psalm-return callable(array):mixed
+ */
 function index($index) {
     return function($array) use ($index) {
         return $array[$index];
@@ -31,9 +48,11 @@ function index($index) {
  *     $getIndexFooBarBaz($array)
  *     => 42
  *
- * @param mixed[] ...$indices Path of indices
+ * @param string|int ...$indices Path of indices
+ * @psalm-param array-key ...$indices
  *
  * @return callable
+ * @psalm-return callable(array):mixed
  */
 function nested_index(...$indices) {
     return function($array) use ($indices) {
@@ -45,18 +64,75 @@ function nested_index(...$indices) {
     };
 }
 
+/**
+ * Returns a callable which returns a given property from an object.
+ *
+ * Example:
+ *
+ *    $object = new \stdClass();
+ *    $object->foo = 42;
+ *
+ *    func\property('foo')($object);
+ *    => 42
+ *
+ * @param string $propertyName
+ *
+ * @return callable
+ * @psalm-return callable(object):mixed
+ */
 function property($propertyName) {
     return function($object) use ($propertyName) {
         return $object->$propertyName;
     };
 }
 
+/**
+ * Returns a callable which calls a method on an object, optionally with some
+ * provided arguments.
+ *
+ * Example:
+ *
+ *     class Foo {
+ *         public function bar($a, $b) {
+ *             return $a + $b;
+ *         }
+ *     }
+ *
+ *     $foo = new Foo();
+ *
+ *     func\method('bar', [1, 2])($foo);
+ *     => 3
+ *
+ * @param string $methodName
+ * @param mixed[] $args
+ *
+ * @return callable
+ * @psalm-return callable(object):mixed
+ */
 function method($methodName, $args = []) {
     return function($object) use ($methodName, $args) {
         return $object->$methodName(...$args);
     };
 }
 
+/**
+ * Returns a callable which applies the specified operator to the argument.
+ *
+ * Examples:
+ *
+ *     $addOne = func\operator('+', 1);
+ *     $addOne(41);
+ *     => 42
+ *
+ *     $modulo2 = func\operator('%', 2);
+ *     $modulo2(42);
+ *     => 0
+ *
+ * @param string $operator
+ * @param mixed $arg The right-hand argument for the operator
+ *
+ * @return callable
+ */
 function operator($operator, $arg = null) {
     $functions = [
         'instanceof' => function($a, $b) { return $a instanceof $b; },
@@ -99,6 +175,29 @@ function operator($operator, $arg = null) {
     }
 }
 
+/**
+ * Takes a callable which returns a boolean, and returns another function that
+ * returns the opposite for all values.
+ *
+ * Example:
+ *     $isEven = function($x) {
+ *         return $x % 2 === 0;
+ *     };
+ *
+ *     $isOdd = func\not($isEven);
+ *
+ *     $isEven(42);
+ *     => true
+ *
+ *     $isOdd(42);
+ *     => false
+ *
+ * @param callable $function
+ * @psalm-param callable(...mixed):bool $function
+ *
+ * @return callable
+ * @psalm-return callable(...mixed):bool
+ */
 function not($function) {
     return function(...$args) use ($function) {
         return !$function(...$args);
