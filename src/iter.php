@@ -997,6 +997,10 @@ function count($iterable): int {
  * Calling isEmpty() does not drain iterators, as only the valid() method will
  * be called.
  *
+ * @throws \InvalidArgumentException if the argument is not iterable or not
+ *                                   Countable, or is a recursively defined
+ *                                   \IteratorAggregate
+ *
  * @param iterable|\Countable $iterable
  * @return bool
  */
@@ -1008,7 +1012,16 @@ function isEmpty($iterable): bool {
     if ($iterable instanceof \Iterator) {
         return !$iterable->valid();
     } else if ($iterable instanceof \IteratorAggregate) {
-        return !$iterable->getIterator()->valid();
+        $inner = $iterable->getIterator();
+
+        if ($inner instanceof \Iterator) {
+            return !$inner->valid();
+        } else if ($inner !== $iterable) {
+            return isEmpty($inner);
+        } else {
+            throw new \InvalidArgumentException(
+                'Argument must not be recursively defined');
+        }
     } else {
         throw new \InvalidArgumentException(
             'Argument must be iterable or implement Countable');
