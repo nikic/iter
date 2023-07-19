@@ -3,6 +3,7 @@
 namespace iter;
 
 use iter\rewindable;
+use iter\rewindable\_RewindableGenerator;
 use PHPUnit\Framework\TestCase;
 
 class IterRewindableTest extends TestCase {
@@ -153,7 +154,7 @@ class IterRewindableTest extends TestCase {
 
     public function testRewindableGenerator() {
         // Make sure that send() and throw() work with rewindable generator
-        $genFn = makeRewindable(function() {
+        $gen = new _RewindableGenerator(function() {
             /** @psalm-suppress NoValue as this is to test send works */
             $startValue = yield;
             try {
@@ -161,10 +162,7 @@ class IterRewindableTest extends TestCase {
             } catch (\Exception $e) {
                 yield 'end';
             }
-        });
-
-        /** @var rewindable\_RewindableGenerator $gen */
-        $gen = $genFn();
+        }, []);
 
         for ($i = 0; $i < 2; ++$i) {
             $gen->rewind();
@@ -180,15 +178,29 @@ class IterRewindableTest extends TestCase {
     }
 
     public function testFirstMethod() {
-        /** @var callable():rewindable\_RewindableGenerator $genFn */
+        /** @var callable():rewindable\_RewindableIterator $genFn */
         $genFn = makeRewindable(function() {
-            try {
-                yield 1 => 2;
-            } catch (\Exception $e) {
-                yield 4;
-            }
-            yield 3;
+            yield 1 => 2;
         });
+
+        $this->assertNull($genFn()->rewind());
+        $this->assertTrue($genFn()->valid());
+        $this->assertNull($genFn()->next());
+        $this->assertSame(1, $genFn()->key());
+        $this->assertSame(2, $genFn()->current());
+    }
+
+    public function testFirstMethodLegacyGenerators() {
+        $genFn = function() {
+            return new _RewindableGenerator(function() {
+                try {
+                    yield 1 => 2;
+                } catch (\Exception $e) {
+                    yield 4;
+                }
+                yield 3;
+            }, []);
+        };
 
         $this->assertNull($genFn()->rewind());
         $this->assertTrue($genFn()->valid());

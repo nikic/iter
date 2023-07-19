@@ -108,8 +108,8 @@ $res = $rewindableMap(func\operator('*', 3), [1, 2, 3]);
 $res = iter\callRewindable('iter\\map', func\operator('*', 3), [1, 2, 3]);
 ```
 
-The above functions are only useful for your own generators though, for the
-`iter` generators rewindable variants are directly provided with an
+The above functions are only useful for your own iterators though; for the
+`iter` iterators, rewindable variants are directly provided with an
 `iter\rewindable` prefix:
 
     $res = iter\rewindable\map(func\operator('*', 3), [1, 2, 3]);

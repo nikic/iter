@@ -25,9 +25,9 @@ namespace iter;
  *
  * @throws \InvalidArgumentException if step is not valid
  *
- * @return \Generator<int|float>
+ * @return \Iterator<int|float>
  */
-function range($start, $end, $step = null): \Generator {
+function range($start, $end, $step = null): \Iterator {
     if ($start == $end) {
         yield $start;
     } elseif ($start < $end) {
@@ -77,9 +77,9 @@ function range($start, $end, $step = null): \Generator {
  * @param callable(T):U $function Mapping function: mixed function(mixed $value)
  * @param iterable<T> $iterable Iterable to be mapped over
  *
- * @return \Generator<U>
+ * @return \Iterator<U>
  */
-function map(callable $function, iterable $iterable): \Generator {
+function map(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         yield $key => $function($value);
     }
@@ -104,9 +104,9 @@ function map(callable $function, iterable $iterable): \Generator {
  * @param callable(TKey):UKey $function Mapping function: mixed function(mixed $key)
  * @param iterable<TKey,Value> $iterable Iterable those keys are to be mapped over
  *
- * @return \Generator<UKey,Value>
+ * @return \Iterator<UKey,Value>
  */
-function mapKeys(callable $function, iterable $iterable): \Generator {
+function mapKeys(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         yield $function($key) => $value;
     }
@@ -137,9 +137,9 @@ function mapKeys(callable $function, iterable $iterable): \Generator {
  * @param callable(T,TKey):U $function Mapping function: mixed function(mixed $value, mixed $key)
  * @param iterable<TKey,T> $iterable Iterable to be mapped over
  *
- * @return \Generator<TKey,U>
+ * @return \Iterator<TKey,U>
  */
-function mapWithKeys(callable $function, iterable $iterable): \Generator {
+function mapWithKeys(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         yield $key => $function($value, $key);
     }
@@ -160,12 +160,12 @@ function mapWithKeys(callable $function, iterable $iterable): \Generator {
  * @template T
  * @template U
  *
- * @param callable(T):iterable<U> $function Mapping function: \Generator function(mixed $value)
+ * @param callable(T):iterable<U> $function Mapping function: \Iterator function(mixed $value)
  * @param iterable<T> $iterable Iterable to be mapped over
  *
- * @return \Generator<U>
+ * @return \Iterator<U>
  */
-function flatMap(callable $function, iterable $iterable): \Generator {
+function flatMap(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $value) {
         yield from $function($value);
     }
@@ -198,9 +198,9 @@ function flatMap(callable $function, iterable $iterable): \Generator {
  * @param callable(Value):UKey $function Mapping function mixed function(mixed $value)
  * @param iterable<TKey,Value> $iterable Iterable to reindex
  *
- * @return \Generator<UKey,Value>
+ * @return \Iterator<UKey,Value>
  */
-function reindex(callable $function, iterable $iterable): \Generator {
+function reindex(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $value) {
         yield $function($value) => $value;
     }
@@ -248,9 +248,9 @@ function apply(callable $function, iterable $iterable): void {
  * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to filter
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function filter(callable $predicate, iterable $iterable): \Generator {
+function filter(callable $predicate, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         if ($predicate($value)) {
             yield $key => $value;
@@ -266,9 +266,9 @@ function filter(callable $predicate, iterable $iterable): \Generator {
  *
  * @param iterable<TKey,TValue> $iterable Iterable to enumerate
  *
- * @return \Generator<array{0:TKey, 1:TValue}>
+ * @return \Iterator<array{0:TKey, 1:TValue}>
  */
-function enumerate(iterable $iterable): \Generator {
+function enumerate(iterable $iterable): \Iterator {
     return toPairs($iterable);
 }
 
@@ -290,9 +290,9 @@ function enumerate(iterable $iterable): \Generator {
  *
  * @param iterable<TKey,TValue> $iterable Iterable to convert to pairs
  *
- * @return \Generator<array{0:TKey, 1:TValue}>
+ * @return \Iterator<array{0:TKey, 1:TValue}>
  */
-function toPairs(iterable $iterable): \Generator {
+function toPairs(iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         yield [$key, $value];
     }
@@ -317,9 +317,9 @@ function toPairs(iterable $iterable): \Generator {
  *
  * @param iterable<array{0:TKey, 1:TValue}> $iterable Iterable of [key, value] pairs
  *
- * @return \Generator<TKey,TValue>
+ * @return \Iterator<TKey,TValue>
  */
-function fromPairs(iterable $iterable): \Generator {
+function fromPairs(iterable $iterable): \Iterator {
     foreach ($iterable as [$key, $value]) {
         yield $key => $value;
     }
@@ -385,9 +385,9 @@ function reduce(callable $function, iterable $iterable, $startValue = null) {
  * @param TAcc $startValue Start value for accumulator.
  *                          Usually identity value of $function.
  *
- * @return \Generator<TAcc> Intermediate results of the reduction
+ * @return \Iterator<TAcc> Intermediate results of the reduction
  */
-function reductions(callable $function, iterable $iterable, $startValue = null): \Generator {
+function reductions(callable $function, iterable $iterable, $startValue = null): \Iterator {
     $acc = $startValue;
     foreach ($iterable as $key => $value) {
         $acc = $function($acc, $value, $key);
@@ -409,9 +409,9 @@ function reductions(callable $function, iterable $iterable, $startValue = null):
  *
  * @param iterable ...$iterables Iterables to zip
  *
- * @return \Generator<array>
+ * @return \Iterator<array>
  */
-function zip(iterable ...$iterables): \Generator {
+function zip(iterable ...$iterables): \Iterator {
     if (\count($iterables) === 0) {
         return;
     }
@@ -441,9 +441,9 @@ function zip(iterable ...$iterables): \Generator {
  * @param iterable<TKey> $keys Iterable of keys
  * @param iterable<TValue> $values Iterable of values
  *
- * @return \Generator<TKey,TValue>
+ * @return \Iterator<TKey,TValue>
  */
-function zipKeyValue(iterable $keys, iterable $values): \Generator {
+function zipKeyValue(iterable $keys, iterable $values): \Iterator {
     $keys = toIter($keys);
     $values = toIter($values);
 
@@ -471,9 +471,9 @@ function zipKeyValue(iterable $keys, iterable $values): \Generator {
  *
  * @param iterable<T> ...$iterables Iterables to chain
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function chain(iterable ...$iterables): \Generator {
+function chain(iterable ...$iterables): \Iterator {
     foreach ($iterables as $iterable) {
         yield from $iterable;
     }
@@ -494,9 +494,9 @@ function chain(iterable ...$iterables): \Generator {
  *
  * @param iterable ...$iterables Iterables to combine
  *
- * @return \Generator<array>
+ * @return \Iterator<array>
  */
-function product(iterable ...$iterables): \Generator {
+function product(iterable ...$iterables): \Iterator {
     $iterators = array_map('iter\\toIter', $iterables);
     $numIterators = \count($iterators);
     if (!$numIterators) {
@@ -548,9 +548,9 @@ function product(iterable ...$iterables): \Generator {
  * @param int $length Length (if not specified all remaining values from the
  *                    iterable are used)
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function slice(iterable $iterable, int $start, $length = PHP_INT_MAX): \Generator {
+function slice(iterable $iterable, int $start, $length = PHP_INT_MAX): \Iterator {
     if ($start < 0) {
         throw new \InvalidArgumentException('Start offset must be non-negative');
     }
@@ -586,9 +586,9 @@ function slice(iterable $iterable, int $start, $length = PHP_INT_MAX): \Generato
  * @param int $num Number of elements to take from the start
  * @param iterable<T> $iterable Iterable to take the elements from
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function take(int $num, iterable $iterable): \Generator {
+function take(int $num, iterable $iterable): \Iterator {
     return slice($iterable, 0, $num);
 }
 
@@ -605,9 +605,9 @@ function take(int $num, iterable $iterable): \Generator {
  * @param int $num Number of elements to drop from the start
  * @param iterable<T> $iterable Iterable to drop the elements from
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function drop(int $num, iterable $iterable): \Generator {
+function drop(int $num, iterable $iterable): \Iterator {
     return slice($iterable, $num);
 }
 
@@ -629,9 +629,9 @@ function drop(int $num, iterable $iterable): \Generator {
  *
  * @throws \InvalidArgumentException if num is negative
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function repeat($value, $num = PHP_INT_MAX): \Generator {
+function repeat($value, $num = PHP_INT_MAX): \Iterator {
     if ($num < 0) {
         throw new \InvalidArgumentException(
             'Number of repetitions must be non-negative');
@@ -655,9 +655,9 @@ function repeat($value, $num = PHP_INT_MAX): \Generator {
  *
  * @param iterable<TKey,TValue> $iterable Iterable to get keys from
  *
- * @return \Generator<TKey>
+ * @return \Iterator<TKey>
  */
-function keys(iterable $iterable): \Generator {
+function keys(iterable $iterable): \Iterator {
     foreach ($iterable as $key => $_) {
         yield $key;
     }
@@ -675,9 +675,9 @@ function keys(iterable $iterable): \Generator {
  *
  * @param iterable<T> $iterable Iterable to get values from
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function values(iterable $iterable): \Generator {
+function values(iterable $iterable): \Iterator {
     foreach ($iterable as $value) {
         yield $value;
     }
@@ -789,9 +789,9 @@ function search(callable $predicate, iterable $iterable) {
  * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to take values from
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function takeWhile(callable $predicate, iterable $iterable): \Generator {
+function takeWhile(callable $predicate, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         if (!$predicate($value)) {
             return;
@@ -817,9 +817,9 @@ function takeWhile(callable $predicate, iterable $iterable): \Generator {
  * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to drop values from
  *
- * @return \Generator<T>
+ * @return \Iterator<T>
  */
-function dropWhile(callable $predicate, iterable $iterable): \Generator {
+function dropWhile(callable $predicate, iterable $iterable): \Iterator {
     $failed = false;
     foreach ($iterable as $key => $value) {
         if (!$failed && !$predicate($value)) {
@@ -848,7 +848,7 @@ function dropWhile(callable $predicate, iterable $iterable): \Generator {
  * @param iterable $iterable Iterable to flatten
  * @param int $levels Number of levels to flatten
  *
- * @return \Generator
+ * @return \Iterator
  *
  * Note: Psalm does not support recursive type definitions yet, so it is not
  *       currently possible to correctly provide generic type information for
@@ -856,7 +856,7 @@ function dropWhile(callable $predicate, iterable $iterable): \Generator {
  * @see https://github.com/vimeo/psalm/issues/2777
  * @see https://github.com/vimeo/psalm/issues/5739
  */
-function flatten(iterable $iterable, $levels = PHP_INT_MAX): \Generator {
+function flatten(iterable $iterable, $levels = PHP_INT_MAX): \Iterator {
     if ($levels < 0) {
         throw new \InvalidArgumentException(
             'Number of levels must be non-negative'
@@ -900,9 +900,9 @@ function flatten(iterable $iterable, $levels = PHP_INT_MAX): \Generator {
  *
  * @param iterable<TKey,TValue> $iterable The iterable to flip
  *
- * @return \Generator<TValue,TKey>
+ * @return \Iterator<TValue,TKey>
  */
-function flip(iterable $iterable): \Generator {
+function flip(iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
         yield $value => $key;
     }
@@ -929,11 +929,11 @@ function flip(iterable $iterable): \Generator {
  *
  * @return (
  *      TPreserveKeys is true
- *      ? \Generator<array<TKey,TValue>>
- *      : \Generator<array<array-key,TValue>>
+ *      ? \Iterator<array<TKey,TValue>>
+ *      : \Iterator<array<array-key,TValue>>
  * ) An iterator of arrays
  */
-function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Generator {
+function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Iterator {
     if ($size <= 0) {
         throw new \InvalidArgumentException('Chunk size must be positive');
     }
@@ -974,9 +974,9 @@ function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Gene
  * @param iterable<TKey,TValue> $iterable The iterable to chunk
  * @param int $size The size of each chunk
  *
- * @return \Generator<array<TKey,TValue>> An iterator of arrays
+ * @return \Iterator<array<TKey,TValue>> An iterator of arrays
  */
-function chunkWithKeys(iterable $iterable, int $size): \Generator {
+function chunkWithKeys(iterable $iterable, int $size): \Iterator {
     return chunk($iterable, $size, true);
 }
 
