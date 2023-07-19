@@ -17,11 +17,9 @@ namespace iter {
      * @template TKey
      * @template TValue
      *
-     * @param callable $function Generator function to make rewindable
-     * @psalm-param callable(...mixed):\Generator<TKey,TValue> $function
+     * @param callable(...mixed):\Generator<TKey,TValue> $function Generator function to make rewindable
      *
-     * @return callable Rewindable generator function
-     * @psalm-return callable(...mixed):\Iterator<TKey,TValue>
+     * @return callable(...mixed):\Iterator<TKey,TValue> Rewindable generator function
      */
     function makeRewindable(callable $function) {
         return function(...$args) use ($function) {
@@ -45,12 +43,10 @@ namespace iter {
      * @template TKey
      * @template TValue
      *
-     * @param callable $function Generator function to call rewindably
+     * @param callable(...mixed):\Generator<TKey,TValue> $function Generator function to call rewindably
      * @param mixed ...$args Function arguments
-     * @psalm-param callable(...mixed):\Generator<TKey,TValue> $function
      *
-     * @return \Iterator Rewindable generator result
-     * @psalm-return \Iterator<TKey,TValue>
+     * @return \Iterator<TKey,TValue> Rewindable generator result
      */
     function callRewindable(callable $function, ...$args) {
         return new rewindable\_RewindableGenerator($function, $args);

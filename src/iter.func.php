@@ -13,11 +13,9 @@ namespace iter\func;
  *     => 42
  *
  *
- * @param string|int $index
- * @psalm-param array-key $index
+ * @param array-key $index
  *
- * @return callable
- * @psalm-return callable(array):mixed
+ * @return callable(array):mixed
  */
 function index($index) {
     return function($array) use ($index) {
@@ -48,11 +46,9 @@ function index($index) {
  *     $getIndexFooBarBaz($array)
  *     => 42
  *
- * @param string|int ...$indices Path of indices
- * @psalm-param array-key ...$indices
+ * @param array-key ...$indices Path of indices
  *
- * @return callable
- * @psalm-return callable(array):mixed
+ * @return callable(array):mixed
  */
 function nested_index(...$indices) {
     return function($array) use ($indices) {
@@ -77,8 +73,7 @@ function nested_index(...$indices) {
  *
  * @param string $propertyName
  *
- * @return callable
- * @psalm-return callable(object):mixed
+ * @return callable(object):mixed
  */
 function property($propertyName) {
     return function($object) use ($propertyName) {
@@ -106,8 +101,7 @@ function property($propertyName) {
  * @param string $methodName
  * @param mixed[] $args
  *
- * @return callable
- * @psalm-return callable(object):mixed
+ * @return callable(object):mixed
  */
 function method($methodName, $args = []) {
     return function($object) use ($methodName, $args) {
@@ -192,11 +186,9 @@ function operator($operator, $arg = null) {
  *     $isOdd(42);
  *     => false
  *
- * @param callable $function
- * @psalm-param callable(...mixed):bool $function
+ * @param callable(...mixed):bool $function
  *
- * @return callable
- * @psalm-return callable(...mixed):bool
+ * @return callable(...mixed):bool
  */
 function not($function) {
     return function(...$args) use ($function) {

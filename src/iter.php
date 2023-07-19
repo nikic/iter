@@ -74,9 +74,8 @@ function range($start, $end, $step = null): \Generator {
  * @template T
  * @template U
  *
- * @param callable $function Mapping function: mixed function(mixed $value)
+ * @param callable(T):U $function Mapping function: mixed function(mixed $value)
  * @param iterable<T> $iterable Iterable to be mapped over
- * @psalm-param callable(T):U $function
  *
  * @return \Generator<U>
  */
@@ -102,9 +101,8 @@ function map(callable $function, iterable $iterable): \Generator {
  * @template UKey
  * @template Value
  *
- * @param callable $function Mapping function: mixed function(mixed $key)
+ * @param callable(TKey):UKey $function Mapping function: mixed function(mixed $key)
  * @param iterable<TKey,Value> $iterable Iterable those keys are to be mapped over
- * @psalm-param callable(TKey):UKey $function
  *
  * @return \Generator<UKey,Value>
  */
@@ -136,9 +134,8 @@ function mapKeys(callable $function, iterable $iterable): \Generator {
  * @template T
  * @template U
  *
- * @param callable $function Mapping function: mixed function(mixed $value, mixed $key)
+ * @param callable(T,TKey):U $function Mapping function: mixed function(mixed $value, mixed $key)
  * @param iterable<TKey,T> $iterable Iterable to be mapped over
- * @psalm-param callable(T,TKey):U $function
  *
  * @return \Generator<TKey,U>
  */
@@ -163,9 +160,8 @@ function mapWithKeys(callable $function, iterable $iterable): \Generator {
  * @template T
  * @template U
  *
- * @param callable $function Mapping function: \Generator function(mixed $value)
+ * @param callable(T):iterable<U> $function Mapping function: \Generator function(mixed $value)
  * @param iterable<T> $iterable Iterable to be mapped over
- * @psalm-param callable(T):iterable<U> $function
  *
  * @return \Generator<U>
  */
@@ -199,9 +195,8 @@ function flatMap(callable $function, iterable $iterable): \Generator {
  * @template UKey
  * @template Value
  *
- * @param callable $function Mapping function mixed function(mixed $value)
+ * @param callable(Value):UKey $function Mapping function mixed function(mixed $value)
  * @param iterable<TKey,Value> $iterable Iterable to reindex
- * @psalm-param callable(Value):UKey $function
  *
  * @return \Generator<UKey,Value>
  */
@@ -225,9 +220,8 @@ function reindex(callable $function, iterable $iterable): \Generator {
  *
  * @template T
  *
- * @param callable $function Apply function: void function(mixed $value)
+ * @param callable(T):void $function Apply function: void function(mixed $value)
  * @param iterable<T> $iterable Iterator to apply on
- * @psalm-param callable(T):void $function
  */
 function apply(callable $function, iterable $iterable): void {
     foreach ($iterable as $value) {
@@ -251,9 +245,8 @@ function apply(callable $function, iterable $iterable): void {
  *
  * @template T
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to filter
- * @psalm-param callable(T):bool $predicate
  *
  * @return \Generator<T>
  */
@@ -273,8 +266,7 @@ function filter(callable $predicate, iterable $iterable): \Generator {
  *
  * @param iterable<TKey,TValue> $iterable Iterable to enumerate
  *
- * @return \Generator<array>
- * @psalm-return \Generator<array{0:TKey, 1:TValue}>
+ * @return \Generator<array{0:TKey, 1:TValue}>
  */
 function enumerate(iterable $iterable): \Generator {
     return toPairs($iterable);
@@ -298,8 +290,7 @@ function enumerate(iterable $iterable): \Generator {
  *
  * @param iterable<TKey,TValue> $iterable Iterable to convert to pairs
  *
- * @return \Generator<array>
- * @psalm-return \Generator<array{0:TKey, 1:TValue}>
+ * @return \Generator<array{0:TKey, 1:TValue}>
  */
 function toPairs(iterable $iterable): \Generator {
     foreach ($iterable as $key => $value) {
@@ -324,8 +315,7 @@ function toPairs(iterable $iterable): \Generator {
  * @template TKey
  * @template TValue
  *
- * @param iterable<array> $iterable Iterable of [key, value] pairs
- * @psalm-param iterable<array{0:TKey, 1:TValue}> $iterable
+ * @param iterable<array{0:TKey, 1:TValue}> $iterable Iterable of [key, value] pairs
  *
  * @return \Generator<TKey,TValue>
  */
@@ -353,12 +343,11 @@ function fromPairs(iterable $iterable): \Generator {
  * @template TValue
  * @template TAcc
  *
- * @param callable $function Reduction function:
- *                           mixed function(mixed $acc, mixed $value, mixed $key)
+ * @param callable(TAcc,TValue,TKey):TAcc $function Reduction function:
+ *                                                  mixed function(mixed $acc, mixed $value, mixed $key)
  * @param iterable<TKey,TValue> $iterable Iterable to reduce
  * @param TAcc $startValue Start value for accumulator.
- *                          Usually identity value of $function.
- * @psalm-param callable(TAcc,TValue,TKey):TAcc $function
+ *                         Usually identity value of $function.
  *
  * @return TAcc Result of the reduction
  */
@@ -390,12 +379,11 @@ function reduce(callable $function, iterable $iterable, $startValue = null) {
  * @template TValue
  * @template TAcc
  *
- * @param callable $function Reduction function:
+ * @param callable(TAcc,TValue,TKey):TAcc $function Reduction function:
  *                           mixed function(mixed $acc, mixed $value, mixed $key)
  * @param iterable<TKey,TValue> $iterable Iterable to reduce
  * @param TAcc $startValue Start value for accumulator.
  *                          Usually identity value of $function.
- * @psalm-param callable(TAcc,TValue,TKey):TAcc $function
  *
  * @return \Generator<TAcc> Intermediate results of the reduction
  */
@@ -636,9 +624,8 @@ function drop(int $num, iterable $iterable): \Generator {
  *
  * @template T
  *
- * @param mixed $value Value to repeat
- * @param int   $num   Number of repetitions (defaults to PHP_INT_MAX)
- * @psalm-param T $value
+ * @param T   $value Value to repeat
+ * @param int $num   Number of repetitions (defaults to PHP_INT_MAX)
  *
  * @throws \InvalidArgumentException if num is negative
  *
@@ -712,9 +699,8 @@ function values(iterable $iterable): \Generator {
  *
  * @template T
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to check against the predicate
- * @psalm-param callable(T):bool $predicate
  *
  * @return bool Whether the predicate matches any value
  */
@@ -743,9 +729,8 @@ function any(callable $predicate, iterable $iterable): bool {
  *
  * @template T
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to check against the predicate
- * @psalm-param callable(T):bool $predicate
  *
  * @return bool Whether the predicate holds for all values
  */
@@ -773,12 +758,10 @@ function all(callable $predicate, iterable $iterable): bool {
  *
  * @template T
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable The iterable to search
- * @psalm-param callable(T):bool $predicate
  *
- * @return null|mixed
- * @psalm-return T|null
+ * @return T|null
  */
 function search(callable $predicate, iterable $iterable) {
     foreach ($iterable as $value) {
@@ -803,9 +786,8 @@ function search(callable $predicate, iterable $iterable) {
  *
  * @template T
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to take values from
- * @psalm-param callable(T):bool $predicate
  *
  * @return \Generator<T>
  */
@@ -832,9 +814,8 @@ function takeWhile(callable $predicate, iterable $iterable): \Generator {
  *
  * @template T
  *
- * @param callable $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
  * @param iterable<T> $iterable Iterable to drop values from
- * @psalm-param callable(T):bool $predicate
  *
  * @return \Generator<T>
  */
@@ -940,14 +921,17 @@ function flip(iterable $iterable): \Generator {
  *
  * @template TKey
  * @template TValue
- * @template TPreserve of bool
+ * @template TPreserveKeys of bool
  *
  * @param iterable<TKey,TValue> $iterable The iterable to chunk
  * @param int $size The size of each chunk
- * @param TPreserve $preserveKeys Whether to preserve keys from the input iterable
+ * @param TPreserveKeys $preserveKeys Whether to preserve keys from the input iterable
  *
- * @return \Generator<array> An iterator of arrays
- * @psalm-return (TPreserve is true ? \Generator<array<TKey,TValue>> : \Generator<array<array-key,TValue>>)
+ * @return (
+ *      TPreserveKeys is true
+ *      ? \Generator<array<TKey,TValue>>
+ *      : \Generator<array<array-key,TValue>>
+ * ) An iterator of arrays
  */
 function chunk(iterable $iterable, int $size, bool $preserveKeys = false): \Generator {
     if ($size <= 0) {
