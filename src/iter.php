@@ -74,7 +74,7 @@ function range($start, $end, $step = null): \Iterator {
  * @template T
  * @template U
  *
- * @param callable(T):U $function Mapping function: mixed function(mixed $value)
+ * @param callable(T):U $function Mapping function
  * @param iterable<T> $iterable Iterable to be mapped over
  *
  * @return \Iterator<U>
@@ -101,7 +101,7 @@ function map(callable $function, iterable $iterable): \Iterator {
  * @template UKey
  * @template Value
  *
- * @param callable(TKey):UKey $function Mapping function: mixed function(mixed $key)
+ * @param callable(TKey):UKey $function Mapping function
  * @param iterable<TKey,Value> $iterable Iterable those keys are to be mapped over
  *
  * @return \Iterator<UKey,Value>
@@ -134,7 +134,7 @@ function mapKeys(callable $function, iterable $iterable): \Iterator {
  * @template T
  * @template U
  *
- * @param callable(T,TKey):U $function Mapping function: mixed function(mixed $value, mixed $key)
+ * @param callable(T,TKey):U $function Mapping function
  * @param iterable<TKey,T> $iterable Iterable to be mapped over
  *
  * @return \Iterator<TKey,U>
@@ -160,7 +160,7 @@ function mapWithKeys(callable $function, iterable $iterable): \Iterator {
  * @template T
  * @template U
  *
- * @param callable(T):iterable<U> $function Mapping function: \Iterator function(mixed $value)
+ * @param callable(T):iterable<U> $function Mapping function
  * @param iterable<T> $iterable Iterable to be mapped over
  *
  * @return \Iterator<U>
@@ -195,7 +195,7 @@ function flatMap(callable $function, iterable $iterable): \Iterator {
  * @template UKey
  * @template Value
  *
- * @param callable(Value):UKey $function Mapping function mixed function(mixed $value)
+ * @param callable(Value):UKey $function Mapping function
  * @param iterable<TKey,Value> $iterable Iterable to reindex
  *
  * @return \Iterator<UKey,Value>
@@ -220,7 +220,7 @@ function reindex(callable $function, iterable $iterable): \Iterator {
  *
  * @template T
  *
- * @param callable(T):void $function Apply function: void function(mixed $value)
+ * @param callable(T):void $function Apply function
  * @param iterable<T> $iterable Iterator to apply on
  */
 function apply(callable $function, iterable $iterable): void {
@@ -245,7 +245,7 @@ function apply(callable $function, iterable $iterable): void {
  *
  * @template T
  *
- * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate function
  * @param iterable<T> $iterable Iterable to filter
  *
  * @return \Iterator<T>
@@ -343,8 +343,7 @@ function fromPairs(iterable $iterable): \Iterator {
  * @template TValue
  * @template TAcc
  *
- * @param callable(TAcc,TValue,TKey):TAcc $function Reduction function:
- *                                                  mixed function(mixed $acc, mixed $value, mixed $key)
+ * @param callable(TAcc,TValue,TKey):TAcc $function Reduction function
  * @param iterable<TKey,TValue> $iterable Iterable to reduce
  * @param TAcc $startValue Start value for accumulator.
  *                         Usually identity value of $function.
@@ -379,11 +378,10 @@ function reduce(callable $function, iterable $iterable, $startValue = null) {
  * @template TValue
  * @template TAcc
  *
- * @param callable(TAcc,TValue,TKey):TAcc $function Reduction function:
- *                           mixed function(mixed $acc, mixed $value, mixed $key)
+ * @param callable(TAcc,TValue,TKey):TAcc $function Reduction function
  * @param iterable<TKey,TValue> $iterable Iterable to reduce
  * @param TAcc $startValue Start value for accumulator.
- *                          Usually identity value of $function.
+ *                         Usually identity value of $function.
  *
  * @return \Iterator<TAcc> Intermediate results of the reduction
  */
@@ -699,7 +697,7 @@ function values(iterable $iterable): \Iterator {
  *
  * @template T
  *
- * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate function
  * @param iterable<T> $iterable Iterable to check against the predicate
  *
  * @return bool Whether the predicate matches any value
@@ -729,7 +727,7 @@ function any(callable $predicate, iterable $iterable): bool {
  *
  * @template T
  *
- * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate function
  * @param iterable<T> $iterable Iterable to check against the predicate
  *
  * @return bool Whether the predicate holds for all values
@@ -758,7 +756,7 @@ function all(callable $predicate, iterable $iterable): bool {
  *
  * @template T
  *
- * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate function
  * @param iterable<T> $iterable The iterable to search
  *
  * @return T|null
@@ -786,7 +784,7 @@ function search(callable $predicate, iterable $iterable) {
  *
  * @template T
  *
- * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate function
  * @param iterable<T> $iterable Iterable to take values from
  *
  * @return \Iterator<T>
@@ -814,7 +812,7 @@ function takeWhile(callable $predicate, iterable $iterable): \Iterator {
  *
  * @template T
  *
- * @param callable(T):bool $predicate Predicate: bool function(mixed $value)
+ * @param callable(T):bool $predicate Predicate function
  * @param iterable<T> $iterable Iterable to drop values from
  *
  * @return \Iterator<T>

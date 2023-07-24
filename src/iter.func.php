@@ -3,7 +3,7 @@
 namespace iter\func;
 
 /**
- * Returns a callable which extracts a given property from an array.
+ * Returns a callable which extracts a given index from an array.
  *
  * Example:
  *
