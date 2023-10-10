@@ -618,6 +618,25 @@ class IterTest extends TestCase {
             \TypeError::class
         ];
     }
+
+    public function testTap() {
+        # Simple case where callback does not return anything
+        $this->assertSame(
+            [1, 2, 3],
+            toArray(tap(function() {}, [1, 2, 3]))
+        );
+
+        # Should also not care about the return value of the callback
+        $mock = $this->createMock(\stdClass::class)
+            ->expects($this->exactly(3))
+            ->method('foo')
+            ->will($this->returnArgument(42));
+
+        $this->assertSame(
+            [1, 2, 3],
+            toArray(tap([$mock, 'foo'], [1, 2, 3]))
+        );
+    }
 }
 
 class _CountableTestDummy implements \Countable {
