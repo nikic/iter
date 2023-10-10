@@ -67,6 +67,7 @@ list the function signatures as an overview:
     Iterator flip(iterable $iterable)
     Iterator chunk(iterable $iterable, int $size, bool $preserveKeys = false)
     Iterator chunkWithKeys(iterable $iterable, int $size)
+    Iterator tap(callable $function, iterable $iterable)
     Iterator toIter(iterable $iterable)
 
     Iterator range(number $start, number $end, number $step = null)
