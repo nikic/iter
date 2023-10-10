@@ -629,7 +629,7 @@ class IterTest extends TestCase {
         # Should also not care about the return value of the callback
         # Also, check that this is called once for every element in the iterable
         $mock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['foo'])
+            ->setMethods(['foo'])
             ->getMock();
 
         $mock->expects($this->exactly(3))
