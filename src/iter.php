@@ -1275,12 +1275,13 @@ function isIterable($value) {
  *     // => [1, 2, 3]
  *     //    "123" : side effects were executed
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
- * @param callable(T):void $function A function to call for each value as a side effect
- * @param iterable<T> $iterable The iterable to tap
+ * @param callable(TValue, TKey):void $function A function to call for each value as a side effect
+ * @param iterable<TKey, TValue> $iterable The iterable to tap
  *
- * @return iterable<T>
+ * @return iterable<TKey, TValue>
  */
 function tap(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
