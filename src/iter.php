@@ -1257,6 +1257,39 @@ function toArrayWithKeys(iterable $iterable): array {
 function isIterable($value) {
     return is_array($value) || $value instanceof \Traversable;
 }
+
+/**
+ * Lazily performs a side effect for each value in an iterable.
+ *
+ * The passed function is called with the value and key of each element of the
+ * iterable. The return value of the function is ignored.
+ *
+ * Examples:
+ *     $iterable = iter\range(1, 3);
+ *     // => iterable(1, 2, 3)
+ *
+ *     $iterable = iter\tap(function($value, $key) { echo $value; }, $iterable);
+ *     // => iterable(1, 2, 3) : pending side effects
+ *
+ *     iter\toArray($iterable);
+ *     // => [1, 2, 3]
+ *     //    "123" : side effects were executed
+ *
+ * @template TKey
+ * @template TValue
+ *
+ * @param callable(TValue, TKey):void $function A function to call for each value as a side effect
+ * @param iterable<TKey, TValue> $iterable The iterable to tap
+ *
+ * @return iterable<TKey, TValue>
+ */
+function tap(callable $function, iterable $iterable): \Iterator {
+    foreach ($iterable as $key => $value) {
+        $function($value, $key);
+        yield $key => $value;
+    }
+}
+
 /*
  * Python:
  * compress()
