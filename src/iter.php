@@ -1094,21 +1094,17 @@ function isEmpty($iterable): bool {
 
     if ($iterable instanceof \Iterator) {
         return !$iterable->valid();
-    } else if ($iterable instanceof \IteratorAggregate) {
-        $inner = $iterable->getIterator();
+    }
 
-        if ($inner instanceof \Iterator) {
-            return !$inner->valid();
-        } else if ($inner !== $iterable) {
-            return isEmpty($inner);
-        } else {
-            throw new \InvalidArgumentException(
-                'Argument must not be recursively defined');
-        }
-    } else {
+    if (!$iterable instanceof \IteratorAggregate) {
         throw new \InvalidArgumentException(
             'Argument must be iterable or implement Countable');
     }
+
+    $iterableCopy = \unserialize(\serialize($iterable));
+    $inner = \iterator_to_array($iterableCopy->getIterator());
+
+    return count($inner) == 0;
 }
 
 /**
