@@ -1192,7 +1192,7 @@ function toIter(iterable $iterable): \Iterator {
  *
  * @param iterable<T> $iterable The iterable to convert to an array
  *
- * @return array<T>
+ * @return list<T>
  */
 function toArray(iterable $iterable): array {
     $array = [];
