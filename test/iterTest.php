@@ -306,6 +306,21 @@ class IterTest extends TestCase {
         );
     }
 
+    public function testHead()
+    {
+        $this->assertSame(1, head([1,2,3]));
+        $this->assertSame(4, head(range(4,8)));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Argument must be non-empty
+     */
+    public function testHeadOnEmptyArgumentError()
+    {
+        head([]);
+    }
+
     public function testFlatten() {
         $this->assertSame(
             [1, 2, 3, 4, 5],
