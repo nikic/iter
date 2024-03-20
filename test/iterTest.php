@@ -42,6 +42,53 @@ class IterTest extends TestCase {
         $this->assertSame([0, 3, 6, 9, 12, 15], toArray($mapped));
     }
 
+    public function testUniqueWithoutHashFunction() {
+        $iterable = [1, 2, '2', '2', 3, 4, 4, null, null, 5, '', '', [1], [1], [2]];
+        $expected = [1, 2, '2', 3, 4, null, 5, '', [1], [2]];
+        $unique = unique($iterable, null);
+        $this->assertSame($expected, toArray($unique));
+    }
+
+    public function testUniqueStringsWithHashFunction() {
+        $iterable = [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'Proin tincidunt mollis dui id efficitur. Vivamus vitae tortor vitae velit imperdiet finibus vel eu lacus.',
+        ];
+        $expected = [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'Proin tincidunt mollis dui id efficitur. Vivamus vitae tortor vitae velit imperdiet finibus vel eu lacus.',
+        ];
+        $unique = unique($iterable, function ($v) {
+            return crc32($v);
+        });
+        $this->assertSame($expected, toArray($unique));
+    }
+
+    public function testUniqueObjectsWithHashFunction() {
+        $obj1 = new \stdClass();
+        $obj1->a = 1;
+        $obj2 = new \stdClass();
+        $obj2->a = 2;
+        $iterable = [$obj1, $obj1, $obj2];
+        $expected = [$obj1, $obj2];
+        $unique = unique($iterable, function ($v) {
+            return $v->a;
+        });
+        $this->assertSame($expected, toArray($unique));
+    }
+
+    public function testUniqueObjectsWithoutHashFunction() {
+        $obj1 = new \stdClass();
+        $obj1->a = 1;
+        $obj2 = new \stdClass();
+        $obj2->a = 2;
+        $iterable = [$obj1, $obj1, $obj2];
+        $expected = [$obj1, $obj2];
+        $unique = unique($iterable);
+        $this->assertSame($expected, toArray($unique));
+    }
+
     public function testMapKeys() {
         $range = range(0, 5);
         $mapped = mapKeys(function($n) { return $n * 3; }, $range);
