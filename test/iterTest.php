@@ -644,6 +644,11 @@ class IterTest extends TestCase {
             toArray(tap([$mock, 'foo'], [1, 2, 3]))
         );
     }
+
+    public function testLast() {
+        self::assertSame(3, last(range(1, 3)));
+        self::assertNull(last(new \EmptyIterator()));
+    }
 }
 
 class _CountableTestDummy implements \Countable {

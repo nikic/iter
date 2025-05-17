@@ -1290,6 +1290,19 @@ function tap(callable $function, iterable $iterable): \Iterator {
     }
 }
 
+/**
+ * Returns the last value of the specified iterable.
+ *
+ * @param iterable $iterable Iterable.
+ *
+ * @return mixed Last value of the iterable if it contains values, otherwise null.
+ */
+function last(iterable $iterable): mixed {
+    foreach ($iterable as $value) {}
+
+    return $value ?? null;
+}
+
 /*
  * Python:
  * compress()
