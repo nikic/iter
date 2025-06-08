@@ -1293,11 +1293,17 @@ function tap(callable $function, iterable $iterable): \Iterator {
 /**
  * Returns the last value of the specified iterable.
  *
- * @param iterable $iterable Iterable.
+ * @template T
  *
- * @return mixed Last value of the iterable if it contains values, otherwise null.
+ * @param iterable<T> $iterable Iterable.
+ *
+ * @return T|null Last value of the iterable if it contains values, otherwise null.
  */
-function last(iterable $iterable): mixed {
+function last(iterable $iterable) {
+    if (is_array($iterable)) {
+        return count($iterable) ? end($iterable) : null;
+    }
+
     foreach ($iterable as $value) {}
 
     return $value ?? null;

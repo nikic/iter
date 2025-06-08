@@ -646,8 +646,13 @@ class IterTest extends TestCase {
     }
 
     public function testLast() {
-        self::assertSame(3, last(range(1, 3)));
+        self::assertSame(5, last((function () {
+            yield from range(1, 5);
+        })()));
         self::assertNull(last(new \EmptyIterator()));
+
+        self::assertSame(3, last(range(1, 3)));
+        self::assertNull(last([]));
     }
 }
 
