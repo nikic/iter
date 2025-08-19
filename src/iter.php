@@ -1166,12 +1166,9 @@ function toIter(iterable $iterable): \Iterator {
     if ($iterable instanceof \IteratorAggregate) {
         return $iterable->getIterator();
     }
-
+    
     // Traversable, but not Iterator or IteratorAggregate
-    $generator = function() use($iterable) {
-        yield from $iterable;
-    };
-    return $generator();
+    return new \IteratorIterator($iterable);
 }
 
 /**
