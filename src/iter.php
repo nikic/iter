@@ -71,13 +71,14 @@ function range($start, $end, $step = null): \Iterator {
  *
  *     $column = map(iter\func\index('name'), $iter);
  *
- * @template T
- * @template U
+ * @template IterableValue
+ * @template FunctionReturn
+ * @template IterableKey
  *
- * @param callable(T):U $function Mapping function
- * @param iterable<T> $iterable Iterable to be mapped over
+ * @param callable(IterableValue):FunctionReturn $function Mapping function
+ * @param iterable<IterableKey, IterableValue> $iterable Iterable to be mapped over
  *
- * @return \Iterator<U>
+ * @return \Iterator<IterableKey, FunctionReturn>
  */
 function map(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -243,12 +244,13 @@ function apply(callable $function, iterable $iterable): void {
  *
  *     iter\filter(iter\func\operator('instanceof', 'SomeClass'), $objects);
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
- * @param callable(T):bool $predicate Predicate function
- * @param iterable<T> $iterable Iterable to filter
+ * @param callable(TValue):bool $predicate Predicate function
+ * @param iterable<TKey, TValue> $iterable Iterable to filter
  *
- * @return \Iterator<T>
+ * @return \Iterator<TKey, TValue>
  */
 function filter(callable $predicate, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -465,11 +467,12 @@ function zipKeyValue(iterable $keys, iterable $values): \Iterator {
  *     iter\chain(iter\range(0, 5), iter\range(6, 10), iter\range(11, 15))
  *     => iter(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
- * @param iterable<T> ...$iterables Iterables to chain
+ * @param iterable<TKey, TValue> ...$iterables Iterables to chain
  *
- * @return \Iterator<T>
+ * @return \Iterator<TKey, TValue>
  */
 function chain(iterable ...$iterables): \Iterator {
     foreach ($iterables as $iterable) {
@@ -492,7 +495,7 @@ function chain(iterable ...$iterables): \Iterator {
  *
  * @param iterable ...$iterables Iterables to combine
  *
- * @return \Iterator<array>
+ * @return \Iterator<array, array>
  */
 function product(iterable ...$iterables): \Iterator {
     $iterators = array_map('iter\\toIter', $iterables);
@@ -539,14 +542,15 @@ function product(iterable ...$iterables): \Iterator {
  *      iter\slice([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], 5, 3)
  *      => iter(0, 1, 2, 3)
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
- * @param iterable<T> $iterable Iterable to take the slice from
+ * @param iterable<TKey, TValue> $iterable Iterable to take the slice from
  * @param int $start Start offset
  * @param int $length Length (if not specified all remaining values from the
  *                    iterable are used)
  *
- * @return \Iterator<T>
+ * @return \Iterator<TKey, TValue>
  */
 function slice(iterable $iterable, int $start, $length = PHP_INT_MAX): \Iterator {
     if ($start < 0) {
@@ -579,12 +583,13 @@ function slice(iterable $iterable, int $start, $length = PHP_INT_MAX): \Iterator
  *      iter\take(3, [1, 2, 3, 4, 5])
  *      => iter(1, 2, 3)
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
  * @param int $num Number of elements to take from the start
- * @param iterable<T> $iterable Iterable to take the elements from
+ * @param iterable<TKey, TValue> $iterable Iterable to take the elements from
  *
- * @return \Iterator<T>
+ * @return \Iterator<TKey, TValue>
  */
 function take(int $num, iterable $iterable): \Iterator {
     return slice($iterable, 0, $num);
@@ -598,12 +603,13 @@ function take(int $num, iterable $iterable): \Iterator {
  *      iter\drop(3, [1, 2, 3, 4, 5])
  *      => iter(4, 5)
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
  * @param int $num Number of elements to drop from the start
- * @param iterable<T> $iterable Iterable to drop the elements from
+ * @param iterable<TKey, TValue> $iterable Iterable to drop the elements from
  *
- * @return \Iterator<T>
+ * @return \Iterator<TKey,TValue>
  */
 function drop(int $num, iterable $iterable): \Iterator {
     return slice($iterable, $num);
@@ -782,12 +788,13 @@ function search(callable $predicate, iterable $iterable) {
  *      iter\takeWhile(iter\func\operator('>', 0), [3, 1, 4, -1, 5])
  *      => iter(3, 1, 4)
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
- * @param callable(T):bool $predicate Predicate function
- * @param iterable<T> $iterable Iterable to take values from
+ * @param callable(TValue):bool $predicate Predicate function
+ * @param iterable<TKey, TValue> $iterable Iterable to take values from
  *
- * @return \Iterator<T>
+ * @return \Iterator<TKey, TValue>
  */
 function takeWhile(callable $predicate, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
@@ -810,12 +817,13 @@ function takeWhile(callable $predicate, iterable $iterable): \Iterator {
  *      iter\dropWhile(iter\func\operator('>', 0), [3, 1, 4, -1, 5])
  *      => iter(-1, 5)
  *
- * @template T
+ * @template TKey
+ * @template TValue
  *
- * @param callable(T):bool $predicate Predicate function
- * @param iterable<T> $iterable Iterable to drop values from
+ * @param callable(TValue):bool $predicate Predicate function
+ * @param iterable<TKey, TValue> $iterable Iterable to drop values from
  *
- * @return \Iterator<T>
+ * @return \Iterator<TKey, TValue>
  */
 function dropWhile(callable $predicate, iterable $iterable): \Iterator {
     $failed = false;
