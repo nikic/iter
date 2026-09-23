@@ -109,7 +109,7 @@ namespace iter\rewindable {
         /** @var mixed[] */
         protected $args;
 
-        /** @var \Iterator<TKey,TValue> */
+        /** @var \Iterator<TKey,TValue>|null */
         protected $iterator;
 
         /**
@@ -172,7 +172,7 @@ namespace iter\rewindable {
      * @deprecated
      */
     class _RewindableGenerator extends _RewindableIterator {
-        /** @var \Generator<TKey,TYield,TSend,TReturn> */
+        /** @var \Generator<TKey,TYield,TSend,TReturn>|null */
         protected $iterator;
 
         /**
