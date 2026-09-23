@@ -17,9 +17,9 @@ namespace iter {
      * @template TKey
      * @template TValue
      *
-     * @param callable(...mixed):\Iterator<TKey,TValue> $function Iterator factory function
+     * @param callable():\Iterator<TKey,TValue> $function Iterator factory function
      *
-     * @return callable(...mixed):\Iterator<TKey,TValue> Rewindable iterator factory function
+     * @return callable():\Iterator<TKey,TValue> Rewindable iterator factory function
      */
     function makeRewindable(callable $function) {
         return function(...$args) use ($function) {
@@ -43,7 +43,7 @@ namespace iter {
      * @template TKey
      * @template TValue
      *
-     * @param callable(...mixed):\Iterator<TKey,TValue> $function Iterator factory function
+     * @param callable():\Iterator<TKey,TValue> $function Iterator factory function
      * @param mixed ...$args Function arguments
      *
      * @return \Iterator<TKey,TValue> Rewindable generator result
