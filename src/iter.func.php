@@ -186,9 +186,9 @@ function operator($operator, $arg = null) {
  *     $isOdd(42);
  *     => false
  *
- * @param callable(...mixed):bool $function
+ * @param callable(mixed...):bool $function
  *
- * @return callable(...mixed):bool
+ * @return callable(mixed...):bool
  */
 function not($function) {
     return function(...$args) use ($function) {

@@ -1289,7 +1289,7 @@ function isIterable($value) {
  * @param callable(TValue, TKey):void $function A function to call for each value as a side effect
  * @param iterable<TKey, TValue> $iterable The iterable to tap
  *
- * @return iterable<TKey, TValue>
+ * @return \Iterator<TKey, TValue>
  */
 function tap(callable $function, iterable $iterable): \Iterator {
     foreach ($iterable as $key => $value) {
